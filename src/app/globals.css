@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --omni-yellow: #FFB800;
+  --omni-yellow-dark: #F5A623;
+  --omni-magenta: #E91E8C;
+  --omni-magenta-light: #F5A5D5;
+  --omni-mint: #00D4AA;
+  --omni-mint-light: #7FFFD4;
+  --omni-blue: #0033A0;
+  --omni-blue-light: #9BB4D9;
+  --omni-purple: #6B00E0;
+  --omni-purple-light: #C4B5FD;
+  --omni-black: #2D2D2D;
+  --omni-gray: #C0C0C0;
+  --omni-gray-light: #F8F8F8;
+  --omni-gray-lighter: #F3F3F3;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  background-color: var(--omni-gray-lighter);
+  color: var(--omni-black);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--omni-gray-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--omni-gray);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Utility classes */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--omni-gray) var(--omni-gray-light);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Domain color backgrounds with opacity */
+  .bg-tax-light {
+    background-color: rgba(107, 0, 224, 0.05);
+  }
+
+  .bg-social-light {
+    background-color: rgba(0, 212, 170, 0.05);
+  }
+
+  .bg-corporate-light {
+    background-color: rgba(0, 51, 160, 0.05);
+  }
+
+  .bg-ipit-light {
+    background-color: rgba(233, 30, 140, 0.05);
+  }
+
+  /* Highlight animation */
+  @keyframes highlight-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.7; }
+  }
+
+  .highlight-pulse {
+    animation: highlight-pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Glow effect */
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px var(--omni-yellow); }
+    50% { box-shadow: 0 0 20px var(--omni-yellow), 0 0 30px var(--omni-yellow); }
+  }
+
+  .glow-effect {
+    animation: glow 1s ease-in-out;
+  }
+}
+
+/* Component styles */
+@layer components {
+  .btn-primary {
+    @apply bg-omni-yellow hover:bg-omni-yellow-dark text-omni-black font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-white border border-omni-gray hover:border-omni-purple text-omni-black font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-4;
+  }
+
+  .card-hover {
+    @apply hover:shadow-md hover:border-omni-yellow transition-all duration-200;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-tax {
+    @apply bg-omni-purple-light text-omni-purple;
+  }
+
+  .badge-social {
+    @apply bg-emerald-100 text-omni-mint;
+  }
+
+  .badge-corporate {
+    @apply bg-blue-100 text-omni-blue;
+  }
+
+  .badge-ipit {
+    @apply bg-pink-100 text-omni-magenta;
+  }
+
+  /* Status badges */
+  .badge-en-cours {
+    @apply bg-amber-100 text-amber-700;
+  }
+
+  .badge-review {
+    @apply bg-omni-purple-light text-omni-purple;
+  }
+
+  .badge-valide {
+    @apply bg-emerald-100 text-emerald-700;
+  }
+
+  .badge-urgent {
+    @apply bg-pink-100 text-omni-magenta;
+  }
+
+  /* Tree view styles */
+  .tree-item {
+    @apply flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-colors;
+  }
+
+  .tree-item:hover {
+    @apply bg-omni-gray-light;
+  }
+
+  .tree-item.selected {
+    @apply bg-omni-yellow bg-opacity-20 border-l-2 border-omni-yellow;
+  }
+
+  /* Table styles */
+  .data-table {
+    @apply w-full border-collapse;
+  }
+
+  .data-table th {
+    @apply bg-omni-gray-light text-left px-4 py-3 text-sm font-semibold text-omni-black border-b border-gray-200;
+  }
+
+  .data-table td {
+    @apply px-4 py-3 text-sm border-b border-gray-100;
+  }
+
+  .data-table tbody tr:hover {
+    @apply bg-gray-50;
+  }
+
+  .data-table td.editable {
+    @apply cursor-pointer hover:bg-omni-yellow hover:bg-opacity-10;
+  }
+
+  .data-table td.selected {
+    @apply ring-2 ring-omni-purple ring-inset bg-omni-purple bg-opacity-5;
+  }
+}
