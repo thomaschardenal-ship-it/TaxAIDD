@@ -101,12 +101,12 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Importer des Documents" size="lg">
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-omni-gray-light rounded-lg mb-6">
+      <div className="flex gap-1 p-1 bg-taxaidd-gray-light rounded-lg mb-6">
         <button
           onClick={() => setActiveTab('manual')}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'manual'
-              ? 'bg-white text-omni-black shadow-sm'
+              ? 'bg-white text-taxaidd-black shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -117,7 +117,7 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
           onClick={() => setActiveTab('ai')}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'ai'
-              ? 'bg-white text-omni-black shadow-sm'
+              ? 'bg-white text-taxaidd-black shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -136,7 +136,7 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
             >
               {categories.map(cat => (
                 <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -148,7 +148,7 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-omni-yellow transition-colors"
+            className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-taxaidd-yellow transition-colors"
           >
             <Upload className="w-12 h-12 mx-auto text-gray-400 mb-3" />
             <p className="text-sm text-gray-600 mb-2">
@@ -171,11 +171,11 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
       {/* AI tab content */}
       {activeTab === 'ai' && (
         <div className="space-y-4">
-          <div className="bg-omni-yellow/10 border border-omni-yellow/30 rounded-lg p-4">
+          <div className="bg-taxaidd-yellow/10 border border-taxaidd-yellow/30 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-omni-yellow-dark flex-shrink-0 mt-0.5" />
+              <Sparkles className="w-5 h-5 text-taxaidd-yellow-dark flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-omni-black">Classement automatique par IA</p>
+                <p className="text-sm font-medium text-taxaidd-black">Classement automatique par IA</p>
                 <p className="text-xs text-gray-600 mt-1">
                   L&apos;IA analysera vos documents et les classera automatiquement dans les bonnes catégories.
                 </p>
@@ -187,13 +187,13 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-omni-purple transition-colors"
+            className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-taxaidd-purple transition-colors"
           >
-            <Sparkles className="w-12 h-12 mx-auto text-omni-purple mb-3" />
+            <Sparkles className="w-12 h-12 mx-auto text-taxaidd-purple mb-3" />
             <p className="text-sm text-gray-600 mb-2">
               Déposez plusieurs fichiers pour un classement automatique
             </p>
-            <label className="bg-omni-purple text-white px-4 py-2 rounded-lg cursor-pointer text-sm inline-block hover:bg-purple-700 transition-colors">
+            <label className="bg-taxaidd-purple text-white px-4 py-2 rounded-lg cursor-pointer text-sm inline-block hover:bg-purple-700 transition-colors">
               Sélectionner des fichiers
               <input
                 type="file"
@@ -216,27 +216,27 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
             {uploadedFiles.map((file, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 p-3 bg-omni-gray-light rounded-lg"
+                className="flex items-center gap-3 p-3 bg-taxaidd-gray-light rounded-lg"
               >
                 <FileText className="w-5 h-5 text-gray-400" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-omni-black truncate">{file.name}</p>
+                  <p className="text-sm font-medium text-taxaidd-black truncate">{file.name}</p>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-500">{file.size}</span>
                     {file.category && (
-                      <span className="text-xs text-omni-purple">→ {file.category}</span>
+                      <span className="text-xs text-taxaidd-purple">→ {file.category}</span>
                     )}
                   </div>
                 </div>
                 <div>
                   {file.status === 'uploading' && (
-                    <Loader2 className="w-5 h-5 text-omni-yellow animate-spin" />
+                    <Loader2 className="w-5 h-5 text-taxaidd-yellow animate-spin" />
                   )}
                   {file.status === 'processing' && (
-                    <Loader2 className="w-5 h-5 text-omni-purple animate-spin" />
+                    <Loader2 className="w-5 h-5 text-taxaidd-purple animate-spin" />
                   )}
                   {file.status === 'done' && (
-                    <Check className="w-5 h-5 text-omni-mint" />
+                    <Check className="w-5 h-5 text-taxaidd-mint" />
                   )}
                 </div>
               </div>

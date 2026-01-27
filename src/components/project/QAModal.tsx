@@ -63,7 +63,7 @@ export default function QAModal({ isOpen, onClose, items, projectName }: QAModal
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="client@example.com"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
             />
           </div>
 
@@ -89,7 +89,7 @@ Merci de nous faire parvenir vos réponses dans les meilleurs délais.
 
 Bien cordialement,
 L'équipe OMNI Advisory`}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
             />
           </div>
 
@@ -114,10 +114,10 @@ L'équipe OMNI Advisory`}
             <span className="text-sm text-gray-600">
               {selectedItems.size} / {items.length} sélectionnés
             </span>
-            <button onClick={selectAll} className="text-sm text-omni-purple hover:underline">
+            <button onClick={selectAll} className="text-sm text-taxaidd-purple hover:underline">
               Tout sélectionner
             </button>
-            <button onClick={selectNone} className="text-sm text-omni-purple hover:underline">
+            <button onClick={selectNone} className="text-sm text-taxaidd-purple hover:underline">
               Désélectionner
             </button>
           </div>
@@ -125,7 +125,7 @@ L'équipe OMNI Advisory`}
           {/* Items table */}
           <div className="max-h-[400px] overflow-y-auto">
             <table className="w-full">
-              <thead className="bg-omni-gray-light sticky top-0">
+              <thead className="bg-taxaidd-gray-light sticky top-0">
                 <tr>
                   <th className="w-10 px-3 py-2"></th>
                   <th className="text-left px-3 py-2 text-sm font-semibold">Question</th>
@@ -138,7 +138,7 @@ L'équipe OMNI Advisory`}
                   <tr
                     key={index}
                     className={`border-b border-gray-50 ${
-                      selectedItems.has(index) ? 'bg-omni-yellow/5' : ''
+                      selectedItems.has(index) ? 'bg-taxaidd-yellow/5' : ''
                     }`}
                   >
                     <td className="px-3 py-3">
@@ -146,7 +146,7 @@ L'équipe OMNI Advisory`}
                         type="checkbox"
                         checked={selectedItems.has(index)}
                         onChange={() => toggleItem(index)}
-                        className="w-4 h-4 accent-omni-yellow"
+                        className="w-4 h-4 accent-taxaidd-yellow"
                       />
                     </td>
                     <td className="px-3 py-3 text-sm">{item.question}</td>

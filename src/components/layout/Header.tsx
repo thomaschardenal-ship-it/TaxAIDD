@@ -18,7 +18,7 @@ export default function Header({ title, breadcrumbs, actions }: HeaderProps) {
         </div>
       )}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-omni-black">{title}</h1>
+        <h1 className="text-2xl font-bold text-taxaidd-black">{title}</h1>
         {actions && <div className="flex items-center gap-3">{actions}</div>}
       </div>
     </header>

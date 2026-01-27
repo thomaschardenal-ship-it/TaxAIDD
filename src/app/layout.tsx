@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ProjectProvider } from "@/context/ProjectContext";
-import Sidebar from "@/components/layout/Sidebar";
+import { SidebarProvider } from "@/context/SidebarContext";
+import SidebarWrapper from "@/components/layout/SidebarWrapper";
 
 export const metadata: Metadata = {
   title: "TaxAIDD - Due Diligence Platform",
@@ -17,12 +18,13 @@ export default function RootLayout({
     <html lang="fr">
       <body className="font-sans antialiased">
         <ProjectProvider>
-          <div className="flex min-h-screen bg-omni-gray-lighter">
-            <Sidebar />
-            <main className="flex-1 ml-60">
-              {children}
-            </main>
-          </div>
+          <SidebarProvider>
+            <div className="flex min-h-screen bg-taxaidd-gray-lighter">
+              <SidebarWrapper>
+                {children}
+              </SidebarWrapper>
+            </div>
+          </SidebarProvider>
         </ProjectProvider>
       </body>
     </html>

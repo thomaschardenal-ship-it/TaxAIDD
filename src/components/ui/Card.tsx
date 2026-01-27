@@ -57,7 +57,7 @@ interface CardFooterProps {
 
 export function CardFooter({ children, className = '' }: CardFooterProps) {
   return (
-    <div className={`px-5 py-4 border-t border-gray-100 bg-omni-gray-light rounded-b-xl ${className}`}>
+    <div className={`px-5 py-4 border-t border-gray-100 bg-taxaidd-gray-light rounded-b-xl ${className}`}>
       {children}
     </div>
   );
