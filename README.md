@@ -102,7 +102,7 @@ src/
 - **Click cellule/élément (col 3)** → Filtre les documents sources (col 1), affiche le 1er document source (col 2)
 - **Click highlight (col 2)** → Scroll vers l'élément du rapport correspondant
 
-## Couleurs OMNI
+## Couleurs TAXAIDD
 
 | Couleur | Hex | Usage |
 |---------|-----|-------|
