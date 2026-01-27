@@ -4,7 +4,7 @@ export const users: User[] = [
   {
     id: 'user-1',
     name: 'Marc Dubois',
-    email: 'admin@omni.fr',
+    email: 'admin@taxaidd.fr',
     role: 'admin',
     title: 'Admin Fiscaliste',
     initials: 'MD',
@@ -13,7 +13,7 @@ export const users: User[] = [
   {
     id: 'user-2',
     name: 'Sophie Laurent',
-    email: 'slaurent@omni.fr',
+    email: 'slaurent@taxaidd.fr',
     role: 'senior',
     title: 'Fiscaliste Senior',
     initials: 'SL',
@@ -22,7 +22,7 @@ export const users: User[] = [
   {
     id: 'user-3',
     name: 'Thomas Bernard',
-    email: 'tbernard@omni.fr',
+    email: 'tbernard@taxaidd.fr',
     role: 'junior',
     title: 'Fiscaliste Junior',
     initials: 'TB',
@@ -31,7 +31,7 @@ export const users: User[] = [
   {
     id: 'user-4',
     name: 'Claire Martin',
-    email: 'cmartin@omni.fr',
+    email: 'cmartin@taxaidd.fr',
     role: 'specialist',
     title: 'Spécialiste Social',
     initials: 'CM',
@@ -40,7 +40,7 @@ export const users: User[] = [
   {
     id: 'user-5',
     name: 'Pierre Durand',
-    email: 'pdurand@omni.fr',
+    email: 'pdurand@taxaidd.fr',
     role: 'specialist',
     title: 'Spécialiste Corporate',
     initials: 'PD',
@@ -49,7 +49,7 @@ export const users: User[] = [
   {
     id: 'user-6',
     name: 'Julie Moreau',
-    email: 'jmoreau@omni.fr',
+    email: 'jmoreau@taxaidd.fr',
     role: 'specialist',
     title: 'Spécialiste IP/IT',
     initials: 'JM',

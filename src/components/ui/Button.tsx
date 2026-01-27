@@ -10,10 +10,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses = {
-  primary: 'bg-omni-yellow hover:bg-omni-yellow-dark text-omni-black',
-  secondary: 'bg-omni-purple hover:bg-purple-700 text-white',
-  outline: 'border border-omni-gray hover:border-omni-purple bg-white text-omni-black',
-  ghost: 'hover:bg-omni-gray-light text-omni-black',
+  primary: 'bg-taxaidd-yellow hover:bg-taxaidd-yellow-dark text-taxaidd-black',
+  secondary: 'bg-taxaidd-purple hover:bg-purple-700 text-white',
+  outline: 'border border-taxaidd-gray hover:border-taxaidd-purple bg-white text-taxaidd-black',
+  ghost: 'hover:bg-taxaidd-gray-light text-taxaidd-black',
 };
 
 const sizeClasses = {

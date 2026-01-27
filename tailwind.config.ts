@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        omni: {
+        taxaidd: {
           yellow: '#FFB800',
           'yellow-dark': '#F5A623',
           magenta: '#E91E8C',

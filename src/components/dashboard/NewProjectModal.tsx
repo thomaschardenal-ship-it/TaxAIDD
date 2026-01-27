@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Plus, Building2 } from 'lucide-react';
 import { DomainType } from '@/types';
-import { clients, users } from '@/data';
+import { clients as initialClients, users } from '@/data';
 import Modal, { ModalFooter } from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
 
@@ -31,10 +31,21 @@ const steps = [
 ];
 
 const domainOptions: { value: DomainType; label: string; color: string }[] = [
-  { value: 'TAX', label: 'TAX (Fiscalité)', color: '#6B00E0' },
+  { value: 'TAX', label: 'Fiscal', color: '#6B00E0' },
   { value: 'Social', label: 'Social', color: '#00D4AA' },
   { value: 'Corporate', label: 'Corporate', color: '#0033A0' },
   { value: 'IP/IT', label: 'IP/IT', color: '#E91E8C' },
+];
+
+const industries = [
+  'Technologies',
+  'Services',
+  'Industrie',
+  'Finance',
+  'Santé',
+  'Commerce',
+  'Immobilier',
+  'Autre',
 ];
 
 const missionTypes = [
@@ -47,6 +58,9 @@ const missionTypes = [
 
 export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjectModalProps) {
   const [currentStep, setCurrentStep] = useState(1);
+  const [clients, setClients] = useState(initialClients);
+  const [showNewClientForm, setShowNewClientForm] = useState(false);
+  const [newClient, setNewClient] = useState({ name: '', industry: '' });
   const [formData, setFormData] = useState<ProjectFormData>({
     name: '',
     clientId: '',
@@ -57,6 +71,22 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
     responsibleId: '',
     teamIds: [],
   });
+
+  const handleCreateClient = () => {
+    if (newClient.name && newClient.industry) {
+      const client = {
+        id: `client-${Date.now()}`,
+        name: newClient.name,
+        industry: newClient.industry,
+        initials: newClient.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+        color: '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'),
+      };
+      setClients(prev => [...prev, client]);
+      setFormData(prev => ({ ...prev, clientId: client.id }));
+      setNewClient({ name: '', industry: '' });
+      setShowNewClientForm(false);
+    }
+  };
 
   const handleChange = (field: keyof ProjectFormData, value: string | string[] | DomainType[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -122,21 +152,21 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
                 className={`
                   w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
                   ${currentStep > step.id
-                    ? 'bg-omni-mint text-white'
+                    ? 'bg-taxaidd-mint text-white'
                     : currentStep === step.id
-                    ? 'bg-omni-yellow text-omni-black'
+                    ? 'bg-taxaidd-yellow text-taxaidd-black'
                     : 'bg-gray-200 text-gray-500'
                   }
                 `}
               >
                 {currentStep > step.id ? <Check className="w-4 h-4" /> : step.id}
               </div>
-              <span className={`ml-2 text-sm ${currentStep === step.id ? 'font-medium text-omni-black' : 'text-gray-500'}`}>
+              <span className={`ml-2 text-sm ${currentStep === step.id ? 'font-medium text-taxaidd-black' : 'text-gray-500'}`}>
                 {step.title}
               </span>
             </div>
             {index < steps.length - 1 && (
-              <div className={`w-16 h-0.5 mx-3 ${currentStep > step.id ? 'bg-omni-mint' : 'bg-gray-200'}`} />
+              <div className={`w-16 h-0.5 mx-3 ${currentStep > step.id ? 'bg-taxaidd-mint' : 'bg-gray-200'}`} />
             )}
           </React.Fragment>
         ))}
@@ -152,22 +182,86 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
               placeholder="Ex: Acquisition TechVision SAS"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Client *</label>
-            <select
-              value={formData.clientId}
-              onChange={(e) => handleChange('clientId', e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
-            >
-              <option value="">Sélectionner un client</option>
-              {clients.map(client => (
-                <option key={client.id} value={client.id}>{client.name}</option>
-              ))}
-            </select>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Client *</label>
+            {!showNewClientForm ? (
+              <>
+                <div className="space-y-2 max-h-40 overflow-y-auto mb-2">
+                  {clients.map(client => (
+                    <button
+                      key={client.id}
+                      onClick={() => handleChange('clientId', client.id)}
+                      className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 text-left transition-all ${
+                        formData.clientId === client.id
+                          ? 'border-taxaidd-yellow bg-taxaidd-yellow/10'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                        style={{ backgroundColor: client.color }}
+                      >
+                        {client.initials}
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{client.name}</p>
+                        <p className="text-xs text-gray-500">{client.industry}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setShowNewClientForm(true)}
+                  className="w-full flex items-center justify-center gap-2 p-3 rounded-lg border-2 border-dashed border-gray-300 text-gray-600 hover:border-taxaidd-purple hover:text-taxaidd-purple transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Créer un nouveau client</span>
+                </button>
+              </>
+            ) : (
+              <div className="p-4 border border-gray-200 rounded-lg space-y-3 bg-gray-50">
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <Building2 className="w-4 h-4" />
+                  <span>Nouveau client</span>
+                </div>
+                <input
+                  type="text"
+                  value={newClient.name}
+                  onChange={(e) => setNewClient(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Nom du client"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                />
+                <select
+                  value={newClient.industry}
+                  onChange={(e) => setNewClient(prev => ({ ...prev, industry: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                >
+                  <option value="">Sélectionner un secteur</option>
+                  {industries.map(ind => (
+                    <option key={ind} value={ind}>{ind}</option>
+                  ))}
+                </select>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowNewClientForm(false)}
+                    className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-100"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={handleCreateClient}
+                    disabled={!newClient.name || !newClient.industry}
+                    className="flex-1 px-3 py-2 text-sm bg-taxaidd-yellow text-taxaidd-black rounded-lg hover:bg-taxaidd-yellow-dark disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Créer
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div>
@@ -175,7 +269,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
             <select
               value={formData.type}
               onChange={(e) => handleChange('type', e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
             >
               <option value="">Sélectionner un type</option>
               {missionTypes.map(type => (
@@ -191,7 +285,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => handleChange('startDate', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
               />
             </div>
             <div>
@@ -200,7 +294,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => handleChange('endDate', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
               />
             </div>
           </div>
@@ -220,7 +314,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
                   className={`
                     p-4 rounded-lg border-2 text-left transition-all
                     ${formData.domains.includes(domain.value)
-                      ? 'border-omni-yellow bg-omni-yellow/10'
+                      ? 'border-taxaidd-yellow bg-taxaidd-yellow/10'
                       : 'border-gray-200 hover:border-gray-300'
                     }
                   `}
@@ -247,7 +341,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
             <select
               value={formData.responsibleId}
               onChange={(e) => handleChange('responsibleId', e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-omni-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
             >
               <option value="">Sélectionner un responsable</option>
               {users.map(user => (
@@ -264,14 +358,14 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
                   key={user.id}
                   className={`
                     flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors
-                    ${formData.teamIds.includes(user.id) ? 'bg-omni-yellow/10' : 'hover:bg-gray-50'}
+                    ${formData.teamIds.includes(user.id) ? 'bg-taxaidd-yellow/10' : 'hover:bg-gray-50'}
                   `}
                 >
                   <input
                     type="checkbox"
                     checked={formData.teamIds.includes(user.id)}
                     onChange={() => toggleTeamMember(user.id)}
-                    className="w-4 h-4 accent-omni-yellow"
+                    className="w-4 h-4 accent-taxaidd-yellow"
                   />
                   <div
                     className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
