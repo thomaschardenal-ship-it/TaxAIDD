@@ -4,3 +4,6 @@ export { default as ActionButtons } from './ActionButtons';
 export { default as IRLModal } from './IRLModal';
 export { default as QAModal } from './QAModal';
 export { default as ImportModal } from './ImportModal';
+export { default as QAResponseImportModal } from './QAResponseImportModal';
+export { default as ExportModal } from './ExportModal';
+export { default as CoherenceReviewModal } from './CoherenceReviewModal';
