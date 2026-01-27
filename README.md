@@ -1,5 +1,7 @@
 # TaxAIDD Platform
 
+https://thomaschardenal-ship-it.github.io/TaxAIDD/
+
 Plateforme de gestion de dossiers de Due Diligence fiscale, sociale, corporate et IP/IT.
 
 ## Technologies
@@ -126,4 +128,4 @@ Optimisé pour desktop (1920px, 1440px, 1280px).
 
 ## License
 
-Propriétaire - OMNI Advisory
+Propriétaire - TaxAIDD
