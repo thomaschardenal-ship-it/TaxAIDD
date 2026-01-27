@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import ProgressBar from '@/components/ui/ProgressBar';
 import Avatar from '@/components/ui/Avatar';
 import Button from '@/components/ui/Button';
-import { OrgChart, CollectionProgress, ActionButtons, IRLModal, QAModal, ImportModal } from '@/components/project';
+import { OrgChart, CollectionProgress, ActionButtons, IRLModal, QAModal, ImportModal, QAResponseImportModal, ExportModal, CoherenceReviewModal } from '@/components/project';
 
 export default function ProjectPage() {
   const params = useParams();
@@ -21,6 +21,9 @@ export default function ProjectPage() {
   const [showIRLModal, setShowIRLModal] = useState(false);
   const [showQAModal, setShowQAModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showQAResponseImportModal, setShowQAResponseImportModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showCoherenceModal, setShowCoherenceModal] = useState(false);
 
   const project = getProjectById(projectId);
   const client = project ? getClientById(project.clientId) : null;
@@ -172,6 +175,9 @@ export default function ProjectPage() {
           onGenerateIRL={() => setShowIRLModal(true)}
           onGenerateQA={() => setShowQAModal(true)}
           onImportDocuments={() => setShowImportModal(true)}
+          onImportQAResponses={() => setShowQAResponseImportModal(true)}
+          onExportReport={() => setShowExportModal(true)}
+          onCoherenceReview={() => setShowCoherenceModal(true)}
         />
       </div>
 
@@ -193,6 +199,24 @@ export default function ProjectPage() {
       <ImportModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+      />
+
+      <QAResponseImportModal
+        isOpen={showQAResponseImportModal}
+        onClose={() => setShowQAResponseImportModal(false)}
+        projectName={project.name}
+      />
+
+      <ExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        projectName={project.name}
+      />
+
+      <CoherenceReviewModal
+        isOpen={showCoherenceModal}
+        onClose={() => setShowCoherenceModal(false)}
+        projectName={project.name}
       />
     </div>
   );

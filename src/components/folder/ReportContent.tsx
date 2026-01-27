@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, ChevronRight, Sparkles, FileText, AlertTriangle, Link as LinkIcon } from 'lucide-react';
+import { ChevronDown, ChevronRight, Sparkles, FileText, AlertTriangle, Link as LinkIcon, CheckCircle2, Circle, Clock, Edit3 } from 'lucide-react';
 import { ReportElement, DomainType, ReportTableData, ReportListItem } from '@/types';
 import { useProjectContext } from '@/context/ProjectContext';
 import { getDocumentById } from '@/data';
 import Button from '@/components/ui/Button';
+
+type ValidationStatus = 'pending' | 'in_review' | 'validated' | 'needs_revision';
 
 interface ReportContentProps {
   elements: ReportElement[];
@@ -32,7 +34,23 @@ export default function ReportContent({ elements, projectId, onCellSelect }: Rep
   const [selectedDomain, setSelectedDomain] = useState<DomainType | 'all'>('all');
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
   const [isGenerating, setIsGenerating] = useState(false);
+  const [validationStatus, setValidationStatus] = useState<Record<string, ValidationStatus>>(() => {
+    // Initialize with mock validation statuses
+    return elements.reduce((acc, el) => {
+      acc[el.id] = Math.random() > 0.7 ? 'validated' : Math.random() > 0.5 ? 'in_review' : 'pending';
+      return acc;
+    }, {} as Record<string, ValidationStatus>);
+  });
   const elementRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const handleValidationChange = (elementId: string, status: ValidationStatus) => {
+    setValidationStatus(prev => ({ ...prev, [elementId]: status }));
+  };
+
+  // Calculate validation statistics
+  const validatedCount = Object.values(validationStatus).filter(s => s === 'validated').length;
+  const totalCount = elements.length;
+  const validationProgress = totalCount > 0 ? Math.round((validatedCount / totalCount) * 100) : 0;
 
   // Group elements by domain
   const groupedElements = elements.reduce((acc, element) => {
@@ -90,6 +108,28 @@ export default function ReportContent({ elements, projectId, onCellSelect }: Rep
           </Button>
         </div>
 
+        {/* Validation Progress */}
+        <div className="mb-3 p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">Validation du rapport</span>
+            <span className="text-sm text-gray-500">{validatedCount}/{totalCount} validés</span>
+          </div>
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className={`h-full transition-all duration-300 ${
+                validationProgress === 100 ? 'bg-green-500' : 'bg-taxaidd-purple'
+              }`}
+              style={{ width: `${validationProgress}%` }}
+            />
+          </div>
+          {validationProgress === 100 && (
+            <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" />
+              Tous les éléments ont été validés
+            </p>
+          )}
+        </div>
+
         {/* Domain filter */}
         <select
           value={selectedDomain}
@@ -117,6 +157,8 @@ export default function ReportContent({ elements, projectId, onCellSelect }: Rep
             selectedElementId={selectedReportElementId}
             projectId={projectId}
             elementRefs={elementRefs}
+            validationStatus={validationStatus}
+            onValidationChange={handleValidationChange}
           />
         ))}
       </div>
@@ -133,6 +175,8 @@ interface DomainSectionProps {
   selectedElementId: string | null;
   projectId: string;
   elementRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
+  validationStatus: Record<string, ValidationStatus>;
+  onValidationChange: (elementId: string, status: ValidationStatus) => void;
 }
 
 function DomainSection({
@@ -144,17 +188,25 @@ function DomainSection({
   selectedElementId,
   projectId,
   elementRefs,
+  validationStatus,
+  onValidationChange,
 }: DomainSectionProps) {
   const colors = domainColors[domain];
+  const domainValidated = elements.filter(el => validationStatus[el.id] === 'validated').length;
 
   return (
     <div className="mb-6">
       {/* Domain header */}
       <div className={`${colors.light} px-4 py-3 rounded-t-lg sticky top-0 z-[5]`}>
-        <h4 className={`font-semibold ${colors.text} flex items-center gap-2`}>
-          <span>{domainIcons[domain]}</span>
-          {domain.toUpperCase()} ANALYSIS
-        </h4>
+        <div className="flex items-center justify-between">
+          <h4 className={`font-semibold ${colors.text} flex items-center gap-2`}>
+            <span>{domainIcons[domain]}</span>
+            {domain.toUpperCase()} ANALYSIS
+          </h4>
+          <span className="text-xs text-gray-500 bg-white/50 px-2 py-1 rounded">
+            {domainValidated}/{elements.length} validés
+          </span>
+        </div>
       </div>
 
       {/* Elements */}
@@ -170,6 +222,8 @@ function DomainSection({
             isSelected={selectedElementId === element.id}
             projectId={projectId}
             elementRefs={elementRefs}
+            validationStatus={validationStatus[element.id] || 'pending'}
+            onValidationChange={(status) => onValidationChange(element.id, status)}
           />
         ))}
       </div>
@@ -186,7 +240,16 @@ interface ElementCardProps {
   isSelected: boolean;
   projectId: string;
   elementRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
+  validationStatus: ValidationStatus;
+  onValidationChange: (status: ValidationStatus) => void;
 }
+
+const validationStatusConfig: Record<ValidationStatus, { icon: React.ReactNode; label: string; color: string; bgColor: string }> = {
+  pending: { icon: <Circle className="w-4 h-4" />, label: 'À valider', color: 'text-gray-400', bgColor: 'bg-gray-100' },
+  in_review: { icon: <Clock className="w-4 h-4" />, label: 'En revue', color: 'text-amber-500', bgColor: 'bg-amber-50' },
+  validated: { icon: <CheckCircle2 className="w-4 h-4" />, label: 'Validé', color: 'text-green-500', bgColor: 'bg-green-50' },
+  needs_revision: { icon: <Edit3 className="w-4 h-4" />, label: 'À réviser', color: 'text-red-500', bgColor: 'bg-red-50' },
+};
 
 function ElementCard({
   element,
@@ -197,8 +260,11 @@ function ElementCard({
   isSelected,
   projectId,
   elementRefs,
+  validationStatus,
+  onValidationChange,
 }: ElementCardProps) {
   const colors = domainColors[domain];
+  const statusConfig = validationStatusConfig[validationStatus];
 
   const getIcon = () => {
     switch (element.type) {
@@ -208,6 +274,14 @@ function ElementCard({
     }
   };
 
+  const cycleValidationStatus = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const statusOrder: ValidationStatus[] = ['pending', 'in_review', 'validated', 'needs_revision'];
+    const currentIndex = statusOrder.indexOf(validationStatus);
+    const nextIndex = (currentIndex + 1) % statusOrder.length;
+    onValidationChange(statusOrder[nextIndex]);
+  };
+
   return (
     <div
       ref={(el) => { elementRefs.current[element.id] = el; }}
@@ -215,26 +289,38 @@ function ElementCard({
         bg-white rounded-lg border-l-4 shadow-sm transition-all duration-300
         ${colors.border}
         ${isSelected ? 'ring-2 ring-taxaidd-yellow glow-effect' : ''}
+        ${validationStatus === 'validated' ? 'opacity-80' : ''}
       `}
     >
       {/* Header */}
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50"
-      >
-        {isCollapsed ? (
-          <ChevronRight className="w-4 h-4 text-gray-400" />
-        ) : (
-          <ChevronDown className="w-4 h-4 text-gray-400" />
-        )}
-        <span>{getIcon()}</span>
-        <span className="font-medium text-taxaidd-black flex-1 text-left">{element.title}</span>
-        {element.sourceDocumentIds.length > 0 && (
-          <span className="badge bg-gray-100 text-gray-600">
-            {element.sourceDocumentIds.length} sources
-          </span>
-        )}
-      </button>
+      <div className="flex items-center">
+        <button
+          onClick={onToggle}
+          className="flex-1 flex items-center gap-3 px-4 py-3 hover:bg-gray-50"
+        >
+          {isCollapsed ? (
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-gray-400" />
+          )}
+          <span>{getIcon()}</span>
+          <span className="font-medium text-taxaidd-black flex-1 text-left">{element.title}</span>
+          {element.sourceDocumentIds.length > 0 && (
+            <span className="badge bg-gray-100 text-gray-600">
+              {element.sourceDocumentIds.length} sources
+            </span>
+          )}
+        </button>
+        {/* Validation status button */}
+        <button
+          onClick={cycleValidationStatus}
+          className={`mr-3 px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-xs font-medium transition-colors ${statusConfig.bgColor} ${statusConfig.color} hover:opacity-80`}
+          title="Cliquez pour changer le statut"
+        >
+          {statusConfig.icon}
+          <span className="hidden sm:inline">{statusConfig.label}</span>
+        </button>
+      </div>
 
       {/* Content */}
       {!isCollapsed && (
