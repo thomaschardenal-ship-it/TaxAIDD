@@ -1,16 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FolderKanban, Users, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Building2, Users, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
 import { currentUser } from '@/data';
 import Avatar from '@/components/ui/Avatar';
 import { useSidebar } from '@/context/SidebarContext';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
-  { icon: FolderKanban, label: 'Projets', href: '/' },
+  { icon: Building2, label: 'Clients', href: '/clients' },
   { icon: Users, label: 'Utilisateurs', href: '/users', adminOnly: true },
   { icon: Settings, label: 'Paramètres', href: '/settings' },
 ];
@@ -18,7 +18,15 @@ const menuItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const isAdmin = currentUser.role === 'admin';
-  const { isCollapsed, toggleSidebar } = useSidebar();
+  const { isCollapsed, toggleSidebar, collapseSidebar } = useSidebar();
+
+  // Auto-collapse sidebar when navigating (on smaller screens or when clicking a link)
+  useEffect(() => {
+    // Auto-collapse on navigation for mobile/tablet
+    if (window.innerWidth < 1024 && !isCollapsed) {
+      collapseSidebar();
+    }
+  }, [pathname, collapseSidebar, isCollapsed]);
 
   return (
     <aside

@@ -16,12 +16,25 @@ export interface User {
   color: string;
 }
 
+export interface ClientContact {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  isPrimary?: boolean;
+}
+
 export interface Client {
   id: string;
   name: string;
   industry: string;
   initials: string;
   color: string;
+  address?: string;
+  website?: string;
+  siren?: string;
+  contacts?: ClientContact[];
 }
 
 export interface Company {
