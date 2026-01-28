@@ -5,7 +5,8 @@ import { MockDataSource } from './mock';
 import { APIDataSource } from './api';
 
 // Check if we should use mock data
-const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
+// Default to true (mock) for safety - only use API when explicitly set to 'false'
+const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK !== 'false';
 
 // Singleton instances
 let mockDataSource: MockDataSource | null = null;
