@@ -24,6 +24,22 @@ export default function ProjectPage() {
   const [showQAResponseImportModal, setShowQAResponseImportModal] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showCoherenceModal, setShowCoherenceModal] = useState(false);
+  const [irlFilterDomain, setIrlFilterDomain] = useState<DomainType | null>(null);
+
+  const handleDomainClick = (domain: DomainType) => {
+    setIrlFilterDomain(domain);
+    setShowIRLModal(true);
+  };
+
+  const handleOpenIRLAll = () => {
+    setIrlFilterDomain(null);
+    setShowIRLModal(true);
+  };
+
+  const handleCloseIRLModal = () => {
+    setShowIRLModal(false);
+    setIrlFilterDomain(null);
+  };
 
   const project = getProjectById(projectId);
   const client = project ? getClientById(project.clientId) : null;
@@ -168,11 +184,11 @@ export default function ProjectPage() {
         <OrgChart companies={project.companies} />
 
         {/* Collection Progress */}
-        <CollectionProgress documentStats={documentStats} />
+        <CollectionProgress documentStats={documentStats} onDomainClick={handleDomainClick} />
 
         {/* Action Buttons */}
         <ActionButtons
-          onGenerateIRL={() => setShowIRLModal(true)}
+          onGenerateIRL={handleOpenIRLAll}
           onGenerateQA={() => setShowQAModal(true)}
           onImportDocuments={() => setShowImportModal(true)}
           onImportQAResponses={() => setShowQAResponseImportModal(true)}
@@ -184,9 +200,11 @@ export default function ProjectPage() {
       {/* Modals */}
       <IRLModal
         isOpen={showIRLModal}
-        onClose={() => setShowIRLModal(false)}
+        onClose={handleCloseIRLModal}
         items={irlItems}
         projectName={project.name}
+        projectId={projectId}
+        filterDomain={irlFilterDomain}
       />
 
       <QAModal

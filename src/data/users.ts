@@ -1,5 +1,11 @@
 import { User } from '@/types';
 
+// Domain colors for reference:
+// TAX: #6B00E0 (purple)
+// Social: #00D4AA (green/mint)
+// Corporate: #0033A0 (blue)
+// IP/IT: #E91E8C (magenta)
+
 export const users: User[] = [
   {
     id: 'user-1',
@@ -8,7 +14,7 @@ export const users: User[] = [
     role: 'admin',
     title: 'Admin Fiscaliste',
     initials: 'MD',
-    color: '#6B00E0',
+    color: '#6B00E0', // TAX purple
   },
   {
     id: 'user-2',
@@ -17,7 +23,7 @@ export const users: User[] = [
     role: 'senior',
     title: 'Fiscaliste Senior',
     initials: 'SL',
-    color: '#0033A0',
+    color: '#6B00E0', // TAX purple
   },
   {
     id: 'user-3',
@@ -26,7 +32,7 @@ export const users: User[] = [
     role: 'junior',
     title: 'Fiscaliste Junior',
     initials: 'TB',
-    color: '#00D4AA',
+    color: '#6B00E0', // TAX purple
   },
   {
     id: 'user-4',
@@ -35,7 +41,7 @@ export const users: User[] = [
     role: 'specialist',
     title: 'Spécialiste Social',
     initials: 'CM',
-    color: '#E91E8C',
+    color: '#00D4AA', // Social green
   },
   {
     id: 'user-5',
@@ -44,7 +50,7 @@ export const users: User[] = [
     role: 'specialist',
     title: 'Spécialiste Corporate',
     initials: 'PD',
-    color: '#FFB800',
+    color: '#0033A0', // Corporate blue
   },
   {
     id: 'user-6',
@@ -53,7 +59,7 @@ export const users: User[] = [
     role: 'specialist',
     title: 'Spécialiste IP/IT',
     initials: 'JM',
-    color: '#E91E8C',
+    color: '#E91E8C', // IP/IT magenta
   },
 ];
 
@@ -64,3 +70,11 @@ export const getUserById = (id: string): User | undefined =>
 
 export const getUsersByIds = (ids: string[]): User[] =>
   users.filter(user => ids.includes(user.id));
+
+// Domain color helper - matches domain to color
+export const domainColors: Record<string, string> = {
+  'TAX': '#6B00E0',
+  'Social': '#00D4AA',
+  'Corporate': '#0033A0',
+  'IP/IT': '#E91E8C',
+};

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Plus, Search, Mail, Shield, Edit2, Trash2 } from 'lucide-react';
-import { users as initialUsers } from '@/data';
+import { users as initialUsers, domainColors } from '@/data';
 import { User } from '@/types';
 import Button from '@/components/ui/Button';
 import Avatar from '@/components/ui/Avatar';
@@ -22,15 +22,25 @@ const roleColors: Record<string, string> = {
   specialist: 'bg-amber-100 text-amber-700',
 };
 
+const specialtyOptions = [
+  { value: 'Fiscaliste', label: 'Fiscaliste', color: domainColors['TAX'] },
+  { value: 'Social', label: 'Spécialiste Social', color: domainColors['Social'] },
+  { value: 'Corporate', label: 'Spécialiste Corporate', color: domainColors['Corporate'] },
+  { value: 'IP/IT', label: 'Spécialiste IP/IT', color: domainColors['IP/IT'] },
+];
+
 export default function UsersPage() {
   const [users, setUsers] = useState(initialUsers);
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
   const [newUser, setNewUser] = useState({
     name: '',
     email: '',
     role: 'junior' as User['role'],
     title: '',
+    specialty: 'Fiscaliste',
   });
 
   const filteredUsers = users.filter(user =>
@@ -38,6 +48,11 @@ export default function UsersPage() {
     user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const getColorForSpecialty = (specialty: string): string => {
+    const found = specialtyOptions.find(opt => specialty.includes(opt.value));
+    return found?.color || domainColors['TAX'];
+  };
 
   const handleAddUser = () => {
     if (newUser.name && newUser.email && newUser.title) {
@@ -48,16 +63,38 @@ export default function UsersPage() {
         role: newUser.role,
         title: newUser.title,
         initials: newUser.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
-        color: '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'),
+        color: getColorForSpecialty(newUser.specialty),
       };
       setUsers(prev => [...prev, user]);
-      setNewUser({ name: '', email: '', role: 'junior', title: '' });
+      setNewUser({ name: '', email: '', role: 'junior', title: '', specialty: 'Fiscaliste' });
       setShowAddModal(false);
     }
   };
 
+  const handleEditUser = () => {
+    if (editingUser) {
+      setUsers(prev => prev.map(u => u.id === editingUser.id ? editingUser : u));
+      setEditingUser(null);
+      setShowEditModal(false);
+    }
+  };
+
+  const openEditModal = (user: User) => {
+    setEditingUser({ ...user });
+    setShowEditModal(true);
+  };
+
   const handleDeleteUser = (userId: string) => {
-    setUsers(prev => prev.filter(u => u.id !== userId));
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+      setUsers(prev => prev.filter(u => u.id !== userId));
+    }
+  };
+
+  const detectSpecialtyFromTitle = (title: string): string => {
+    if (title.toLowerCase().includes('social')) return 'Social';
+    if (title.toLowerCase().includes('corporate')) return 'Corporate';
+    if (title.toLowerCase().includes('ip') || title.toLowerCase().includes('it')) return 'IP/IT';
+    return 'Fiscaliste';
   };
 
   return (
@@ -65,7 +102,7 @@ export default function UsersPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-taxaidd-black">Utilisateurs</h1>
+          <h1 className="text-2xl font-bold text-wedd-black">Utilisateurs</h1>
           <p className="text-gray-500 mt-1">Gérez les membres de votre équipe</p>
         </div>
         <Button onClick={() => setShowAddModal(true)} icon={<Plus className="w-4 h-4" />}>
@@ -83,7 +120,7 @@ export default function UsersPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Rechercher un utilisateur..."
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
             />
           </div>
         </div>
@@ -105,7 +142,7 @@ export default function UsersPage() {
                   size="lg"
                 />
                 <div>
-                  <h3 className="font-semibold text-taxaidd-black">{user.name}</h3>
+                  <h3 className="font-semibold text-wedd-black">{user.name}</h3>
                   <p className="text-sm text-gray-500">{user.title}</p>
                 </div>
               </div>
@@ -126,7 +163,10 @@ export default function UsersPage() {
             </div>
 
             <div className="flex gap-2 pt-3 border-t border-gray-100">
-              <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <button
+                onClick={() => openEditModal(user)}
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+              >
                 <Edit2 className="w-4 h-4" />
                 Modifier
               </button>
@@ -162,7 +202,7 @@ export default function UsersPage() {
               value={newUser.name}
               onChange={(e) => setNewUser(prev => ({ ...prev, name: e.target.value }))}
               placeholder="Jean Dupont"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
             />
           </div>
 
@@ -173,7 +213,7 @@ export default function UsersPage() {
               value={newUser.email}
               onChange={(e) => setNewUser(prev => ({ ...prev, email: e.target.value }))}
               placeholder="jean.dupont@taxaidd.fr"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
             />
           </div>
 
@@ -184,7 +224,7 @@ export default function UsersPage() {
               value={newUser.title}
               onChange={(e) => setNewUser(prev => ({ ...prev, title: e.target.value }))}
               placeholder="Fiscaliste Senior"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
             />
           </div>
 
@@ -193,13 +233,27 @@ export default function UsersPage() {
             <select
               value={newUser.role}
               onChange={(e) => setNewUser(prev => ({ ...prev, role: e.target.value as User['role'] }))}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
             >
               <option value="junior">Junior</option>
               <option value="senior">Senior</option>
               <option value="specialist">Spécialiste</option>
               <option value="admin">Administrateur</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Spécialité</label>
+            <select
+              value={newUser.specialty}
+              onChange={(e) => setNewUser(prev => ({ ...prev, specialty: e.target.value }))}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
+            >
+              {specialtyOptions.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">Définit la couleur de l&apos;avatar</p>
           </div>
         </div>
 
@@ -212,6 +266,94 @@ export default function UsersPage() {
             disabled={!newUser.name || !newUser.email || !newUser.title}
           >
             Ajouter
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      {/* Edit User Modal */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setEditingUser(null);
+        }}
+        title="Modifier l'utilisateur"
+      >
+        {editingUser && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-4">
+              <Avatar
+                name={editingUser.name}
+                initials={editingUser.initials}
+                color={editingUser.color}
+                size="lg"
+              />
+              <div>
+                <p className="font-semibold">{editingUser.name}</p>
+                <p className="text-sm text-gray-500">{editingUser.email}</p>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Titre / Fonction *</label>
+              <input
+                type="text"
+                value={editingUser.title}
+                onChange={(e) => setEditingUser(prev => prev ? { ...prev, title: e.target.value } : null)}
+                placeholder="Fiscaliste Senior"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Rôle *</label>
+              <select
+                value={editingUser.role}
+                onChange={(e) => setEditingUser(prev => prev ? { ...prev, role: e.target.value as User['role'] } : null)}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
+              >
+                <option value="junior">Junior</option>
+                <option value="senior">Senior</option>
+                <option value="specialist">Spécialiste</option>
+                <option value="admin">Administrateur</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Spécialité (Couleur)</label>
+              <div className="grid grid-cols-2 gap-2">
+                {specialtyOptions.map(opt => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setEditingUser(prev => prev ? { ...prev, color: opt.color } : null)}
+                    className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      editingUser.color === opt.color
+                        ? 'border-wedd-mint bg-wedd-mint/5'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div
+                      className="w-6 h-6 rounded-full"
+                      style={{ backgroundColor: opt.color }}
+                    />
+                    <span className="text-sm">{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <ModalFooter>
+          <Button variant="outline" onClick={() => {
+            setShowEditModal(false);
+            setEditingUser(null);
+          }}>
+            Annuler
+          </Button>
+          <Button onClick={handleEditUser} disabled={!editingUser?.title}>
+            Enregistrer
           </Button>
         </ModalFooter>
       </Modal>
