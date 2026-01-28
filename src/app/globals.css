@@ -3,20 +3,30 @@
 @tailwind utilities;
 
 :root {
-  --taxaidd-yellow: #FFB800;
-  --taxaidd-yellow-dark: #F5A623;
-  --taxaidd-magenta: #E91E8C;
-  --taxaidd-magenta-light: #F5A5D5;
-  --taxaidd-mint: #00D4AA;
-  --taxaidd-mint-light: #7FFFD4;
-  --taxaidd-blue: #0033A0;
-  --taxaidd-blue-light: #9BB4D9;
-  --taxaidd-purple: #6B00E0;
-  --taxaidd-purple-light: #C4B5FD;
-  --taxaidd-black: #2D2D2D;
-  --taxaidd-gray: #C0C0C0;
-  --taxaidd-gray-light: #F8F8F8;
-  --taxaidd-gray-lighter: #F3F3F3;
+  /* WeDD Color Palette */
+  --wedd-mint: #8dd4a0;
+  --wedd-mint-light: #b8e5c5;
+  --wedd-mint-dark: #6bc48a;
+  --wedd-mint-50: #f0faf3;
+  --wedd-black: #1a1a1a;
+  --wedd-black-light: #2d2d2d;
+  --wedd-cream: #f5f5f0;
+  --wedd-cream-dark: #e8e8e3;
+  --wedd-white: #ffffff;
+  --wedd-gray-100: #f8f8f5;
+  --wedd-gray-200: #e5e5e0;
+  --wedd-gray-300: #d1d1cc;
+  --wedd-gray-400: #9c9c97;
+  --wedd-gray-500: #6b6b66;
+  --wedd-gray-600: #4a4a46;
+
+  /* Legacy aliases */
+  --taxaidd-yellow: var(--wedd-mint);
+  --taxaidd-yellow-dark: var(--wedd-mint-dark);
+  --taxaidd-black: var(--wedd-black);
+  --taxaidd-gray: var(--wedd-gray-400);
+  --taxaidd-gray-light: var(--wedd-cream);
+  --taxaidd-gray-lighter: var(--wedd-gray-100);
 }
 
 * {
@@ -30,56 +40,56 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   font-family: var(--font-inter), system-ui, sans-serif;
-  background-color: var(--taxaidd-gray-lighter);
-  color: var(--taxaidd-black);
+  background-color: var(--wedd-cream);
+  color: var(--wedd-black);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - WeDD style */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--taxaidd-gray-light);
-  border-radius: 4px;
+  background: var(--wedd-gray-100);
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--taxaidd-gray);
-  border-radius: 4px;
+  background: var(--wedd-gray-300);
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #999;
+  background: var(--wedd-gray-400);
 }
 
 /* Utility classes */
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: var(--taxaidd-gray) var(--taxaidd-gray-light);
+    scrollbar-color: var(--wedd-gray-300) var(--wedd-gray-100);
   }
 
   .text-balance {
     text-wrap: balance;
   }
 
-  /* Domain color backgrounds with opacity */
+  /* Domain color backgrounds - WeDD mint accent */
   .bg-tax-light {
-    background-color: rgba(107, 0, 224, 0.05);
+    background-color: rgba(141, 212, 160, 0.1);
   }
 
   .bg-social-light {
-    background-color: rgba(0, 212, 170, 0.05);
+    background-color: rgba(141, 212, 160, 0.15);
   }
 
   .bg-corporate-light {
-    background-color: rgba(0, 51, 160, 0.05);
+    background-color: rgba(26, 26, 26, 0.05);
   }
 
   .bg-ipit-light {
-    background-color: rgba(233, 30, 140, 0.05);
+    background-color: rgba(141, 212, 160, 0.08);
   }
 
   /* Highlight animation */
@@ -92,54 +102,64 @@ body {
     animation: highlight-pulse 1.5s ease-in-out infinite;
   }
 
-  /* Glow effect */
+  /* Glow effect - WeDD mint */
   @keyframes glow {
-    0%, 100% { box-shadow: 0 0 5px var(--taxaidd-yellow); }
-    50% { box-shadow: 0 0 20px var(--taxaidd-yellow), 0 0 30px var(--taxaidd-yellow); }
+    0%, 100% { box-shadow: 0 0 5px var(--wedd-mint); }
+    50% { box-shadow: 0 0 20px var(--wedd-mint), 0 0 30px var(--wedd-mint); }
   }
 
   .glow-effect {
     animation: glow 1s ease-in-out;
+  }
+
+  /* WeDD-style focus ring */
+  .focus-wedd:focus {
+    outline: 0.125rem solid var(--wedd-mint);
+    outline-offset: 2px;
   }
 }
 
 /* Component styles */
 @layer components {
   .btn-primary {
-    @apply bg-taxaidd-yellow hover:bg-taxaidd-yellow-dark text-taxaidd-black font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+    @apply bg-wedd-black hover:bg-wedd-black-light text-white font-medium px-4 py-2 rounded transition-colors duration-200;
   }
 
   .btn-secondary {
-    @apply bg-white border border-taxaidd-gray hover:border-taxaidd-purple text-taxaidd-black font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+    @apply bg-wedd-mint hover:bg-wedd-mint-dark text-wedd-black font-medium px-4 py-2 rounded transition-colors duration-200;
+  }
+
+  .btn-outline {
+    @apply bg-white border border-wedd-gray-300 hover:border-wedd-black text-wedd-black font-medium px-4 py-2 rounded transition-colors duration-200;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-4;
+    @apply bg-white rounded shadow-sm border border-wedd-gray-200 p-4;
   }
 
   .card-hover {
-    @apply hover:shadow-md hover:border-taxaidd-yellow transition-all duration-200;
+    @apply hover:shadow-md hover:border-wedd-mint transition-all duration-200;
   }
 
-  /* Badge styles */
+  /* Badge styles - WeDD */
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium;
   }
 
   .badge-tax {
-    @apply bg-taxaidd-purple-light text-taxaidd-purple;
+    @apply bg-wedd-mint-50 text-wedd-black;
   }
 
   .badge-social {
-    @apply bg-emerald-100 text-taxaidd-mint;
+    @apply bg-wedd-mint/20 text-wedd-black;
   }
 
   .badge-corporate {
-    @apply bg-blue-100 text-taxaidd-blue;
+    @apply bg-wedd-gray-200 text-wedd-black;
   }
 
   .badge-ipit {
-    @apply bg-pink-100 text-taxaidd-magenta;
+    @apply bg-wedd-mint-light text-wedd-black;
   }
 
   /* Status badges */
@@ -148,52 +168,74 @@ body {
   }
 
   .badge-review {
-    @apply bg-taxaidd-purple-light text-taxaidd-purple;
+    @apply bg-wedd-mint-50 text-wedd-black;
   }
 
   .badge-valide {
-    @apply bg-emerald-100 text-emerald-700;
+    @apply bg-wedd-mint/30 text-wedd-black;
   }
 
   .badge-urgent {
-    @apply bg-pink-100 text-taxaidd-magenta;
+    @apply bg-red-100 text-red-700;
   }
 
   /* Tree view styles */
   .tree-item {
-    @apply flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-colors;
+    @apply flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer transition-colors;
   }
 
   .tree-item:hover {
-    @apply bg-taxaidd-gray-light;
+    @apply bg-wedd-gray-100;
   }
 
   .tree-item.selected {
-    @apply bg-taxaidd-yellow bg-opacity-20 border-l-2 border-taxaidd-yellow;
+    @apply bg-wedd-mint/20 border-l-2 border-wedd-mint;
   }
 
-  /* Table styles */
+  /* Table styles - WeDD */
   .data-table {
     @apply w-full border-collapse;
   }
 
   .data-table th {
-    @apply bg-taxaidd-gray-light text-left px-4 py-3 text-sm font-semibold text-taxaidd-black border-b border-gray-200;
+    @apply bg-wedd-gray-100 text-left px-4 py-3 text-sm font-semibold text-wedd-black border-b border-wedd-gray-200;
   }
 
   .data-table td {
-    @apply px-4 py-3 text-sm border-b border-gray-100;
+    @apply px-4 py-3 text-sm border-b border-wedd-gray-200;
   }
 
   .data-table tbody tr:hover {
-    @apply bg-gray-50;
+    @apply bg-wedd-gray-100;
   }
 
   .data-table td.editable {
-    @apply cursor-pointer hover:bg-taxaidd-yellow hover:bg-opacity-10;
+    @apply cursor-pointer hover:bg-wedd-mint/10;
   }
 
   .data-table td.selected {
-    @apply ring-2 ring-taxaidd-purple ring-inset bg-taxaidd-purple bg-opacity-5;
+    @apply ring-2 ring-wedd-mint ring-inset bg-wedd-mint/5;
+  }
+
+  /* WeDD Section styles */
+  .section-dark {
+    @apply bg-wedd-black text-white;
+  }
+
+  .section-light {
+    @apply bg-wedd-cream;
+  }
+
+  .section-white {
+    @apply bg-white;
+  }
+
+  /* WeDD Typography */
+  .heading-display {
+    @apply font-display font-bold tracking-tight;
+  }
+
+  .text-accent {
+    @apply text-wedd-mint;
   }
 }

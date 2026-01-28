@@ -16,10 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased bg-wedd-cream">
         <ProjectProvider>
           <SidebarProvider>
-            <div className="flex min-h-screen bg-taxaidd-gray-lighter">
+            <div className="flex min-h-screen">
               <SidebarWrapper>
                 {children}
               </SidebarWrapper>

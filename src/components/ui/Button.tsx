@@ -1,19 +1,22 @@
 'use client';
 
 import React from 'react';
+import { ArrowUpRight } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'mint';
   size?: 'sm' | 'md' | 'lg';
   icon?: React.ReactNode;
+  showArrow?: boolean;
   children: React.ReactNode;
 }
 
 const variantClasses = {
-  primary: 'bg-taxaidd-yellow hover:bg-taxaidd-yellow-dark text-taxaidd-black',
-  secondary: 'bg-taxaidd-purple hover:bg-purple-700 text-white',
-  outline: 'border border-taxaidd-gray hover:border-taxaidd-purple bg-white text-taxaidd-black',
-  ghost: 'hover:bg-taxaidd-gray-light text-taxaidd-black',
+  primary: 'bg-wedd-black hover:bg-wedd-black-light text-white',
+  secondary: 'bg-wedd-mint hover:bg-wedd-mint-dark text-wedd-black',
+  outline: 'border border-wedd-gray-300 hover:border-wedd-black bg-white text-wedd-black',
+  ghost: 'hover:bg-wedd-gray-100 text-wedd-black',
+  mint: 'bg-wedd-mint hover:bg-wedd-mint-dark text-wedd-black font-semibold',
 };
 
 const sizeClasses = {
@@ -26,6 +29,7 @@ export default function Button({
   variant = 'primary',
   size = 'md',
   icon,
+  showArrow = false,
   children,
   className = '',
   disabled,
@@ -34,7 +38,7 @@ export default function Button({
   return (
     <button
       className={`
-        inline-flex items-center justify-center gap-2 font-medium rounded-lg
+        inline-flex items-center justify-center gap-2 font-medium rounded
         transition-all duration-200
         ${variantClasses[variant]}
         ${sizeClasses[size]}
@@ -46,6 +50,7 @@ export default function Button({
     >
       {icon && <span className="flex-shrink-0">{icon}</span>}
       {children}
+      {showArrow && <ArrowUpRight className="w-4 h-4 ml-1" />}
     </button>
   );
 }

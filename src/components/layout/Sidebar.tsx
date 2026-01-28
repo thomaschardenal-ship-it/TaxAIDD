@@ -22,23 +22,23 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-full bg-white border-r border-gray-100 flex flex-col z-40 transition-all duration-300 ${
+      className={`fixed left-0 top-0 h-full bg-wedd-black flex flex-col z-40 transition-all duration-300 ${
         isCollapsed ? 'w-16' : 'w-60'
       }`}
     >
       {/* Logo */}
-      <div className="h-16 flex items-center px-4 border-b border-gray-100 justify-between">
+      <div className="h-16 flex items-center px-4 border-b border-wedd-black-light justify-between">
         <Link href="/" className="flex items-center gap-2 overflow-hidden">
-          <div className="w-8 h-8 bg-taxaidd-yellow rounded-lg flex items-center justify-center flex-shrink-0">
-            <span className="font-bold text-taxaidd-black text-sm">T</span>
+          <div className="w-8 h-8 bg-wedd-mint rounded flex items-center justify-center flex-shrink-0">
+            <span className="font-bold text-wedd-black text-sm font-display">W</span>
           </div>
           {!isCollapsed && (
-            <span className="font-bold text-lg text-taxaidd-black whitespace-nowrap">TaxAIDD</span>
+            <span className="font-bold text-lg text-white whitespace-nowrap font-display tracking-tight">TaxAIDD</span>
           )}
         </Link>
         <button
           onClick={toggleSidebar}
-          className="p-1.5 rounded-lg hover:bg-taxaidd-gray-light transition-colors text-gray-500 hover:text-taxaidd-black"
+          className="p-1.5 rounded hover:bg-wedd-black-light transition-colors text-wedd-gray-400 hover:text-white"
           title={isCollapsed ? 'Développer' : 'Réduire'}
         >
           {isCollapsed ? (
@@ -63,17 +63,17 @@ export default function Sidebar() {
                 <Link
                   href={item.href}
                   className={`
-                    flex items-center gap-3 px-3 py-2.5 rounded-lg
+                    flex items-center gap-3 px-3 py-2.5 rounded
                     transition-all duration-200
                     ${isCollapsed ? 'justify-center' : ''}
                     ${isActive
-                      ? 'bg-taxaidd-yellow/20 text-taxaidd-black border-l-2 border-taxaidd-yellow ml-[-1px]'
-                      : 'text-gray-600 hover:bg-taxaidd-gray-light hover:text-taxaidd-black'
+                      ? 'bg-wedd-mint/20 text-wedd-mint border-l-2 border-wedd-mint ml-[-1px]'
+                      : 'text-wedd-gray-400 hover:bg-wedd-black-light hover:text-white'
                     }
                   `}
                   title={isCollapsed ? item.label : undefined}
                 >
-                  <item.icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-taxaidd-yellow-dark' : ''}`} />
+                  <item.icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-wedd-mint' : ''}`} />
                   {!isCollapsed && <span className="font-medium">{item.label}</span>}
                 </Link>
               </li>
@@ -83,8 +83,8 @@ export default function Sidebar() {
       </nav>
 
       {/* User Badge */}
-      <div className="p-3 border-t border-gray-100">
-        <div className={`flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-taxaidd-gray-light transition-colors cursor-pointer ${
+      <div className="p-3 border-t border-wedd-black-light">
+        <div className={`flex items-center gap-3 px-2 py-2 rounded hover:bg-wedd-black-light transition-colors cursor-pointer ${
           isCollapsed ? 'justify-center' : ''
         }`}>
           <Avatar
@@ -95,10 +95,10 @@ export default function Sidebar() {
           />
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-taxaidd-black truncate">
+              <p className="text-sm font-medium text-white truncate">
                 {currentUser.name}
               </p>
-              <p className="text-xs text-gray-500 truncate">
+              <p className="text-xs text-wedd-gray-400 truncate">
                 {currentUser.title}
               </p>
             </div>

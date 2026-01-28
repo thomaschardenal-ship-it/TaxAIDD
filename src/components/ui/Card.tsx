@@ -7,14 +7,22 @@ interface CardProps {
   className?: string;
   hover?: boolean;
   onClick?: () => void;
+  variant?: 'default' | 'dark' | 'mint';
 }
 
-export function Card({ children, className = '', hover = false, onClick }: CardProps) {
+export function Card({ children, className = '', hover = false, onClick, variant = 'default' }: CardProps) {
+  const variantClasses = {
+    default: 'bg-white border border-wedd-gray-200',
+    dark: 'bg-wedd-black text-white',
+    mint: 'bg-wedd-mint-50 border border-wedd-mint/30',
+  };
+
   return (
     <div
       className={`
-        bg-white rounded-xl shadow-sm border border-gray-100
-        ${hover ? 'card-hover cursor-pointer' : ''}
+        rounded shadow-sm
+        ${variantClasses[variant]}
+        ${hover ? 'card-hover cursor-pointer hover:shadow-md transition-shadow' : ''}
         ${className}
       `}
       onClick={onClick}
@@ -31,7 +39,7 @@ interface CardHeaderProps {
 
 export function CardHeader({ children, className = '' }: CardHeaderProps) {
   return (
-    <div className={`px-5 py-4 border-b border-gray-100 ${className}`}>
+    <div className={`px-5 py-4 border-b border-wedd-gray-200 ${className}`}>
       {children}
     </div>
   );
@@ -57,7 +65,7 @@ interface CardFooterProps {
 
 export function CardFooter({ children, className = '' }: CardFooterProps) {
   return (
-    <div className={`px-5 py-4 border-t border-gray-100 bg-taxaidd-gray-light rounded-b-xl ${className}`}>
+    <div className={`px-5 py-4 border-t border-wedd-gray-200 bg-wedd-gray-100 rounded-b ${className}`}>
       {children}
     </div>
   );
