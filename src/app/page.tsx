@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Loader2 } from 'lucide-react';
 import { DomainType, ProjectStatus } from '@/types';
-import { projects, currentUser } from '@/data';
+import { currentUser } from '@/data';
+import { useProjects } from '@/hooks';
 import { Header } from '@/components/layout';
 import { ProjectCard, ProjectTable, FilterBar, NewProjectModal } from '@/components/dashboard';
 import Button from '@/components/ui/Button';
@@ -16,6 +17,7 @@ interface Filters {
 }
 
 export default function DashboardPage() {
+  const { projects, loading, error } = useProjects();
   const [view, setView] = useState<'cards' | 'list'>('cards');
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({
@@ -64,7 +66,7 @@ export default function DashboardPage() {
 
       return true;
     });
-  }, [searchQuery, filters]);
+  }, [projects, searchQuery, filters]);
 
   const handleNewProject = (data: Parameters<typeof NewProjectModal>[0]['onSubmit'] extends (d: infer T) => void ? T : never) => {
     console.log('[Dashboard] New project created:', data);
@@ -98,7 +100,16 @@ export default function DashboardPage() {
           onFilterChange={handleFilterChange}
         />
 
-        {filteredProjects.length === 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-wedd-mint" />
+            <span className="ml-3 text-gray-500">Chargement des dossiers...</span>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-500">Erreur: {error.message}</p>
+          </div>
+        ) : filteredProjects.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500">Aucun dossier trouvé</p>
           </div>

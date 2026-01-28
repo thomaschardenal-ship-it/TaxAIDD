@@ -16,7 +16,8 @@ coverage
 .DS_Store
 *.pem
 .env
-.env.*
+.env.local
+.env.*.local
 
 # Debug
 npm-debug.log*
