@@ -2,13 +2,13 @@
 
 import React, { useState } from 'react';
 import { Plus, Search, Building2, Mail, Phone, Globe, MapPin, Edit2, Trash2, User, ChevronDown, ChevronUp, Star } from 'lucide-react';
-import { clients as initialClients } from '@/data';
+import { useClients } from '@/context/ClientsContext';
 import { Client, ClientContact } from '@/types';
 import Button from '@/components/ui/Button';
 import Modal, { ModalFooter } from '@/components/ui/Modal';
 
 export default function ClientsPage() {
-  const [clients, setClients] = useState(initialClients);
+  const { clients, addClient, updateClient, deleteClient } = useClients();
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -35,29 +35,16 @@ export default function ClientsPage() {
     client.industry.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const generateInitials = (name: string): string => {
-    return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-  };
-
-  const generateColor = (): string => {
-    const colors = ['#6B00E0', '#0033A0', '#00D4AA', '#E91E8C', '#FFB800'];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
   const handleAddClient = () => {
     if (newClient.name && newClient.industry) {
-      const client: Client = {
-        id: `client-${Date.now()}`,
+      addClient({
         name: newClient.name,
         industry: newClient.industry,
-        initials: generateInitials(newClient.name),
-        color: generateColor(),
         address: newClient.address,
         website: newClient.website,
         siren: newClient.siren,
         contacts: newClient.contacts,
-      };
-      setClients(prev => [...prev, client]);
+      });
       setNewClient({ name: '', industry: '', address: '', website: '', siren: '', contacts: [] });
       setShowAddModal(false);
     }
@@ -65,15 +52,15 @@ export default function ClientsPage() {
 
   const handleEditClient = () => {
     if (editingClient) {
-      setClients(prev => prev.map(c => c.id === editingClient.id ? editingClient : c));
+      updateClient(editingClient);
       setEditingClient(null);
       setShowEditModal(false);
     }
   };
 
   const handleDeleteClient = (clientId: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
-      setClients(prev => prev.filter(c => c.id !== clientId));
+    if (confirm('Etes-vous sur de vouloir supprimer ce client ?')) {
+      deleteClient(clientId);
     }
   };
 
@@ -144,7 +131,7 @@ export default function ClientsPage() {
           type="tel"
           value={newContact.phone}
           onChange={(e) => setNewContact(prev => ({ ...prev, phone: e.target.value }))}
-          placeholder="Téléphone"
+          placeholder="Telephone"
           className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-wedd-mint"
         />
         <input
@@ -240,7 +227,7 @@ export default function ClientsPage() {
             type="text"
             value={client?.address || ''}
             onChange={(e) => setClient((prev: any) => ({ ...prev, address: e.target.value }))}
-            placeholder="Adresse complète"
+            placeholder="Adresse complete"
             className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
           />
         </div>
@@ -293,7 +280,7 @@ export default function ClientsPage() {
             onClick={isEditing ? handleEditClient : handleAddClient}
             disabled={!client?.name || !client?.industry}
           >
-            {isEditing ? 'Enregistrer' : 'Créer'}
+            {isEditing ? 'Enregistrer' : 'Creer'}
           </Button>
         </ModalFooter>
       </div>
@@ -306,7 +293,7 @@ export default function ClientsPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-wedd-black">Clients</h1>
-          <p className="text-gray-500 mt-1">Gérez vos clients et leurs contacts</p>
+          <p className="text-gray-500 mt-1">Gerez vos clients et leurs contacts</p>
         </div>
         <Button onClick={() => setShowAddModal(true)} icon={<Plus className="w-4 h-4" />}>
           Nouveau client
@@ -435,7 +422,7 @@ export default function ClientsPage() {
       {filteredClients.length === 0 && (
         <div className="text-center py-12">
           <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500">Aucun client trouvé</p>
+          <p className="text-gray-500">Aucun client trouve</p>
         </div>
       )}
 

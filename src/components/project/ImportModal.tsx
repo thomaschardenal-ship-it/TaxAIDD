@@ -1,125 +1,268 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Upload, Sparkles, FileText, Check, Loader2 } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { Upload, Sparkles, FileText, Check, Loader2, AlertCircle, X } from 'lucide-react';
 import Modal, { ModalFooter } from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
+import ProgressBar from '@/components/ui/ProgressBar';
+import {
+  uploadFiles,
+  UploadFile,
+  UploadSession,
+  UploadProgress,
+  validateFile,
+  formatBytes,
+  UPLOAD_CONFIG,
+} from '@/lib/upload';
 
 interface ImportModalProps {
   isOpen: boolean;
   onClose: () => void;
+  projectId?: string;
+  onUploadComplete?: () => void;
 }
 
 type ImportTab = 'manual' | 'ai';
 
-interface UploadedFile {
-  name: string;
-  size: string;
-  status: 'uploading' | 'processing' | 'done';
-  category?: string;
-}
+// Category mapping for manual upload
+const CATEGORIES = [
+  { value: '', label: 'Selectionner une categorie', code: '' },
+  { value: 'corporate-constitution', label: '01.1 - Constitution & Kbis', code: '01.1' },
+  { value: 'corporate-actionnariat', label: '01.2 - Actionnariat', code: '01.2' },
+  { value: 'corporate-vie-sociale', label: '01.3 - Vie Sociale', code: '01.3' },
+  { value: 'corporate-contrats', label: '01.4 - Contrats Materiels', code: '01.4' },
+  { value: 'tax-cit', label: '02.1 - CIT (IS)', code: '02.1' },
+  { value: 'tax-vat', label: '02.2 - VAT (TVA)', code: '02.2' },
+  { value: 'tax-autres', label: '02.3 - Autres Taxes', code: '02.3' },
+  { value: 'social-effectifs', label: '03.1 - Effectifs', code: '03.1' },
+  { value: 'social-contrats', label: '03.2 - Contrats Travail', code: '03.2' },
+  { value: 'social-paie', label: '03.3 - Paie', code: '03.3' },
+  { value: 'ipit-ip', label: '04.1 - Propriete Intellectuelle', code: '04.1' },
+  { value: 'ipit-domaines', label: '04.2 - Noms de Domaine', code: '04.2' },
+  { value: 'ipit-it', label: '04.3 - IT', code: '04.3' },
+  { value: 'ipit-rgpd', label: '04.4 - RGPD', code: '04.4' },
+];
 
-export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
+export default function ImportModal({ isOpen, onClose, projectId = 'project-1', onUploadComplete }: ImportModalProps) {
   const [activeTab, setActiveTab] = useState<ImportTab>('manual');
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [uploadSession, setUploadSession] = useState<UploadSession | null>(null);
+  const [fileStatuses, setFileStatuses] = useState<Map<string, UploadFile>>(new Map());
   const [isUploading, setIsUploading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [overallProgress, setOverallProgress] = useState(0);
 
-  const categories = [
-    { value: '', label: 'Sélectionner une catégorie' },
-    { value: 'corporate-constitution', label: '01.1 - Constitution & Kbis' },
-    { value: 'corporate-actionnariat', label: '01.2 - Actionnariat' },
-    { value: 'corporate-vie-sociale', label: '01.3 - Vie Sociale' },
-    { value: 'tax-cit', label: '02.1 - CIT (IS)' },
-    { value: 'tax-vat', label: '02.2 - VAT (TVA)' },
-    { value: 'tax-autres', label: '02.3 - Autres Taxes' },
-    { value: 'social-effectifs', label: '03.1 - Effectifs' },
-    { value: 'social-contrats', label: '03.2 - Contrats Travail' },
-    { value: 'ipit-ip', label: '04.1 - Propriété Intellectuelle' },
-    { value: 'ipit-rgpd', label: '04.4 - RGPD' },
-  ];
+  // Get category details from value
+  const getCategory = (value: string) => CATEGORIES.find(c => c.value === value);
 
-  const simulateUpload = (files: FileList | null) => {
+  // Progress callback
+  const handleProgress = useCallback((progress: UploadProgress) => {
+    setFileStatuses(prev => {
+      const next = new Map(prev);
+      next.set(progress.file.id, progress.file);
+      return next;
+    });
+    setOverallProgress(progress.overallProgress);
+  }, []);
+
+  // File complete callback
+  const handleFileComplete = useCallback((file: UploadFile) => {
+    setFileStatuses(prev => {
+      const next = new Map(prev);
+      next.set(file.id, file);
+      return next;
+    });
+  }, []);
+
+  // Error callback
+  const handleError = useCallback((file: UploadFile, error: Error) => {
+    console.error(`[Upload] File error: ${file.name}`, error);
+    setFileStatuses(prev => {
+      const next = new Map(prev);
+      next.set(file.id, { ...file, status: 'failed', error: error.message });
+      return next;
+    });
+  }, []);
+
+  // Handle file selection
+  const handleFilesSelected = (files: FileList | null) => {
     if (!files) return;
 
-    setIsUploading(true);
-    const newFiles: UploadedFile[] = Array.from(files).map(file => ({
-      name: file.name,
-      size: `${(file.size / 1024).toFixed(1)} KB`,
-      status: 'uploading' as const,
-    }));
+    const validFiles: File[] = [];
+    const invalidFiles: { name: string; error: string }[] = [];
 
-    setUploadedFiles(prev => [...prev, ...newFiles]);
-
-    // Simulate upload progress
-    setTimeout(() => {
-      setUploadedFiles(prev =>
-        prev.map(f => (f.status === 'uploading' ? { ...f, status: 'processing' as const } : f))
-      );
-
-      if (activeTab === 'ai') {
-        // AI classification simulation
-        setTimeout(() => {
-          setUploadedFiles(prev =>
-            prev.map(f => {
-              if (f.status === 'processing') {
-                const randomCategory = categories[Math.floor(Math.random() * (categories.length - 1)) + 1];
-                return { ...f, status: 'done' as const, category: randomCategory.label };
-              }
-              return f;
-            })
-          );
-          setIsUploading(false);
-        }, 2000);
+    Array.from(files).forEach(file => {
+      const validation = validateFile(file);
+      if (validation.valid) {
+        validFiles.push(file);
       } else {
-        setTimeout(() => {
-          setUploadedFiles(prev =>
-            prev.map(f => (f.status === 'processing' ? { ...f, status: 'done' as const } : f))
-          );
-          setIsUploading(false);
-        }, 1000);
+        invalidFiles.push({ name: file.name, error: validation.error || 'Invalid file' });
       }
-    }, 1500);
+    });
+
+    if (invalidFiles.length > 0) {
+      console.warn('[Upload] Invalid files:', invalidFiles);
+      alert(`Fichiers invalides:\n${invalidFiles.map(f => `- ${f.name}: ${f.error}`).join('\n')}`);
+    }
+
+    setSelectedFiles(prev => [...prev, ...validFiles]);
   };
 
+  // Handle drag and drop
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    simulateUpload(e.dataTransfer.files);
+    handleFilesSelected(e.dataTransfer.files);
   };
 
+  // Handle file input change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    simulateUpload(e.target.files);
+    handleFilesSelected(e.target.files);
+    e.target.value = ''; // Reset input for re-selection
   };
 
-  const handleConfirm = () => {
-    console.log('[Import] Confirmed files:', uploadedFiles);
-    alert(`${uploadedFiles.length} fichier(s) importé(s) avec succès!`);
-    setUploadedFiles([]);
+  // Remove a file from selection
+  const removeFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Start upload
+  const startUpload = async () => {
+    if (selectedFiles.length === 0) return;
+    if (activeTab === 'manual' && !selectedCategory) {
+      alert('Veuillez selectionner une categorie');
+      return;
+    }
+
+    setIsUploading(true);
+    setOverallProgress(0);
+    setFileStatuses(new Map());
+
+    const category = getCategory(selectedCategory);
+
+    try {
+      const session = await uploadFiles({
+        projectId,
+        files: selectedFiles,
+        mode: activeTab,
+        category: activeTab === 'manual' ? category?.label : undefined,
+        categoryCode: activeTab === 'manual' ? category?.code : undefined,
+        onProgress: handleProgress,
+        onFileComplete: handleFileComplete,
+        onError: handleError,
+      });
+
+      setUploadSession(session);
+
+      if (session.failedFiles === 0) {
+        onUploadComplete?.();
+      }
+    } catch (error) {
+      console.error('[Upload] Session error:', error);
+      alert('Erreur lors de l\'upload. Veuillez reessayer.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Handle close
+  const handleClose = () => {
+    if (isUploading) {
+      if (!confirm('Upload en cours. Voulez-vous vraiment fermer?')) {
+        return;
+      }
+    }
+    // Reset state
+    setSelectedFiles([]);
+    setUploadSession(null);
+    setFileStatuses(new Map());
+    setOverallProgress(0);
+    setSelectedCategory('');
     onClose();
   };
 
+  // Render file status
+  const renderFileStatus = (file: File, index: number) => {
+    // Find corresponding upload file status
+    const uploadFile = Array.from(fileStatuses.values()).find(
+      uf => uf.name === file.name && uf.size === file.size
+    );
+
+    return (
+      <div
+        key={index}
+        className="flex items-center gap-3 p-3 bg-taxaidd-gray-light rounded-lg"
+      >
+        <FileText className="w-5 h-5 text-gray-400 flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-taxaidd-black truncate">{file.name}</p>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500">{formatBytes(file.size)}</span>
+            {uploadFile?.category && (
+              <span className="text-xs text-taxaidd-purple">→ {uploadFile.category}</span>
+            )}
+            {uploadFile?.error && (
+              <span className="text-xs text-red-500">{uploadFile.error}</span>
+            )}
+          </div>
+          {uploadFile && uploadFile.status === 'uploading' && (
+            <div className="mt-1">
+              <ProgressBar value={uploadFile.progress} size="sm" />
+            </div>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          {!isUploading && !uploadSession && (
+            <button
+              onClick={() => removeFile(index)}
+              className="p-1 hover:bg-gray-200 rounded"
+            >
+              <X className="w-4 h-4 text-gray-400" />
+            </button>
+          )}
+          {uploadFile?.status === 'uploading' && (
+            <Loader2 className="w-5 h-5 text-taxaidd-yellow animate-spin" />
+          )}
+          {uploadFile?.status === 'processing' && (
+            <Loader2 className="w-5 h-5 text-taxaidd-purple animate-spin" />
+          )}
+          {uploadFile?.status === 'completed' && (
+            <Check className="w-5 h-5 text-taxaidd-mint" />
+          )}
+          {uploadFile?.status === 'failed' && (
+            <AlertCircle className="w-5 h-5 text-red-500" />
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // Calculate totals
+  const totalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Importer des Documents" size="lg">
+    <Modal isOpen={isOpen} onClose={handleClose} title="Importer des Documents" size="lg">
       {/* Tabs */}
       <div className="flex gap-1 p-1 bg-taxaidd-gray-light rounded-lg mb-6">
         <button
           onClick={() => setActiveTab('manual')}
+          disabled={isUploading}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'manual'
               ? 'bg-white text-taxaidd-black shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
-          }`}
+          } ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <Upload className="w-4 h-4" />
           Manuel
         </button>
         <button
           onClick={() => setActiveTab('ai')}
+          disabled={isUploading}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'ai'
               ? 'bg-white text-taxaidd-black shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
-          }`}
+          } ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <Sparkles className="w-4 h-4" />
           Automatique IA
@@ -131,14 +274,15 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Catégorie de destination
+              Categorie de destination
             </label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+              disabled={isUploading}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple disabled:opacity-50"
             >
-              {categories.map(cat => (
+              {CATEGORIES.map(cat => (
                 <option key={cat.value} value={cat.value}>{cat.label}</option>
               ))}
             </select>
@@ -148,20 +292,26 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-taxaidd-yellow transition-colors"
+            className={`border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-taxaidd-yellow transition-colors ${
+              isUploading ? 'opacity-50 pointer-events-none' : ''
+            }`}
           >
             <Upload className="w-12 h-12 mx-auto text-gray-400 mb-3" />
             <p className="text-sm text-gray-600 mb-2">
-              Glissez-déposez vos fichiers ici
+              Glissez-deposez vos fichiers ici
             </p>
-            <p className="text-xs text-gray-400 mb-4">ou</p>
+            <p className="text-xs text-gray-400 mb-4">
+              Max {formatBytes(UPLOAD_CONFIG.maxSingleFileSize)} par fichier
+            </p>
             <label className="btn-primary px-4 py-2 rounded-lg cursor-pointer text-sm">
               Parcourir
               <input
                 type="file"
                 multiple
                 onChange={handleFileChange}
+                disabled={isUploading}
                 className="hidden"
+                accept={UPLOAD_CONFIG.allowedExtensions.join(',')}
               />
             </label>
           </div>
@@ -177,7 +327,7 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
               <div>
                 <p className="text-sm font-medium text-taxaidd-black">Classement automatique par IA</p>
                 <p className="text-xs text-gray-600 mt-1">
-                  L&apos;IA analysera vos documents et les classera automatiquement dans les bonnes catégories.
+                  L&apos;IA analysera vos documents et les classera automatiquement dans les bonnes categories.
                 </p>
               </div>
             </div>
@@ -187,74 +337,96 @@ export default function ImportModal({ isOpen, onClose }: ImportModalProps) {
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-taxaidd-purple transition-colors"
+            className={`border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-taxaidd-purple transition-colors ${
+              isUploading ? 'opacity-50 pointer-events-none' : ''
+            }`}
           >
             <Sparkles className="w-12 h-12 mx-auto text-taxaidd-purple mb-3" />
             <p className="text-sm text-gray-600 mb-2">
-              Déposez plusieurs fichiers pour un classement automatique
+              Deposez plusieurs fichiers pour un classement automatique
+            </p>
+            <p className="text-xs text-gray-400 mb-4">
+              Max {formatBytes(UPLOAD_CONFIG.maxSingleFileSize)} par fichier
             </p>
             <label className="bg-taxaidd-purple text-white px-4 py-2 rounded-lg cursor-pointer text-sm inline-block hover:bg-purple-700 transition-colors">
-              Sélectionner des fichiers
+              Selectionner des fichiers
               <input
                 type="file"
                 multiple
                 onChange={handleFileChange}
+                disabled={isUploading}
                 className="hidden"
+                accept={UPLOAD_CONFIG.allowedExtensions.join(',')}
               />
             </label>
           </div>
         </div>
       )}
 
-      {/* Uploaded files list */}
-      {uploadedFiles.length > 0 && (
+      {/* Selected files list */}
+      {selectedFiles.length > 0 && (
         <div className="mt-6">
-          <h4 className="text-sm font-medium text-gray-700 mb-3">
-            Fichiers ({uploadedFiles.length})
-          </h4>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {uploadedFiles.map((file, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-3 p-3 bg-taxaidd-gray-light rounded-lg"
-              >
-                <FileText className="w-5 h-5 text-gray-400" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-taxaidd-black truncate">{file.name}</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500">{file.size}</span>
-                    {file.category && (
-                      <span className="text-xs text-taxaidd-purple">→ {file.category}</span>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  {file.status === 'uploading' && (
-                    <Loader2 className="w-5 h-5 text-taxaidd-yellow animate-spin" />
-                  )}
-                  {file.status === 'processing' && (
-                    <Loader2 className="w-5 h-5 text-taxaidd-purple animate-spin" />
-                  )}
-                  {file.status === 'done' && (
-                    <Check className="w-5 h-5 text-taxaidd-mint" />
-                  )}
-                </div>
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-sm font-medium text-gray-700">
+              Fichiers ({selectedFiles.length}) - {formatBytes(totalSize)}
+            </h4>
+          </div>
+
+          {/* Overall progress during upload */}
+          {isUploading && (
+            <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+              <div className="flex justify-between text-sm mb-1">
+                <span>Progression totale</span>
+                <span>{overallProgress}%</span>
               </div>
-            ))}
+              <ProgressBar value={overallProgress} size="md" />
+            </div>
+          )}
+
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {selectedFiles.map((file, index) => renderFileStatus(file, index))}
+          </div>
+        </div>
+      )}
+
+      {/* Upload summary */}
+      {uploadSession && !isUploading && (
+        <div className={`mt-4 p-4 rounded-lg ${
+          uploadSession.failedFiles > 0 ? 'bg-red-50' : 'bg-green-50'
+        }`}>
+          <div className="flex items-center gap-2">
+            {uploadSession.failedFiles > 0 ? (
+              <AlertCircle className="w-5 h-5 text-red-500" />
+            ) : (
+              <Check className="w-5 h-5 text-green-500" />
+            )}
+            <span className="font-medium">
+              {uploadSession.completedFiles} fichier(s) importe(s) avec succes
+              {uploadSession.failedFiles > 0 && `, ${uploadSession.failedFiles} echec(s)`}
+            </span>
           </div>
         </div>
       )}
 
       <ModalFooter>
-        <Button variant="outline" onClick={onClose}>
-          Annuler
+        <Button variant="outline" onClick={handleClose}>
+          {uploadSession ? 'Fermer' : 'Annuler'}
         </Button>
-        <Button
-          onClick={handleConfirm}
-          disabled={uploadedFiles.length === 0 || isUploading}
-        >
-          Confirmer l&apos;import
-        </Button>
+        {!uploadSession && (
+          <Button
+            onClick={startUpload}
+            disabled={selectedFiles.length === 0 || isUploading || (activeTab === 'manual' && !selectedCategory)}
+          >
+            {isUploading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Upload en cours...
+              </>
+            ) : (
+              `Importer ${selectedFiles.length} fichier(s)`
+            )}
+          </Button>
+        )}
       </ModalFooter>
     </Modal>
   );

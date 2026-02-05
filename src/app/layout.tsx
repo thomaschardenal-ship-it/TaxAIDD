@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ProjectProvider } from "@/context/ProjectContext";
 import { SidebarProvider } from "@/context/SidebarContext";
+import { ClientsProvider } from "@/context/ClientsContext";
 import SidebarWrapper from "@/components/layout/SidebarWrapper";
 
 export const metadata: Metadata = {
@@ -17,15 +18,17 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className="font-sans antialiased bg-wedd-cream">
-        <ProjectProvider>
-          <SidebarProvider>
-            <div className="flex min-h-screen">
-              <SidebarWrapper>
-                {children}
-              </SidebarWrapper>
-            </div>
-          </SidebarProvider>
-        </ProjectProvider>
+        <ClientsProvider>
+          <ProjectProvider>
+            <SidebarProvider>
+              <div className="flex min-h-screen">
+                <SidebarWrapper>
+                  {children}
+                </SidebarWrapper>
+              </div>
+            </SidebarProvider>
+          </ProjectProvider>
+        </ClientsProvider>
       </body>
     </html>
   );

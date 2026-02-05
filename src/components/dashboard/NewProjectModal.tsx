@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Plus, Building2 } from 'lucide-react';
 import { DomainType } from '@/types';
-import { clients as initialClients, users } from '@/data';
+import { users } from '@/data';
+import { useClients } from '@/context/ClientsContext';
 import Modal, { ModalFooter } from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
 
@@ -25,9 +26,9 @@ export interface ProjectFormData {
 }
 
 const steps = [
-  { id: 1, title: 'Infos générales' },
-  { id: 2, title: 'Périmètre' },
-  { id: 3, title: 'Équipe' },
+  { id: 1, title: 'Infos generales' },
+  { id: 2, title: 'Perimetre' },
+  { id: 3, title: 'Equipe' },
 ];
 
 const domainOptions: { value: DomainType; label: string; color: string }[] = [
@@ -42,7 +43,7 @@ const industries = [
   'Services',
   'Industrie',
   'Finance',
-  'Santé',
+  'Sante',
   'Commerce',
   'Immobilier',
   'Autre',
@@ -57,10 +58,10 @@ const missionTypes = [
 ];
 
 export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjectModalProps) {
+  const { clients, addClient } = useClients();
   const [currentStep, setCurrentStep] = useState(1);
-  const [clients, setClients] = useState(initialClients);
   const [showNewClientForm, setShowNewClientForm] = useState(false);
-  const [newClient, setNewClient] = useState({ name: '', industry: '' });
+  const [newClientData, setNewClientData] = useState({ name: '', industry: '' });
   const [formData, setFormData] = useState<ProjectFormData>({
     name: '',
     clientId: '',
@@ -73,17 +74,13 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
   });
 
   const handleCreateClient = () => {
-    if (newClient.name && newClient.industry) {
-      const client = {
-        id: `client-${Date.now()}`,
-        name: newClient.name,
-        industry: newClient.industry,
-        initials: newClient.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
-        color: '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'),
-      };
-      setClients(prev => [...prev, client]);
-      setFormData(prev => ({ ...prev, clientId: client.id }));
-      setNewClient({ name: '', industry: '' });
+    if (newClientData.name && newClientData.industry) {
+      const createdClient = addClient({
+        name: newClientData.name,
+        industry: newClientData.industry,
+      });
+      setFormData(prev => ({ ...prev, clientId: createdClient.id }));
+      setNewClientData({ name: '', industry: '' });
       setShowNewClientForm(false);
     }
   };
@@ -219,7 +216,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
                   className="w-full flex items-center justify-center gap-2 p-3 rounded-lg border-2 border-dashed border-gray-300 text-gray-600 hover:border-taxaidd-purple hover:text-taxaidd-purple transition-colors"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Créer un nouveau client</span>
+                  <span>Creer un nouveau client</span>
                 </button>
               </>
             ) : (
@@ -230,17 +227,17 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
                 </div>
                 <input
                   type="text"
-                  value={newClient.name}
-                  onChange={(e) => setNewClient(prev => ({ ...prev, name: e.target.value }))}
+                  value={newClientData.name}
+                  onChange={(e) => setNewClientData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Nom du client"
                   className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
                 />
                 <select
-                  value={newClient.industry}
-                  onChange={(e) => setNewClient(prev => ({ ...prev, industry: e.target.value }))}
+                  value={newClientData.industry}
+                  onChange={(e) => setNewClientData(prev => ({ ...prev, industry: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
                 >
-                  <option value="">Sélectionner un secteur</option>
+                  <option value="">Selectionner un secteur</option>
                   {industries.map(ind => (
                     <option key={ind} value={ind}>{ind}</option>
                   ))}
@@ -254,10 +251,10 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
                   </button>
                   <button
                     onClick={handleCreateClient}
-                    disabled={!newClient.name || !newClient.industry}
+                    disabled={!newClientData.name || !newClientData.industry}
                     className="flex-1 px-3 py-2 text-sm bg-taxaidd-yellow text-taxaidd-black rounded-lg hover:bg-taxaidd-yellow-dark disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Créer
+                    Creer
                   </button>
                 </div>
               </div>
@@ -271,7 +268,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
               onChange={(e) => handleChange('type', e.target.value)}
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
             >
-              <option value="">Sélectionner un type</option>
+              <option value="">Selectionner un type</option>
               {missionTypes.map(type => (
                 <option key={type} value={type}>{type}</option>
               ))}
@@ -280,7 +277,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date de début *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Date de debut *</label>
               <input
                 type="date"
                 value={formData.startDate}
@@ -343,7 +340,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
               onChange={(e) => handleChange('responsibleId', e.target.value)}
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
             >
-              <option value="">Sélectionner un responsable</option>
+              <option value="">Selectionner un responsable</option>
               {users.map(user => (
                 <option key={user.id} value={user.id}>{user.name} - {user.title}</option>
               ))}
@@ -351,7 +348,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Membres de l&apos;équipe</label>
+            <label className="block text-sm font-medium text-gray-700 mb-3">Membres de l&apos;equipe</label>
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {users.filter(u => u.id !== formData.responsibleId).map(user => (
                 <label
@@ -412,7 +409,7 @@ export default function NewProjectModal({ isOpen, onClose, onSubmit }: NewProjec
             disabled={!canProceed()}
             icon={<Check className="w-4 h-4" />}
           >
-            Créer
+            Creer
           </Button>
         )}
       </ModalFooter>
