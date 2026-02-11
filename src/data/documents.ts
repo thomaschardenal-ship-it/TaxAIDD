@@ -59,6 +59,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'Corporate',
               pages: 24,
               highlights: createHighlights('doc-corp-1-1', 'report-corp-structure', 'Legal Structure', 'Corporate'),
+              tags: [{ type: 'document_type', value: 'Statuts' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'domain', value: 'Corporate' }],
             },
             {
               id: 'doc-corp-1-2',
@@ -68,6 +69,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'Corporate',
               pages: 2,
               highlights: createHighlights('doc-corp-1-2', 'report-corp-structure', 'Legal Structure', 'Corporate'),
+              tags: [{ type: 'document_type', value: 'K-bis' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2024' }],
             },
             {
               id: 'doc-corp-1-3',
@@ -76,6 +78,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               status: 'pending',
               domain: 'Corporate',
               pages: 1,
+              tags: [{ type: 'document_type', value: 'Organigramme' }, { type: 'entity', value: 'TechVision Holding' }, { type: 'domain', value: 'Corporate' }],
             },
           ],
         },
@@ -94,6 +97,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'Corporate',
               pages: 3,
               highlights: createHighlights('doc-corp-2-1', 'report-corp-governance', 'Governance', 'Corporate'),
+              tags: [{ type: 'document_type', value: 'Cap Table' }, { type: 'entity', value: 'TechVision Holding' }],
             },
             {
               id: 'doc-corp-2-2',
@@ -110,13 +114,16 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'Corporate',
               pages: 18,
               highlights: createHighlights('doc-corp-2-3', 'report-corp-governance', 'Governance', 'Corporate'),
+              tags: [{ type: 'document_type', value: 'Pacte' }, { type: 'entity', value: 'TechVision Holding' }],
             },
             {
               id: 'doc-corp-2-4',
               code: '01.2.4',
               name: 'Management Packages',
-              status: 'pending',
+              status: 'partiel',
               domain: 'Corporate',
+              missingElements: ['Package CEO manquant', 'Grille de vesting non fournie'],
+              tags: [{ type: 'document_type', value: 'Management Package' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'domain', value: 'Corporate' }],
             },
           ],
         },
@@ -134,8 +141,8 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               status: 'received',
               domain: 'Corporate',
               children: [
-                { id: 'doc-corp-3-1-1', code: '', name: 'PV AG N-3', status: 'received', domain: 'Corporate', pages: 8 },
-                { id: 'doc-corp-3-1-2', code: '', name: 'PV Conseil N-3', status: 'received', domain: 'Corporate', pages: 12 },
+                { id: 'doc-corp-3-1-1', code: '', name: 'PV AG N-3', status: 'received', domain: 'Corporate', pages: 8, tags: [{ type: 'document_type', value: 'PV AG' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022' }] },
+                { id: 'doc-corp-3-1-2', code: '', name: 'PV Conseil N-3', status: 'received', domain: 'Corporate', pages: 12, tags: [{ type: 'document_type', value: 'PV Conseil' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022' }] },
               ],
             },
             {
@@ -179,9 +186,9 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
           status: 'received',
           domain: 'Corporate',
           children: [
-            { id: 'doc-corp-4-1', code: '01.4.1', name: 'Conventions Réglementées', status: 'received', domain: 'Corporate', pages: 6 },
-            { id: 'doc-corp-4-2', code: '01.4.2', name: 'Baux Commerciaux', status: 'received', domain: 'Corporate', pages: 22 },
-            { id: 'doc-corp-4-3', code: '01.4.3', name: 'Assurances', status: 'received', domain: 'Corporate', pages: 15 },
+            { id: 'doc-corp-4-1', code: '01.4.1', name: 'Conventions Réglementées', status: 'received', domain: 'Corporate', pages: 6, tags: [{ type: 'document_type', value: 'Convention' }, { type: 'entity', value: 'TechVision SAS' }] },
+            { id: 'doc-corp-4-2', code: '01.4.2', name: 'Baux Commerciaux', status: 'received', domain: 'Corporate', pages: 22, tags: [{ type: 'document_type', value: 'Bail' }, { type: 'entity', value: 'TechVision SAS' }] },
+            { id: 'doc-corp-4-3', code: '01.4.3', name: 'Assurances', status: 'received', domain: 'Corporate', pages: 15, tags: [{ type: 'document_type', value: 'Assurance' }, { type: 'entity', value: 'TechVision SAS' }] },
           ],
         },
       ],
@@ -215,6 +222,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
                   domain: 'TAX',
                   pages: 32,
                   highlights: createHighlights('doc-tax-1-1-1', 'report-tax-determination', 'Tableau de Détermination du Résultat Fiscal', 'TAX'),
+                  tags: [{ type: 'document_type', value: 'Liasse fiscale' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022' }],
                 },
               ],
             },
@@ -233,6 +241,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
                   domain: 'TAX',
                   pages: 34,
                   highlights: createHighlights('doc-tax-1-2-1', 'report-tax-determination', 'Tableau de Détermination du Résultat Fiscal', 'TAX'),
+                  tags: [{ type: 'document_type', value: 'Liasse fiscale' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2023' }],
                 },
               ],
             },
@@ -251,11 +260,12 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
                   domain: 'TAX',
                   pages: 35,
                   highlights: createHighlights('doc-tax-1-3-1', 'report-tax-determination', 'Tableau de Détermination du Résultat Fiscal', 'TAX'),
+                  tags: [{ type: 'document_type', value: 'Liasse fiscale' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2024' }],
                 },
               ],
             },
-            { id: 'doc-tax-1-4', code: '02.1.4', name: 'Relevés solde IS (3 ans)', status: 'received', domain: 'TAX', pages: 6 },
-            { id: 'doc-tax-1-5', code: '02.1.5', name: 'Suivi déficits reportables', status: 'pending', domain: 'TAX' },
+            { id: 'doc-tax-1-4', code: '02.1.4', name: 'Relevés solde IS (3 ans)', status: 'received', domain: 'TAX', pages: 6, tags: [{ type: 'document_type', value: 'Relevé IS' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022-2024' }] },
+            { id: 'doc-tax-1-5', code: '02.1.5', name: 'Suivi déficits reportables', status: 'pending', domain: 'TAX', tags: [{ type: 'document_type', value: 'Suivi déficits' }, { type: 'entity', value: 'TechVision SAS' }] },
           ],
         },
         {
@@ -272,7 +282,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               status: 'received',
               domain: 'TAX',
               children: [
-                { id: 'doc-tax-2-1-1', code: '', name: 'CA3 N-3 (12 mois)', status: 'received', domain: 'TAX', pages: 24 },
+                { id: 'doc-tax-2-1-1', code: '', name: 'CA3 N-3 (12 mois)', status: 'received', domain: 'TAX', pages: 24, tags: [{ type: 'document_type', value: 'CA3' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022' }] },
               ],
             },
             {
@@ -282,7 +292,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               status: 'received',
               domain: 'TAX',
               children: [
-                { id: 'doc-tax-2-2-1', code: '', name: 'CA3 N-2 (12 mois)', status: 'received', domain: 'TAX', pages: 24 },
+                { id: 'doc-tax-2-2-1', code: '', name: 'CA3 N-2 (12 mois)', status: 'received', domain: 'TAX', pages: 24, tags: [{ type: 'document_type', value: 'CA3' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2023' }] },
               ],
             },
             {
@@ -293,7 +303,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'TAX',
               children: [
                 { id: 'doc-tax-2-3-1', code: '', name: 'CA3 N-1 (12 mois)', status: 'received', domain: 'TAX', pages: 24 },
-                { id: 'doc-tax-2-3-2', code: '', name: 'CA3 YTD', status: 'pending', domain: 'TAX' },
+                { id: 'doc-tax-2-3-2', code: '', name: 'CA3 YTD', status: 'partiel', domain: 'TAX', missingElements: ['Mois de novembre et décembre manquants'] },
               ],
             },
             { id: 'doc-tax-2-4', code: '02.2.4', name: 'Coefficient déduction', status: 'received', domain: 'TAX', pages: 2 },
@@ -327,6 +337,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'TAX',
               pages: 15,
               highlights: createHighlights('doc-tax-4-1', 'report-tax-credits', 'Tax Credits Analysis', 'TAX'),
+              tags: [{ type: 'document_type', value: 'CIR' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022-2024' }],
             },
             { id: 'doc-tax-4-2', code: '02.4.2', name: 'Dossiers justificatifs (3 ans)', status: 'pending', domain: 'TAX' },
           ],
@@ -338,8 +349,8 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
           status: 'received',
           domain: 'TAX',
           children: [
-            { id: 'doc-tax-5-1', code: '02.5.1', name: 'Balances & FEC (3 ans)', status: 'received', domain: 'TAX', pages: 48 },
-            { id: 'doc-tax-5-2', code: '02.5.2', name: 'Correspondances Administration', status: 'received', domain: 'TAX', pages: 8 },
+            { id: 'doc-tax-5-1', code: '02.5.1', name: 'Balances & FEC (3 ans)', status: 'received', domain: 'TAX', pages: 48, tags: [{ type: 'document_type', value: 'FEC' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022-2024' }] },
+            { id: 'doc-tax-5-2', code: '02.5.2', name: 'Correspondances Administration', status: 'received', domain: 'TAX', pages: 8, tags: [{ type: 'document_type', value: 'Correspondance' }, { type: 'entity', value: 'TechVision SAS' }] },
           ],
         },
       ],
@@ -366,6 +377,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'Social',
               pages: 4,
               highlights: createHighlights('doc-social-1-1', 'report-social-workforce', 'Workforce Overview', 'Social'),
+              tags: [{ type: 'document_type', value: 'Organigramme' }, { type: 'entity', value: 'TechVision SAS' }],
             },
             {
               id: 'doc-social-1-2',
@@ -375,8 +387,9 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'Social',
               pages: 12,
               highlights: createHighlights('doc-social-1-2', 'report-social-workforce', 'Workforce Overview', 'Social'),
+              tags: [{ type: 'document_type', value: 'Registre personnel' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2024' }],
             },
-            { id: 'doc-social-1-3', code: '03.1.3', name: 'Registre Unique', status: 'received', domain: 'Social', pages: 8 },
+            { id: 'doc-social-1-3', code: '03.1.3', name: 'Registre Unique', status: 'received', domain: 'Social', pages: 8, tags: [{ type: 'document_type', value: 'Registre' }, { type: 'entity', value: 'TechVision SAS' }] },
           ],
         },
         {
@@ -395,7 +408,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'Social',
               highlights: createHighlights('doc-social-2-2', 'report-social-contracts', 'Contract Review', 'Social'),
             },
-            { id: 'doc-social-2-3', code: '03.2.3', name: 'Travailleurs externes', status: 'missing', domain: 'Social' },
+            { id: 'doc-social-2-3', code: '03.2.3', name: 'Travailleurs externes', status: 'partiel', domain: 'Social', missingElements: ['Contrats des 2 prestataires IT manquants'] },
           ],
         },
         {
@@ -405,8 +418,8 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
           status: 'pending',
           domain: 'Social',
           children: [
-            { id: 'doc-social-3-1', code: '03.3.1', name: 'Livres Paie (3 ans)', status: 'received', domain: 'Social', pages: 36 },
-            { id: 'doc-social-3-2', code: '03.3.2', name: 'États charges sociales (3 ans)', status: 'received', domain: 'Social', pages: 18 },
+            { id: 'doc-social-3-1', code: '03.3.1', name: 'Livres Paie (3 ans)', status: 'received', domain: 'Social', pages: 36, tags: [{ type: 'document_type', value: 'Livre de paie' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022-2024' }] },
+            { id: 'doc-social-3-2', code: '03.3.2', name: 'États charges sociales (3 ans)', status: 'received', domain: 'Social', pages: 18, tags: [{ type: 'document_type', value: 'Charges sociales' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2022-2024' }] },
             { id: 'doc-social-3-3', code: '03.3.3', name: 'Contrôles URSSAF', status: 'missing', domain: 'Social' },
           ],
         },
@@ -436,6 +449,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'Social',
               pages: 3,
               highlights: createHighlights('doc-social-5-1', 'report-social-risks', 'Social Risks', 'Social'),
+              tags: [{ type: 'document_type', value: 'Contentieux' }, { type: 'entity', value: 'TechVision SAS' }],
             },
             { id: 'doc-social-5-2', code: '03.5.2', name: 'Documents afférents', status: 'missing', domain: 'Social' },
           ],
@@ -464,9 +478,10 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'IP/IT',
               pages: 8,
               highlights: createHighlights('doc-ipit-1-1', 'report-ipit-trademarks', 'Trademark Portfolio', 'IP/IT'),
+              tags: [{ type: 'document_type', value: 'Marques' }, { type: 'entity', value: 'TechVision Holding' }],
             },
-            { id: 'doc-ipit-1-2', code: '04.1.2', name: 'Noms de domaine', status: 'received', domain: 'IP/IT', pages: 2 },
-            { id: 'doc-ipit-1-3', code: '04.1.3', name: 'Brevets & Dessins', status: 'missing', domain: 'IP/IT' },
+            { id: 'doc-ipit-1-2', code: '04.1.2', name: 'Noms de domaine', status: 'received', domain: 'IP/IT', pages: 2, tags: [{ type: 'document_type', value: 'Noms de domaine' }, { type: 'entity', value: 'TechVision SAS' }] },
+            { id: 'doc-ipit-1-3', code: '04.1.3', name: 'Brevets & Dessins', status: 'na', domain: 'IP/IT' },
           ],
         },
         {
@@ -476,7 +491,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
           status: 'pending',
           domain: 'IP/IT',
           children: [
-            { id: 'doc-ipit-2-1', code: '04.2.1', name: 'Clauses cession IP Salariés', status: 'received', domain: 'IP/IT', pages: 6 },
+            { id: 'doc-ipit-2-1', code: '04.2.1', name: 'Clauses cession IP Salariés', status: 'received', domain: 'IP/IT', pages: 6, tags: [{ type: 'document_type', value: 'Cession IP' }, { type: 'entity', value: 'TechVision SAS' }] },
             { id: 'doc-ipit-2-2', code: '04.2.2', name: 'Contrats cession Tiers', status: 'pending', domain: 'IP/IT' },
           ],
         },
@@ -487,8 +502,8 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
           status: 'received',
           domain: 'IP/IT',
           children: [
-            { id: 'doc-ipit-3-1', code: '04.3.1', name: 'Licences logicielles', status: 'received', domain: 'IP/IT', pages: 12 },
-            { id: 'doc-ipit-3-2', code: '04.3.2', name: 'Liste Open Source', status: 'received', domain: 'IP/IT', pages: 4 },
+            { id: 'doc-ipit-3-1', code: '04.3.1', name: 'Licences logicielles', status: 'received', domain: 'IP/IT', pages: 12, tags: [{ type: 'document_type', value: 'Licences' }, { type: 'entity', value: 'TechVision SAS' }] },
+            { id: 'doc-ipit-3-2', code: '04.3.2', name: 'Liste Open Source', status: 'received', domain: 'IP/IT', pages: 4, tags: [{ type: 'document_type', value: 'Open Source' }, { type: 'entity', value: 'TechVision SAS' }] },
           ],
         },
         {
@@ -506,6 +521,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'IP/IT',
               pages: 10,
               highlights: createHighlights('doc-ipit-4-1', 'report-ipit-gdpr', 'GDPR Compliance', 'IP/IT'),
+              tags: [{ type: 'document_type', value: 'Registre RGPD' }, { type: 'entity', value: 'TechVision SAS' }, { type: 'period', value: '2024' }],
             },
             {
               id: 'doc-ipit-4-2',
@@ -515,6 +531,7 @@ export const projectDocuments: Record<string, DocumentItem[]> = {
               domain: 'IP/IT',
               pages: 8,
               highlights: createHighlights('doc-ipit-4-2', 'report-ipit-gdpr', 'GDPR Compliance', 'IP/IT'),
+              tags: [{ type: 'document_type', value: 'Politique RGPD' }, { type: 'entity', value: 'TechVision SAS' }],
             },
             { id: 'doc-ipit-4-3', code: '04.4.3', name: 'Contrats DPA', status: 'pending', domain: 'IP/IT' },
           ],
@@ -548,12 +565,14 @@ export const getDocumentById = (projectId: string, docId: string): DocumentItem 
   return allDocs.find(d => d.id === docId);
 };
 
-export const countDocumentsByStatus = (docs: DocumentItem[]): { received: number; pending: number; missing: number; total: number } => {
+export const countDocumentsByStatus = (docs: DocumentItem[]): { received: number; pending: number; missing: number; partiel: number; na: number; total: number } => {
   const flattened = flattenDocuments(docs).filter(d => !d.children); // Only count leaf nodes
   return {
     received: flattened.filter(d => d.status === 'received').length,
     pending: flattened.filter(d => d.status === 'pending').length,
     missing: flattened.filter(d => d.status === 'missing').length,
+    partiel: flattened.filter(d => d.status === 'partiel').length,
+    na: flattened.filter(d => d.status === 'na').length,
     total: flattened.length,
   };
 };

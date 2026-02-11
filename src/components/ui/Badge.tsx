@@ -73,6 +73,8 @@ const docStatusConfig: Record<DocumentStatus, { icon: string; color: string; lab
   'received': { icon: '✅', color: 'text-emerald-600', label: 'Reçu' },
   'pending': { icon: '⏳', color: 'text-amber-600', label: 'En attente' },
   'missing': { icon: '❌', color: 'text-red-500', label: 'Manquant' },
+  'partiel': { icon: '⚠️', color: 'text-orange-600', label: 'Partiel' },
+  'na': { icon: '➖', color: 'text-gray-400', label: 'N/A' },
 };
 
 export function DocumentStatusBadge({ status, showLabel = false }: DocumentStatusBadgeProps) {

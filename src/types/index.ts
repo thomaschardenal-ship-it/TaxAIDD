@@ -3,7 +3,7 @@
 export type UserRole = 'admin' | 'senior' | 'junior' | 'specialist';
 export type DomainType = 'TAX' | 'Social' | 'Corporate' | 'IP/IT';
 export type ProjectStatus = 'en-cours' | 'review' | 'valide' | 'urgent';
-export type DocumentStatus = 'received' | 'pending' | 'missing';
+export type DocumentStatus = 'received' | 'pending' | 'missing' | 'partiel' | 'na';
 
 export interface User {
   id: string;
@@ -71,6 +71,8 @@ export interface DocumentItem {
   domain?: DomainType;
   pages?: number;
   highlights?: Highlight[];
+  missingElements?: string[];
+  tags?: DocumentTag[];
 }
 
 export interface Highlight {
@@ -107,11 +109,22 @@ export interface ReportTableRow {
   sourceDocId?: string;
 }
 
+export type AttentionLevel = 'information' | 'modere' | 'critique';
+
 export interface ReportListItem {
   id: string;
   text: string;
   risk?: 'low' | 'medium' | 'high';
+  attention?: AttentionLevel;
   sourceDocId?: string;
+}
+
+export type TagType = 'document_type' | 'entity' | 'period' | 'domain' | 'free';
+
+export interface DocumentTag {
+  type: TagType;
+  value: string;
+  color?: string;
 }
 
 export interface IRLItem {

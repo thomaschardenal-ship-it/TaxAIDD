@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import ProgressBar from '@/components/ui/ProgressBar';
 import Avatar from '@/components/ui/Avatar';
 import Button from '@/components/ui/Button';
-import { OrgChart, CollectionProgress, ActionButtons, IRLModal, QAModal, ImportModal, QAResponseImportModal, ExportModal, CoherenceReviewModal } from '@/components/project';
+import { OrgChart, CollectionProgress, ActionButtons, IRLModal, QAModal, ImportModal, QAResponseImportModal, ExportModal, CoherenceReviewModal, TaskSection } from '@/components/project';
 
 export default function ProjectPage() {
   const params = useParams();
@@ -195,6 +195,9 @@ export default function ProjectPage() {
           onExportReport={() => setShowExportModal(true)}
           onCoherenceReview={() => setShowCoherenceModal(true)}
         />
+
+        {/* Task Section */}
+        <TaskSection projectId={projectId} />
       </div>
 
       {/* Modals */}

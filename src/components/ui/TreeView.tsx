@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ChevronRight, ChevronDown, Folder, FolderOpen, FileText } from 'lucide-react';
-import { DocumentItem, DomainType } from '@/types';
+import { DocumentItem, DomainType, TagType } from '@/types';
 import { DocumentStatusBadge } from './Badge';
 
 interface TreeViewProps {
@@ -11,7 +11,16 @@ interface TreeViewProps {
   filteredIds: string[] | null;
   onSelect: (item: DocumentItem) => void;
   projectName?: string;
+  showTags?: boolean;
 }
+
+const tagColorMap: Record<TagType, string> = {
+  document_type: 'bg-blue-100 text-blue-700',
+  entity: 'bg-purple-100 text-purple-700',
+  period: 'bg-amber-100 text-amber-700',
+  domain: 'bg-emerald-100 text-emerald-700',
+  free: 'bg-gray-100 text-gray-700',
+};
 
 const domainColors: Record<DomainType, string> = {
   'TAX': '#6B00E0',
@@ -20,7 +29,7 @@ const domainColors: Record<DomainType, string> = {
   'IP/IT': '#E91E8C',
 };
 
-export default function TreeView({ items, selectedId, filteredIds, onSelect, projectName }: TreeViewProps) {
+export default function TreeView({ items, selectedId, filteredIds, onSelect, projectName, showTags = false }: TreeViewProps) {
   return (
     <div className="text-sm">
       {projectName && (
@@ -37,6 +46,7 @@ export default function TreeView({ items, selectedId, filteredIds, onSelect, pro
           selectedId={selectedId}
           filteredIds={filteredIds}
           onSelect={onSelect}
+          showTags={showTags}
         />
       ))}
     </div>
@@ -49,9 +59,10 @@ interface TreeItemProps {
   selectedId: string | null;
   filteredIds: string[] | null;
   onSelect: (item: DocumentItem) => void;
+  showTags?: boolean;
 }
 
-function TreeItem({ item, level, selectedId, filteredIds, onSelect }: TreeItemProps) {
+function TreeItem({ item, level, selectedId, filteredIds, onSelect, showTags = false }: TreeItemProps) {
   const [isExpanded, setIsExpanded] = useState(level < 2);
   const hasChildren = item.children && item.children.length > 0;
   const isSelected = selectedId === item.id;
@@ -72,7 +83,7 @@ function TreeItem({ item, level, selectedId, filteredIds, onSelect }: TreeItemPr
   const domainColor = item.domain ? domainColors[item.domain] : '#C0C0C0';
 
   return (
-    <div className={isGreyedOut ? 'opacity-30' : ''}>
+    <div className={`transition-opacity duration-200 ${isGreyedOut ? 'opacity-40' : ''}`}>
       <div
         className={`
           flex items-center gap-1.5 py-1.5 px-2 rounded-md cursor-pointer
@@ -113,6 +124,37 @@ function TreeItem({ item, level, selectedId, filteredIds, onSelect }: TreeItemPr
         {isDocument && <DocumentStatusBadge status={item.status} />}
       </div>
 
+      {/* Missing elements for partiel status */}
+      {isDocument && item.status === 'partiel' && item.missingElements && item.missingElements.length > 0 && (
+        <div
+          className="ml-2 mb-1"
+          style={{ paddingLeft: `${level * 16 + 32}px` }}
+        >
+          {item.missingElements.map((el, idx) => (
+            <p key={idx} className="text-xs text-orange-600 leading-tight py-0.5">
+              {el}
+            </p>
+          ))}
+        </div>
+      )}
+
+      {/* Tags for leaf documents */}
+      {showTags && isDocument && item.tags && item.tags.length > 0 && (
+        <div
+          className="flex flex-wrap gap-0.5 mb-0.5"
+          style={{ paddingLeft: `${level * 16 + 32}px` }}
+        >
+          {item.tags.map((tag, idx) => (
+            <span
+              key={idx}
+              className={`text-[10px] px-1 py-0 rounded leading-tight ${tagColorMap[tag.type]}`}
+            >
+              {tag.value}
+            </span>
+          ))}
+        </div>
+      )}
+
       {/* Children */}
       {hasChildren && isExpanded && (
         <div>
@@ -124,6 +166,7 @@ function TreeItem({ item, level, selectedId, filteredIds, onSelect }: TreeItemPr
               selectedId={selectedId}
               filteredIds={filteredIds}
               onSelect={onSelect}
+              showTags={showTags}
             />
           ))}
         </div>

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, ChevronRight, Sparkles, FileText, AlertTriangle, Link as LinkIcon, CheckCircle2, Circle, Clock, Edit3 } from 'lucide-react';
-import { ReportElement, DomainType, ReportTableData, ReportListItem } from '@/types';
+import { ChevronDown, ChevronRight, ChevronUp, Sparkles, FileText, AlertTriangle, Link as LinkIcon, CheckCircle2, Circle, Clock, Edit3, MessageCircle, User, MapPin } from 'lucide-react';
+import { ReportElement, DomainType, ReportTableData, ReportListItem, AttentionLevel } from '@/types';
 import { useProjectContext } from '@/context/ProjectContext';
 import { getDocumentById } from '@/data';
 import Button from '@/components/ui/Button';
@@ -27,6 +27,89 @@ const domainIcons: Record<DomainType, string> = {
   'Social': '👥',
   'Corporate': '🏢',
   'IP/IT': '🔒',
+};
+
+// A10: Collaborative Review Panel mock data
+const reviewStates: Record<string, { status: 'draft' | 'in_review' | 'validated' | 'needs_revision'; author: string; reviewer?: string; comments: Array<{ user: string; initials: string; date: string; text: string; action: 'approve' | 'request_changes' | 'comment' }> }> = {
+  'report-tax-determination': {
+    status: 'validated',
+    author: 'Thomas Bernard',
+    reviewer: 'Sophie Laurent',
+    comments: [
+      { user: 'Sophie Laurent', initials: 'SL', date: '15/01/2025 11:30', text: 'Bien rédigé. Vérifier le montant CIT FY24 - semble légèrement différent de la liasse.', action: 'comment' },
+      { user: 'Thomas Bernard', initials: 'TB', date: '15/01/2025 14:00', text: 'Corrigé, merci. Le montant était arrondi, j\'ai repris la valeur exacte.', action: 'comment' },
+      { user: 'Sophie Laurent', initials: 'SL', date: '15/01/2025 15:30', text: 'Validé.', action: 'approve' },
+    ],
+  },
+  'report-tax-positions': {
+    status: 'needs_revision',
+    author: 'Thomas Bernard',
+    reviewer: 'Sophie Laurent',
+    comments: [
+      { user: 'Sophie Laurent', initials: 'SL', date: '14/01/2025 16:00', text: 'Le risque prix de transfert doit être qualifié plus précisément. Ajouter le montant des flux intercompany concernés.', action: 'request_changes' },
+    ],
+  },
+  'report-tax-credits': {
+    status: 'in_review',
+    author: 'Thomas Bernard',
+    comments: [],
+  },
+  'report-social-workforce': {
+    status: 'validated',
+    author: 'Claire Martin',
+    reviewer: 'Marc Dubois',
+    comments: [
+      { user: 'Marc Dubois', initials: 'MD', date: '13/01/2025 10:00', text: 'OK. Ajouter le turnover rate en commentaire narratif.', action: 'comment' },
+      { user: 'Claire Martin', initials: 'CM', date: '13/01/2025 14:00', text: 'Ajouté.', action: 'comment' },
+      { user: 'Marc Dubois', initials: 'MD', date: '13/01/2025 16:00', text: 'Parfait, validé.', action: 'approve' },
+    ],
+  },
+  'report-social-contracts': { status: 'in_review', author: 'Claire Martin', comments: [] },
+  'report-social-risks': { status: 'draft', author: 'Claire Martin', comments: [] },
+  'report-corp-structure': {
+    status: 'validated',
+    author: 'Pierre Durand',
+    reviewer: 'Marc Dubois',
+    comments: [
+      { user: 'Marc Dubois', initials: 'MD', date: '12/01/2025 09:00', text: 'Validé. Structure claire et complète.', action: 'approve' },
+    ],
+  },
+  'report-corp-governance': { status: 'in_review', author: 'Pierre Durand', comments: [] },
+  'report-ipit-trademarks': { status: 'draft', author: 'Julie Moreau', comments: [] },
+  'report-ipit-gdpr': { status: 'draft', author: 'Julie Moreau', comments: [] },
+};
+
+// A12: Post-Acquisition Roadmap mock data
+const roadmapItems = [
+  { id: 'road-1', title: 'Régularisation TVS', description: 'Déposer les déclarations TVS manquantes et régler les montants dus', priority: 'high' as const, timeline: '0-3 mois', domain: 'TAX' as DomainType, responsible: 'Sophie Laurent' },
+  { id: 'road-2', title: 'Documentation prix de transfert', description: 'Compléter la documentation TP pour les flux intercompany identifiés', priority: 'high' as const, timeline: '0-3 mois', domain: 'TAX' as DomainType, responsible: 'Marc Dubois' },
+  { id: 'road-3', title: 'Contrats travailleurs externes', description: 'Régulariser les contrats des 3 prestataires sans contrat formel', priority: 'high' as const, timeline: '0-3 mois', domain: 'Social' as DomainType, responsible: 'Claire Martin' },
+  { id: 'road-4', title: 'Registre mouvements de titres', description: 'Reconstituer le registre des mouvements de titres 2023', priority: 'medium' as const, timeline: '3-6 mois', domain: 'Corporate' as DomainType, responsible: 'Pierre Durand' },
+  { id: 'road-5', title: 'Audit CIR/CII', description: 'Préparer la documentation en cas de contrôle CIR — dossiers FY22-23', priority: 'medium' as const, timeline: '3-6 mois', domain: 'TAX' as DomainType, responsible: 'Thomas Bernard' },
+  { id: 'road-6', title: 'DPA fournisseurs cloud', description: 'Finaliser et signer les DPA avec AWS et Google', priority: 'medium' as const, timeline: '3-6 mois', domain: 'IP/IT' as DomainType, responsible: 'Julie Moreau' },
+  { id: 'road-7', title: 'Procédure data breach', description: 'Rédiger et mettre en place une procédure formelle de gestion des incidents', priority: 'low' as const, timeline: '6-12 mois', domain: 'IP/IT' as DomainType, responsible: 'Julie Moreau' },
+  { id: 'road-8', title: 'Élections CSE', description: 'Organiser les élections CSE en conformité avec le Code du travail', priority: 'low' as const, timeline: '6-12 mois', domain: 'Social' as DomainType, responsible: 'Claire Martin' },
+];
+
+const reviewStatusBadgeConfig: Record<string, { label: string; className: string }> = {
+  draft: { label: 'Brouillon', className: 'bg-gray-100 text-gray-600' },
+  in_review: { label: 'En review', className: 'bg-amber-100 text-amber-700' },
+  validated: { label: 'Validé', className: 'bg-emerald-100 text-emerald-700' },
+  needs_revision: { label: 'À corriger', className: 'bg-red-100 text-red-700' },
+};
+
+const priorityBadgeConfig: Record<string, { label: string; className: string }> = {
+  high: { label: 'Haute', className: 'bg-red-100 text-red-700' },
+  medium: { label: 'Moyenne', className: 'bg-amber-100 text-amber-700' },
+  low: { label: 'Basse', className: 'bg-blue-100 text-blue-700' },
+};
+
+const timelineGroups = ['0-3 mois', '3-6 mois', '6-12 mois'] as const;
+
+const timelineIcons: Record<string, string> = {
+  '0-3 mois': '🔴',
+  '3-6 mois': '🟡',
+  '6-12 mois': '🔵',
 };
 
 export default function ReportContent({ elements, projectId, onCellSelect }: ReportContentProps) {
@@ -161,6 +244,9 @@ export default function ReportContent({ elements, projectId, onCellSelect }: Rep
             onValidationChange={handleValidationChange}
           />
         ))}
+
+        {/* A12: Post-Acquisition Roadmap Section */}
+        <RoadmapSection />
       </div>
     </div>
   );
@@ -352,6 +438,9 @@ function ElementCard({
             />
           )}
 
+          {/* A10: Collaborative Review Panel */}
+          <ReviewPanel elementId={element.id} />
+
           {/* Sources footer */}
           {element.sourceDocumentIds.length > 0 && (
             <SourcesFooter
@@ -445,6 +534,17 @@ function ListContent({ items, elementId, sourceDocIds, onCellSelect }: ListConte
     return <span className={`badge ${c.bg} ${c.text} ml-2`}>{c.label}</span>;
   };
 
+  const getAttentionBadge = (attention?: AttentionLevel) => {
+    if (!attention) return null;
+    const config: Record<AttentionLevel, { bg: string; text: string; label: string }> = {
+      information: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Information' },
+      modere: { bg: 'bg-orange-100', text: 'text-orange-700', label: 'Modéré' },
+      critique: { bg: 'bg-red-100', text: 'text-red-700', label: 'Critique' },
+    };
+    const c = config[attention];
+    return <span className={`badge ${c.bg} ${c.text} ml-1 text-xs`}>{c.label}</span>;
+  };
+
   const handleItemClick = (item: ReportListItem) => {
     const docIds = item.sourceDocId ? [item.sourceDocId] : sourceDocIds;
     console.log('[List] Item clicked:', item.id, 'Sources:', docIds);
@@ -466,6 +566,7 @@ function ListContent({ items, elementId, sourceDocIds, onCellSelect }: ListConte
           )}
           <span className="flex-1 text-sm">{item.text}</span>
           {getRiskBadge(item.risk)}
+          {getAttentionBadge(item.attention)}
         </li>
       ))}
     </ul>
@@ -535,6 +636,226 @@ function SourcesFooter({ sourceDocIds, projectId, onSourceClick }: SourcesFooter
           </span>
         )}
       </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// A10: Collaborative Review Panel
+// =============================================================================
+
+interface ReviewPanelProps {
+  elementId: string;
+}
+
+function ReviewPanel({ elementId }: ReviewPanelProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const review = reviewStates[elementId];
+
+  if (!review) return null;
+
+  const statusBadge = reviewStatusBadgeConfig[review.status];
+  const commentCount = review.comments.length;
+
+  const getActionIcon = (action: 'approve' | 'request_changes' | 'comment') => {
+    switch (action) {
+      case 'approve':
+        return <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />;
+      case 'request_changes':
+        return <Edit3 className="w-3.5 h-3.5 text-red-500" />;
+      case 'comment':
+        return <MessageCircle className="w-3.5 h-3.5 text-blue-500" />;
+    }
+  };
+
+  const getActionLabel = (action: 'approve' | 'request_changes' | 'comment') => {
+    switch (action) {
+      case 'approve': return 'Approuvé';
+      case 'request_changes': return 'Modifications demandées';
+      case 'comment': return 'Commentaire';
+    }
+  };
+
+  const getInitialsColor = (initials: string) => {
+    const colors = [
+      'bg-purple-500',
+      'bg-blue-500',
+      'bg-emerald-500',
+      'bg-amber-500',
+      'bg-pink-500',
+      'bg-indigo-500',
+    ];
+    const index = initials.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  return (
+    <div className="mt-3 bg-gray-50 border-t border-dashed border-gray-200 rounded-b-lg px-4 py-3">
+      {/* Workflow status indicator */}
+      <div className="flex items-center gap-2 flex-wrap text-xs mb-2">
+        <span className="text-gray-500 flex items-center gap-1">
+          <User className="w-3 h-3" />
+          Rédigé par <span className="font-medium text-gray-700">{review.author}</span>
+        </span>
+        <span className="text-gray-300">&rarr;</span>
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge.className}`}>
+          {statusBadge.label}
+        </span>
+        {review.reviewer && (
+          <>
+            <span className="text-gray-300">&rarr;</span>
+            <span className="text-gray-500 flex items-center gap-1">
+              {review.status === 'validated' ? (
+                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+              ) : review.status === 'needs_revision' ? (
+                <Edit3 className="w-3 h-3 text-red-500" />
+              ) : (
+                <Clock className="w-3 h-3 text-amber-500" />
+              )}
+              {review.status === 'validated'
+                ? `Validé par ${review.reviewer}`
+                : review.status === 'needs_revision'
+                  ? `Corrections demandées par ${review.reviewer}`
+                  : `En attente de review par ${review.reviewer}`
+              }
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* Collapsible comments toggle */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-800 transition-colors mt-1"
+      >
+        <span>💬</span>
+        <span className="font-medium">Commentaires review ({commentCount})</span>
+        {isExpanded ? (
+          <ChevronUp className="w-3 h-3" />
+        ) : (
+          <ChevronDown className="w-3 h-3" />
+        )}
+      </button>
+
+      {/* Comments list */}
+      {isExpanded && (
+        <div className="mt-3 space-y-3">
+          {commentCount === 0 ? (
+            <p className="text-xs text-gray-400 italic pl-1">Aucun commentaire pour le moment.</p>
+          ) : (
+            review.comments.map((comment, idx) => (
+              <div key={idx} className="flex items-start gap-2.5">
+                {/* Avatar initials */}
+                <div className={`w-7 h-7 rounded-full ${getInitialsColor(comment.initials)} flex items-center justify-center flex-shrink-0`}>
+                  <span className="text-[10px] font-bold text-white">{comment.initials}</span>
+                </div>
+                {/* Comment body */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-semibold text-gray-800">{comment.user}</span>
+                    <span className="text-[10px] text-gray-400">{comment.date}</span>
+                    <span className="flex items-center gap-0.5 text-[10px] text-gray-500">
+                      {getActionIcon(comment.action)}
+                      {getActionLabel(comment.action)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">{comment.text}</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// A12: Post-Acquisition Roadmap Section
+// =============================================================================
+
+function RoadmapSection() {
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  const groupedItems = timelineGroups.map(timeline => ({
+    timeline,
+    items: roadmapItems.filter(item => item.timeline === timeline),
+  }));
+
+  return (
+    <div className="mb-6 mt-8">
+      {/* Roadmap header */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-center justify-between bg-gradient-to-r from-slate-100 to-slate-50 px-5 py-4 rounded-t-lg border border-gray-200 hover:from-slate-200 hover:to-slate-100 transition-colors"
+      >
+        <h4 className="font-semibold text-wedd-black flex items-center gap-2 text-base">
+          <span>🗺️</span>
+          Feuille de Route Post-Acquisition
+        </h4>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded">
+            {roadmapItems.length} actions
+          </span>
+          {isExpanded ? (
+            <ChevronUp className="w-4 h-4 text-gray-400" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-gray-400" />
+          )}
+        </div>
+      </button>
+
+      {isExpanded && (
+        <div className="border border-t-0 border-gray-200 rounded-b-lg bg-white">
+          {groupedItems.map((group, groupIdx) => (
+            <div key={group.timeline}>
+              {/* Timeline group header */}
+              <div className={`px-5 py-3 bg-gray-50 flex items-center gap-2 ${groupIdx > 0 ? 'border-t border-gray-200' : ''}`}>
+                <span>{timelineIcons[group.timeline]}</span>
+                <Clock className="w-3.5 h-3.5 text-gray-400" />
+                <h5 className="text-sm font-semibold text-gray-700">{group.timeline}</h5>
+                <span className="text-xs text-gray-400 ml-auto">
+                  {group.items.length} action{group.items.length > 1 ? 's' : ''}
+                </span>
+              </div>
+
+              {/* Timeline group items */}
+              <div className="divide-y divide-gray-100">
+                {group.items.map(item => {
+                  const priorityConfig = priorityBadgeConfig[item.priority];
+                  const domainColor = domainColors[item.domain];
+
+                  return (
+                    <div key={item.id} className="px-5 py-3 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-start gap-3">
+                        {/* Priority badge */}
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold mt-0.5 flex-shrink-0 ${priorityConfig.className}`}>
+                          {priorityConfig.label}
+                        </span>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-sm font-bold text-gray-800">{item.title}</span>
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${domainColor.light} ${domainColor.text}`}>
+                              {item.domain}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1 leading-relaxed">{item.description}</p>
+                          <div className="flex items-center gap-1 mt-1.5 text-[11px] text-gray-400">
+                            <User className="w-3 h-3" />
+                            <span>{item.responsible}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
