@@ -53,7 +53,7 @@ export default function FilterBar({
             placeholder="Rechercher un dossier..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-taxaidd-purple focus:ring-1 focus:ring-taxaidd-purple"
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-wedd-black focus:ring-1 focus:ring-wedd-black"
           />
         </div>
 
@@ -65,7 +65,7 @@ export default function FilterBar({
           <select
             value={filters.clientId || ''}
             onChange={(e) => onFilterChange('clientId', e.target.value || null)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-taxaidd-purple"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-wedd-black"
           >
             <option value="">Tous les clients</option>
             {clients.map(client => (
@@ -77,7 +77,7 @@ export default function FilterBar({
           <select
             value={filters.status || ''}
             onChange={(e) => onFilterChange('status', e.target.value || null)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-taxaidd-purple"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-wedd-black"
           >
             <option value="">Tous les statuts</option>
             {statusOptions.map(opt => (
@@ -89,7 +89,7 @@ export default function FilterBar({
           <select
             value={filters.responsibleId || ''}
             onChange={(e) => onFilterChange('responsibleId', e.target.value || null)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-taxaidd-purple"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-wedd-black"
           >
             <option value="">Tous les responsables</option>
             {users.map(user => (
@@ -101,7 +101,7 @@ export default function FilterBar({
           <select
             value={filters.domain || ''}
             onChange={(e) => onFilterChange('domain', e.target.value || null)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-taxaidd-purple"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-wedd-black"
           >
             <option value="">Tous les domaines</option>
             {domainOptions.map(opt => (
@@ -111,11 +111,11 @@ export default function FilterBar({
         </div>
 
         {/* View toggle */}
-        <div className="flex items-center bg-taxaidd-gray-light rounded-lg p-1 ml-auto">
+        <div className="flex items-center bg-wedd-cream rounded-lg p-1 ml-auto">
           <button
             onClick={() => onViewChange('cards')}
             className={`p-2 rounded-md transition-colors ${
-              view === 'cards' ? 'bg-white shadow-sm text-taxaidd-purple' : 'text-gray-500 hover:text-gray-700'
+              view === 'cards' ? 'bg-white shadow-sm text-wedd-black' : 'text-gray-500 hover:text-gray-700'
             }`}
             title="Vue cartes"
           >
@@ -124,7 +124,7 @@ export default function FilterBar({
           <button
             onClick={() => onViewChange('list')}
             className={`p-2 rounded-md transition-colors ${
-              view === 'list' ? 'bg-white shadow-sm text-taxaidd-purple' : 'text-gray-500 hover:text-gray-700'
+              view === 'list' ? 'bg-white shadow-sm text-wedd-black' : 'text-gray-500 hover:text-gray-700'
             }`}
             title="Vue liste"
           >

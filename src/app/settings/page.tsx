@@ -65,7 +65,7 @@ export default function SettingsPage() {
 
   // Organization settings
   const [organization, setOrganization] = useState({
-    name: 'TaxAIDD',
+    name: 'WeDD',
     defaultDomain: 'Fiscal',
     autoArchive: true,
     archiveAfterDays: 90,
@@ -108,7 +108,7 @@ export default function SettingsPage() {
                   type="text"
                   value={profile.name}
                   onChange={(e) => setProfile(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
                 />
               </div>
               <div>
@@ -117,7 +117,7 @@ export default function SettingsPage() {
                   type="email"
                   value={profile.email}
                   onChange={(e) => setProfile(prev => ({ ...prev, email: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
                 />
               </div>
               <div>
@@ -126,7 +126,7 @@ export default function SettingsPage() {
                   type="text"
                   value={profile.title}
                   onChange={(e) => setProfile(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
                 />
               </div>
               <div>
@@ -135,7 +135,7 @@ export default function SettingsPage() {
                   type="tel"
                   value={profile.phone}
                   onChange={(e) => setProfile(prev => ({ ...prev, phone: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
                 />
               </div>
             </div>
@@ -146,7 +146,7 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div className="space-y-4">
-              <h3 className="font-medium text-taxaidd-black">Canaux de notification</h3>
+              <h3 className="font-medium text-wedd-black">Canaux de notification</h3>
               <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer">
                 <div>
                   <p className="font-medium">Notifications par email</p>
@@ -156,7 +156,7 @@ export default function SettingsPage() {
                   type="checkbox"
                   checked={notifications.emailNotifications}
                   onChange={(e) => setNotifications(prev => ({ ...prev, emailNotifications: e.target.checked }))}
-                  className="w-5 h-5 accent-taxaidd-yellow"
+                  className="w-5 h-5 accent-wedd-mint"
                 />
               </label>
               <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer">
@@ -168,13 +168,13 @@ export default function SettingsPage() {
                   type="checkbox"
                   checked={notifications.pushNotifications}
                   onChange={(e) => setNotifications(prev => ({ ...prev, pushNotifications: e.target.checked }))}
-                  className="w-5 h-5 accent-taxaidd-yellow"
+                  className="w-5 h-5 accent-wedd-mint"
                 />
               </label>
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-medium text-taxaidd-black">Types de notifications</h3>
+              <h3 className="font-medium text-wedd-black">Types de notifications</h3>
               <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer">
                 <div>
                   <p className="font-medium">Nouveau projet</p>
@@ -184,7 +184,7 @@ export default function SettingsPage() {
                   type="checkbox"
                   checked={notifications.newProject}
                   onChange={(e) => setNotifications(prev => ({ ...prev, newProject: e.target.checked }))}
-                  className="w-5 h-5 accent-taxaidd-yellow"
+                  className="w-5 h-5 accent-wedd-mint"
                 />
               </label>
               <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer">
@@ -196,7 +196,7 @@ export default function SettingsPage() {
                   type="checkbox"
                   checked={notifications.documentUploaded}
                   onChange={(e) => setNotifications(prev => ({ ...prev, documentUploaded: e.target.checked }))}
-                  className="w-5 h-5 accent-taxaidd-yellow"
+                  className="w-5 h-5 accent-wedd-mint"
                 />
               </label>
               <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer">
@@ -208,7 +208,7 @@ export default function SettingsPage() {
                   type="checkbox"
                   checked={notifications.commentMention}
                   onChange={(e) => setNotifications(prev => ({ ...prev, commentMention: e.target.checked }))}
-                  className="w-5 h-5 accent-taxaidd-yellow"
+                  className="w-5 h-5 accent-wedd-mint"
                 />
               </label>
               <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer">
@@ -220,7 +220,7 @@ export default function SettingsPage() {
                   type="checkbox"
                   checked={notifications.weeklyReport}
                   onChange={(e) => setNotifications(prev => ({ ...prev, weeklyReport: e.target.checked }))}
-                  className="w-5 h-5 accent-taxaidd-yellow"
+                  className="w-5 h-5 accent-wedd-mint"
                 />
               </label>
             </div>
@@ -231,19 +231,19 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div className="p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-medium text-taxaidd-black mb-2">Mot de passe</h3>
+              <h3 className="font-medium text-wedd-black mb-2">Mot de passe</h3>
               <p className="text-sm text-gray-500 mb-4">Dernière modification il y a 30 jours</p>
               <Button variant="outline" size="sm">Changer le mot de passe</Button>
             </div>
 
             <div className="p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-medium text-taxaidd-black mb-2">Authentification à deux facteurs</h3>
+              <h3 className="font-medium text-wedd-black mb-2">Authentification à deux facteurs</h3>
               <p className="text-sm text-gray-500 mb-4">Ajoutez une couche de sécurité supplémentaire</p>
               <Button variant="outline" size="sm">Activer 2FA</Button>
             </div>
 
             <div className="p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-medium text-taxaidd-black mb-2">Sessions actives</h3>
+              <h3 className="font-medium text-wedd-black mb-2">Sessions actives</h3>
               <p className="text-sm text-gray-500 mb-4">Gérez vos sessions connectées</p>
               <div className="space-y-2">
                 <div className="flex items-center justify-between p-3 bg-white rounded-lg">
@@ -270,7 +270,7 @@ export default function SettingsPage() {
                     onClick={() => setAppearance(prev => ({ ...prev, theme }))}
                     className={`p-4 rounded-lg border-2 text-center transition-all ${
                       appearance.theme === theme
-                        ? 'border-taxaidd-yellow bg-taxaidd-yellow/10'
+                        ? 'border-wedd-mint bg-wedd-mint/10'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -289,7 +289,7 @@ export default function SettingsPage() {
                 type="checkbox"
                 checked={appearance.compactMode}
                 onChange={(e) => setAppearance(prev => ({ ...prev, compactMode: e.target.checked }))}
-                className="w-5 h-5 accent-taxaidd-yellow"
+                className="w-5 h-5 accent-wedd-mint"
               />
             </label>
 
@@ -302,7 +302,7 @@ export default function SettingsPage() {
                 type="checkbox"
                 checked={appearance.showAvatars}
                 onChange={(e) => setAppearance(prev => ({ ...prev, showAvatars: e.target.checked }))}
-                className="w-5 h-5 accent-taxaidd-yellow"
+                className="w-5 h-5 accent-wedd-mint"
               />
             </label>
           </div>
@@ -317,7 +317,7 @@ export default function SettingsPage() {
                 type="text"
                 value={organization.name}
                 onChange={(e) => setOrganization(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
               />
             </div>
 
@@ -326,7 +326,7 @@ export default function SettingsPage() {
               <select
                 value={organization.defaultDomain}
                 onChange={(e) => setOrganization(prev => ({ ...prev, defaultDomain: e.target.value }))}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
               >
                 <option value="Fiscal">Fiscal</option>
                 <option value="Social">Social</option>
@@ -344,7 +344,7 @@ export default function SettingsPage() {
                 type="checkbox"
                 checked={organization.autoArchive}
                 onChange={(e) => setOrganization(prev => ({ ...prev, autoArchive: e.target.checked }))}
-                className="w-5 h-5 accent-taxaidd-yellow"
+                className="w-5 h-5 accent-wedd-mint"
               />
             </label>
 
@@ -355,7 +355,7 @@ export default function SettingsPage() {
                   type="number"
                   value={organization.archiveAfterDays}
                   onChange={(e) => setOrganization(prev => ({ ...prev, archiveAfterDays: parseInt(e.target.value) }))}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
                 />
               </div>
             )}
@@ -365,7 +365,7 @@ export default function SettingsPage() {
       case 'integrations':
         return (
           <div className="space-y-4">
-            <p className="text-sm text-gray-500">Connectez TaxAIDD à vos outils préférés</p>
+            <p className="text-sm text-gray-500">Connectez WeDD à vos outils préférés</p>
 
             {[
               { name: 'Microsoft 365', description: 'Synchronisez vos documents OneDrive', connected: true },
@@ -394,7 +394,7 @@ export default function SettingsPage() {
               <select
                 value={language.interface}
                 onChange={(e) => setLanguage(prev => ({ ...prev, interface: e.target.value }))}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
               >
                 <option value="fr">Français</option>
                 <option value="en">English</option>
@@ -408,7 +408,7 @@ export default function SettingsPage() {
               <select
                 value={language.dateFormat}
                 onChange={(e) => setLanguage(prev => ({ ...prev, dateFormat: e.target.value }))}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
               >
                 <option value="DD/MM/YYYY">DD/MM/YYYY (31/12/2024)</option>
                 <option value="MM/DD/YYYY">MM/DD/YYYY (12/31/2024)</option>
@@ -421,7 +421,7 @@ export default function SettingsPage() {
               <select
                 value={language.timezone}
                 onChange={(e) => setLanguage(prev => ({ ...prev, timezone: e.target.value }))}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
               >
                 <option value="Europe/Paris">Europe/Paris (UTC+1)</option>
                 <option value="Europe/London">Europe/London (UTC+0)</option>
@@ -435,21 +435,21 @@ export default function SettingsPage() {
         return (
           <div className="space-y-6">
             <div className="p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-medium text-taxaidd-black mb-2">Configuration SMTP</h3>
+              <h3 className="font-medium text-wedd-black mb-2">Configuration SMTP</h3>
               <p className="text-sm text-gray-500 mb-4">Configurez le serveur d&apos;envoi d&apos;emails</p>
               <div className="space-y-3">
                 <input
                   type="text"
                   placeholder="Serveur SMTP"
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
                 />
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     type="text"
                     placeholder="Port"
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
                   />
-                  <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple">
+                  <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black">
                     <option>TLS</option>
                     <option>SSL</option>
                     <option>Aucun</option>
@@ -459,7 +459,7 @@ export default function SettingsPage() {
             </div>
 
             <div className="p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-medium text-taxaidd-black mb-2">Email de test</h3>
+              <h3 className="font-medium text-wedd-black mb-2">Email de test</h3>
               <p className="text-sm text-gray-500 mb-4">Envoyez un email de test pour vérifier la configuration</p>
               <Button variant="outline" size="sm">Envoyer un test</Button>
             </div>
@@ -475,7 +475,7 @@ export default function SettingsPage() {
     <div className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-taxaidd-black">Paramètres</h1>
+        <h1 className="text-2xl font-bold text-wedd-black">Paramètres</h1>
         <p className="text-gray-500 mt-1">Gérez vos préférences et configurations</p>
       </div>
 
@@ -489,7 +489,7 @@ export default function SettingsPage() {
                 onClick={() => setActiveSection(section.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
                   activeSection === section.id
-                    ? 'bg-taxaidd-yellow/20 text-taxaidd-black'
+                    ? 'bg-wedd-mint/20 text-wedd-black'
                     : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >
@@ -504,7 +504,7 @@ export default function SettingsPage() {
         <div className="flex-1">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-              <h2 className="text-lg font-semibold text-taxaidd-black">
+              <h2 className="text-lg font-semibold text-wedd-black">
                 {sections.find(s => s.id === activeSection)?.label}
               </h2>
               <Button

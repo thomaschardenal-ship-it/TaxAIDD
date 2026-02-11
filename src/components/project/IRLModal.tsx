@@ -96,7 +96,7 @@ export default function IRLModal({ isOpen, onClose, items, projectName, projectI
             <label className="block text-sm font-medium text-gray-700 mb-1">Objet</label>
             <input
               type="text"
-              value={`[OMNI] Information Request List${filterDomain ? ` - ${filterDomain}` : ''} - ${projectName}`}
+              value={`[WeDD] Information Request List${filterDomain ? ` - ${filterDomain}` : ''} - ${projectName}`}
               readOnly
               className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50"
             />
@@ -113,7 +113,7 @@ Dans le cadre de notre mission de due diligence, nous vous prions de bien vouloi
 N'hésitez pas à revenir vers nous pour toute question.
 
 Bien cordialement,
-L'équipe OMNI Advisory`}
+L'équipe WeDD Advisory`}
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
             />
           </div>
@@ -165,7 +165,7 @@ L'équipe OMNI Advisory`}
               {/* Items table */}
               <div className="max-h-[400px] overflow-y-auto">
                 <table className="w-full">
-                  <thead className="bg-taxaidd-gray-light sticky top-0">
+                  <thead className="bg-wedd-cream sticky top-0">
                     <tr>
                       <th className="w-10 px-3 py-2"></th>
                       <th className="text-left px-3 py-2 text-sm font-semibold">Catégorie</th>
@@ -193,7 +193,7 @@ L'équipe OMNI Advisory`}
                             </td>
                             <td className="px-3 py-2 text-sm">
                               {idx === 0 && (
-                                <span className="font-medium text-taxaidd-black">{category}</span>
+                                <span className="font-medium text-wedd-black">{category}</span>
                               )}
                             </td>
                             <td className="px-3 py-2 text-sm">{item.document}</td>

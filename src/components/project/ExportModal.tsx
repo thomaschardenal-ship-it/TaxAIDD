@@ -84,7 +84,7 @@ export default function ExportModal({ isOpen, onClose, projectName }: ExportModa
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-green-600" />
           </div>
-          <h3 className="text-xl font-semibold text-taxaidd-black mb-2">Rapport généré avec succès</h3>
+          <h3 className="text-xl font-semibold text-wedd-black mb-2">Rapport généré avec succès</h3>
           <p className="text-gray-600 mb-6">
             Votre rapport {formatOptions.find(f => f.value === config.format)?.label} est prêt.
           </p>
@@ -133,12 +133,12 @@ export default function ExportModal({ isOpen, onClose, projectName }: ExportModa
                   onClick={() => setConfig(prev => ({ ...prev, format: format.value }))}
                   className={`p-4 rounded-lg border-2 text-center transition-all ${
                     config.format === format.value
-                      ? 'border-taxaidd-yellow bg-taxaidd-yellow/10'
+                      ? 'border-wedd-mint bg-wedd-mint/10'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <Icon className={`w-8 h-8 mx-auto mb-2 ${
-                    config.format === format.value ? 'text-taxaidd-yellow-dark' : 'text-gray-400'
+                    config.format === format.value ? 'text-wedd-mint-dark' : 'text-gray-400'
                   }`} />
                   <p className="font-medium text-sm">{format.label}</p>
                   <p className="text-xs text-gray-500 mt-1">{format.description}</p>
@@ -158,7 +158,7 @@ export default function ExportModal({ isOpen, onClose, projectName }: ExportModa
                 onClick={() => toggleDomain(domain.value)}
                 className={`p-3 rounded-lg border-2 text-left transition-all ${
                   config.domains.includes(domain.value)
-                    ? 'border-taxaidd-yellow bg-taxaidd-yellow/10'
+                    ? 'border-wedd-mint bg-wedd-mint/10'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
@@ -169,7 +169,7 @@ export default function ExportModal({ isOpen, onClose, projectName }: ExportModa
                   />
                   <span className="font-medium">{domain.label}</span>
                   {config.domains.includes(domain.value) && (
-                    <Check className="w-4 h-4 text-taxaidd-mint ml-auto" />
+                    <Check className="w-4 h-4 text-wedd-mint ml-auto" />
                   )}
                 </div>
               </button>
@@ -189,7 +189,7 @@ export default function ExportModal({ isOpen, onClose, projectName }: ExportModa
                 type="checkbox"
                 checked={config.includeExecutiveSummary}
                 onChange={(e) => setConfig(prev => ({ ...prev, includeExecutiveSummary: e.target.checked }))}
-                className="w-4 h-4 accent-taxaidd-yellow"
+                className="w-4 h-4 accent-wedd-mint"
               />
               <div>
                 <p className="font-medium text-sm">Executive Summary</p>
@@ -202,7 +202,7 @@ export default function ExportModal({ isOpen, onClose, projectName }: ExportModa
                 type="checkbox"
                 checked={config.includeAppendices}
                 onChange={(e) => setConfig(prev => ({ ...prev, includeAppendices: e.target.checked }))}
-                className="w-4 h-4 accent-taxaidd-yellow"
+                className="w-4 h-4 accent-wedd-mint"
               />
               <div>
                 <p className="font-medium text-sm">Annexes</p>
@@ -215,7 +215,7 @@ export default function ExportModal({ isOpen, onClose, projectName }: ExportModa
                 type="checkbox"
                 checked={config.includeSourceReferences}
                 onChange={(e) => setConfig(prev => ({ ...prev, includeSourceReferences: e.target.checked }))}
-                className="w-4 h-4 accent-taxaidd-yellow"
+                className="w-4 h-4 accent-wedd-mint"
               />
               <div>
                 <p className="font-medium text-sm">Références sources</p>

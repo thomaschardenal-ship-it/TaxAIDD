@@ -10,7 +10,7 @@ export const users: User[] = [
   {
     id: 'user-1',
     name: 'Marc Dubois',
-    email: 'admin@taxaidd.fr',
+    email: 'admin@wedd.fr',
     role: 'admin',
     title: 'Admin Fiscaliste',
     initials: 'MD',
@@ -19,7 +19,7 @@ export const users: User[] = [
   {
     id: 'user-2',
     name: 'Sophie Laurent',
-    email: 'slaurent@taxaidd.fr',
+    email: 'slaurent@wedd.fr',
     role: 'senior',
     title: 'Fiscaliste Senior',
     initials: 'SL',
@@ -28,7 +28,7 @@ export const users: User[] = [
   {
     id: 'user-3',
     name: 'Thomas Bernard',
-    email: 'tbernard@taxaidd.fr',
+    email: 'tbernard@wedd.fr',
     role: 'junior',
     title: 'Fiscaliste Junior',
     initials: 'TB',
@@ -37,7 +37,7 @@ export const users: User[] = [
   {
     id: 'user-4',
     name: 'Claire Martin',
-    email: 'cmartin@taxaidd.fr',
+    email: 'cmartin@wedd.fr',
     role: 'specialist',
     title: 'Spécialiste Social',
     initials: 'CM',
@@ -46,7 +46,7 @@ export const users: User[] = [
   {
     id: 'user-5',
     name: 'Pierre Durand',
-    email: 'pdurand@taxaidd.fr',
+    email: 'pdurand@wedd.fr',
     role: 'specialist',
     title: 'Spécialiste Corporate',
     initials: 'PD',
@@ -55,7 +55,7 @@ export const users: User[] = [
   {
     id: 'user-6',
     name: 'Julie Moreau',
-    email: 'jmoreau@taxaidd.fr',
+    email: 'jmoreau@wedd.fr',
     role: 'specialist',
     title: 'Spécialiste IP/IT',
     initials: 'JM',

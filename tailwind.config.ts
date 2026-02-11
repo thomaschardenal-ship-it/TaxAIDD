@@ -27,21 +27,6 @@ const config: Config = {
           'gray-500': '#6b6b66',
           'gray-600': '#4a4a46',
         },
-        // Keep taxaidd as alias for backward compatibility (mapped to WeDD colors)
-        taxaidd: {
-          yellow: '#8dd4a0',
-          'yellow-dark': '#6bc48a',
-          purple: '#1a1a1a',
-          'purple-light': '#f0faf3',
-          blue: '#1a1a1a',
-          'blue-light': '#e8e8e3',
-          magenta: '#8dd4a0',
-          mint: '#8dd4a0',
-          black: '#1a1a1a',
-          gray: '#9c9c97',
-          'gray-light': '#f5f5f0',
-          'gray-lighter': '#f8f8f5',
-        },
       },
       fontFamily: {
         sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],

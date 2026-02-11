@@ -7,3 +7,4 @@ export { default as ImportModal } from './ImportModal';
 export { default as QAResponseImportModal } from './QAResponseImportModal';
 export { default as ExportModal } from './ExportModal';
 export { default as CoherenceReviewModal } from './CoherenceReviewModal';
+export { default as TaskSection } from './TaskSection';

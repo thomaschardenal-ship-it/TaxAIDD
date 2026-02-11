@@ -3,14 +3,17 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Building2, Users, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, BookOpen, Building2, Users, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
 import { currentUser } from '@/data';
 import Avatar from '@/components/ui/Avatar';
 import { useSidebar } from '@/context/SidebarContext';
+import NotificationBell from './NotificationBell';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
+  { icon: TrendingUp, label: 'Pipeline', href: '/pipeline' },
   { icon: Building2, label: 'Clients', href: '/clients' },
+  { icon: BookOpen, label: 'Ressources', href: '/resources' },
   { icon: Users, label: 'Utilisateurs', href: '/users', adminOnly: true },
   { icon: Settings, label: 'Paramètres', href: '/settings' },
 ];
@@ -41,20 +44,23 @@ export default function Sidebar() {
             <span className="font-bold text-wedd-black text-sm font-display">W</span>
           </div>
           {!isCollapsed && (
-            <span className="font-bold text-lg text-white whitespace-nowrap font-display tracking-tight">TaxAIDD</span>
+            <span className="font-bold text-lg text-white whitespace-nowrap font-display tracking-tight">WeDD</span>
           )}
         </Link>
-        <button
-          onClick={toggleSidebar}
-          className="p-1.5 rounded hover:bg-wedd-black-light transition-colors text-wedd-gray-400 hover:text-white"
-          title={isCollapsed ? 'Développer' : 'Réduire'}
-        >
+        <div className="flex items-center gap-1">
+          {!isCollapsed && <NotificationBell />}
+          <button
+            onClick={toggleSidebar}
+            className="p-1.5 rounded hover:bg-wedd-black-light transition-colors text-wedd-gray-400 hover:text-white"
+            title={isCollapsed ? 'Développer' : 'Réduire'}
+          >
           {isCollapsed ? (
             <ChevronRight className="w-4 h-4" />
           ) : (
             <ChevronLeft className="w-4 h-4" />
           )}
-        </button>
+          </button>
+        </div>
       </div>
 
       {/* Navigation */}

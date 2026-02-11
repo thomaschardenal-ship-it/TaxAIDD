@@ -26,10 +26,10 @@ interface DomainBadgeProps {
 }
 
 const domainConfig: Record<DomainType, { bg: string; text: string; label: string }> = {
-  'TAX': { bg: 'bg-taxaidd-purple-light', text: 'text-taxaidd-purple', label: 'TAX' },
+  'TAX': { bg: 'bg-wedd-mint-50', text: 'text-wedd-black', label: 'TAX' },
   'Social': { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Social' },
-  'Corporate': { bg: 'bg-blue-100', text: 'text-taxaidd-blue', label: 'Corporate' },
-  'IP/IT': { bg: 'bg-pink-100', text: 'text-taxaidd-magenta', label: 'IP/IT' },
+  'Corporate': { bg: 'bg-blue-100', text: 'text-wedd-black', label: 'Corporate' },
+  'IP/IT': { bg: 'bg-pink-100', text: 'text-wedd-mint', label: 'IP/IT' },
 };
 
 export function DomainBadge({ domain, size = 'sm' }: DomainBadgeProps) {
@@ -49,9 +49,9 @@ interface StatusBadgeProps {
 
 const statusConfig: Record<ProjectStatus, { bg: string; text: string; label: string }> = {
   'en-cours': { bg: 'bg-amber-100', text: 'text-amber-700', label: 'En cours' },
-  'review': { bg: 'bg-taxaidd-purple-light', text: 'text-taxaidd-purple', label: 'Review' },
+  'review': { bg: 'bg-wedd-mint-50', text: 'text-wedd-black', label: 'Review' },
   'valide': { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Validé' },
-  'urgent': { bg: 'bg-pink-100', text: 'text-taxaidd-magenta', label: 'Urgent' },
+  'urgent': { bg: 'bg-pink-100', text: 'text-wedd-mint', label: 'Urgent' },
 };
 
 export function StatusBadge({ status }: StatusBadgeProps) {
@@ -73,6 +73,8 @@ const docStatusConfig: Record<DocumentStatus, { icon: string; color: string; lab
   'received': { icon: '✅', color: 'text-emerald-600', label: 'Reçu' },
   'pending': { icon: '⏳', color: 'text-amber-600', label: 'En attente' },
   'missing': { icon: '❌', color: 'text-red-500', label: 'Manquant' },
+  'partiel': { icon: '⚠️', color: 'text-orange-600', label: 'Partiel' },
+  'na': { icon: '➖', color: 'text-gray-400', label: 'N/A' },
 };
 
 export function DocumentStatusBadge({ status, showLabel = false }: DocumentStatusBadgeProps) {

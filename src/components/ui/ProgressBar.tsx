@@ -40,7 +40,7 @@ export default function ProgressBar({
 
   return (
     <div className={`w-full ${className}`}>
-      <div className={`w-full bg-taxaidd-gray-light rounded-full overflow-hidden ${sizeClasses[size]}`}>
+      <div className={`w-full bg-wedd-cream rounded-full overflow-hidden ${sizeClasses[size]}`}>
         <div
           className={`${sizeClasses[size]} rounded-full transition-all duration-500 ease-out`}
           style={{
@@ -74,7 +74,7 @@ export function DomainProgressBar({ domain, received, total }: DomainProgressBar
 
   return (
     <div className="w-full">
-      <div className="w-full h-2 bg-taxaidd-gray-light rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-wedd-cream rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{

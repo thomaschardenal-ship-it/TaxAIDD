@@ -22,7 +22,7 @@ export default function CollectionProgress({ documentStats, onDomainClick }: Col
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-6">
-      <h3 className="text-lg font-semibold text-taxaidd-black mb-6">Avancée de la Collecte</h3>
+      <h3 className="text-lg font-semibold text-wedd-black mb-6">Avancée de la Collecte</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {domains.map(domain => {
@@ -44,7 +44,7 @@ export default function CollectionProgress({ documentStats, onDomainClick }: Col
                   <Icon className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-semibold text-taxaidd-black">{domain}</p>
+                  <p className="font-semibold text-wedd-black">{domain}</p>
                   <p className="text-xs text-gray-500">
                     {stats.received} / {stats.total} documents
                   </p>

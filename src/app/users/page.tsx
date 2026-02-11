@@ -212,7 +212,7 @@ export default function UsersPage() {
               type="email"
               value={newUser.email}
               onChange={(e) => setNewUser(prev => ({ ...prev, email: e.target.value }))}
-              placeholder="jean.dupont@taxaidd.fr"
+              placeholder="jean.dupont@wedd.fr"
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-mint"
             />
           </div>

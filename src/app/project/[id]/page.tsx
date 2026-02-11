@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import ProgressBar from '@/components/ui/ProgressBar';
 import Avatar from '@/components/ui/Avatar';
 import Button from '@/components/ui/Button';
-import { OrgChart, CollectionProgress, ActionButtons, IRLModal, QAModal, ImportModal, QAResponseImportModal, ExportModal, CoherenceReviewModal } from '@/components/project';
+import { OrgChart, CollectionProgress, ActionButtons, IRLModal, QAModal, ImportModal, QAResponseImportModal, ExportModal, CoherenceReviewModal, TaskSection } from '@/components/project';
 
 export default function ProjectPage() {
   const params = useParams();
@@ -61,7 +61,7 @@ export default function ProjectPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-taxaidd-black mb-2">Projet non trouvé</h2>
+          <h2 className="text-xl font-semibold text-wedd-black mb-2">Projet non trouvé</h2>
           <p className="text-gray-500 mb-4">Le projet demandé n&apos;existe pas.</p>
           <Link href="/">
             <Button>Retour au dashboard</Button>
@@ -117,7 +117,7 @@ export default function ProjectPage() {
                 )}
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide">Client</p>
-                  <p className="font-semibold text-taxaidd-black">{client?.name || 'N/A'}</p>
+                  <p className="font-semibold text-wedd-black">{client?.name || 'N/A'}</p>
                   <p className="text-xs text-gray-500">{client?.industry}</p>
                 </div>
               </div>
@@ -138,7 +138,7 @@ export default function ProjectPage() {
                 )}
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide">Responsable</p>
-                  <p className="font-semibold text-taxaidd-black">{responsible?.name || 'N/A'}</p>
+                  <p className="font-semibold text-wedd-black">{responsible?.name || 'N/A'}</p>
                   <p className="text-xs text-gray-500">{responsible?.title}</p>
                 </div>
               </div>
@@ -150,12 +150,12 @@ export default function ProjectPage() {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${daysRemaining <= 7 ? 'bg-pink-100' : 'bg-blue-100'}`}>
-                  <Calendar className={`w-6 h-6 ${daysRemaining <= 7 ? 'text-taxaidd-magenta' : 'text-taxaidd-blue'}`} />
+                  <Calendar className={`w-6 h-6 ${daysRemaining <= 7 ? 'text-wedd-mint' : 'text-wedd-black'}`} />
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide">Deadline</p>
-                  <p className="font-semibold text-taxaidd-black">{formatDate(project.endDate)}</p>
-                  <p className={`text-xs ${daysRemaining <= 7 ? 'text-taxaidd-magenta font-medium' : 'text-gray-500'}`}>
+                  <p className="font-semibold text-wedd-black">{formatDate(project.endDate)}</p>
+                  <p className={`text-xs ${daysRemaining <= 7 ? 'text-wedd-mint font-medium' : 'text-gray-500'}`}>
                     {daysRemaining > 0 ? `${daysRemaining} jours restants` : 'Dépassé'}
                   </p>
                 </div>
@@ -167,12 +167,12 @@ export default function ProjectPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-taxaidd-yellow/20 flex items-center justify-center">
-                  <Target className="w-6 h-6 text-taxaidd-yellow-dark" />
+                <div className="w-12 h-12 rounded-xl bg-wedd-mint/20 flex items-center justify-center">
+                  <Target className="w-6 h-6 text-wedd-mint-dark" />
                 </div>
                 <div className="flex-1">
                   <p className="text-xs text-gray-500 uppercase tracking-wide">Progression</p>
-                  <p className="font-semibold text-taxaidd-black text-lg">{project.progress}%</p>
+                  <p className="font-semibold text-wedd-black text-lg">{project.progress}%</p>
                   <ProgressBar value={project.progress} size="sm" className="mt-1" />
                 </div>
               </div>
@@ -195,6 +195,9 @@ export default function ProjectPage() {
           onExportReport={() => setShowExportModal(true)}
           onCoherenceReview={() => setShowCoherenceModal(true)}
         />
+
+        {/* Task Section */}
+        <TaskSection projectId={projectId} />
       </div>
 
       {/* Modals */}

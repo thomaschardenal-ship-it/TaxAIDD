@@ -27,7 +27,7 @@ export default function OrgChart({ companies }: OrgChartProps) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 p-6">
-      <h3 className="text-lg font-semibold text-taxaidd-black mb-6">Structure Juridique</h3>
+      <h3 className="text-lg font-semibold text-wedd-black mb-6">Structure Juridique</h3>
 
       <div className="flex flex-col items-center">
         {/* Holding Company */}
@@ -106,7 +106,7 @@ function CompanyBox({ company, color, isHovered, onHover }: CompanyBoxProps) {
       )}
 
       <div className="text-center">
-        <p className="font-semibold text-taxaidd-black">{company.name}</p>
+        <p className="font-semibold text-wedd-black">{company.name}</p>
         {company.legalForm && (
           <p className="text-xs text-gray-500 mt-1">{company.legalForm}</p>
         )}
@@ -114,7 +114,7 @@ function CompanyBox({ company, color, isHovered, onHover }: CompanyBoxProps) {
 
       {/* Tooltip on hover */}
       {isHovered && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-10 bg-taxaidd-black text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-10 bg-wedd-black text-white px-3 py-2 rounded-lg text-xs whitespace-nowrap shadow-lg">
           <p><strong>SIREN:</strong> {company.siren || 'N/A'}</p>
           <p><strong>Forme:</strong> {company.legalForm || 'N/A'}</p>
           <p><strong>Type:</strong> {company.type}</p>
