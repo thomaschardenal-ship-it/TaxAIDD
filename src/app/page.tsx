@@ -6,7 +6,7 @@ import { DomainType, ProjectStatus } from '@/types';
 import { currentUser } from '@/data';
 import { useProjects } from '@/hooks';
 import { Header } from '@/components/layout';
-import { ProjectCard, ProjectTable, FilterBar, NewProjectModal } from '@/components/dashboard';
+import { ProjectCard, ProjectTable, FilterBar, NewOpportunityModal } from '@/components/dashboard';
 import Button from '@/components/ui/Button';
 
 interface Filters {
@@ -68,9 +68,9 @@ export default function DashboardPage() {
     });
   }, [projects, searchQuery, filters]);
 
-  const handleNewProject = (data: Parameters<typeof NewProjectModal>[0]['onSubmit'] extends (d: infer T) => void ? T : never) => {
-    console.log('[Dashboard] New project created:', data);
-    // In a real app, this would add to the projects list
+  const handleNewOpportunity = (data: Parameters<typeof NewOpportunityModal>[0]['onSubmit'] extends (d: infer T) => void ? T : never) => {
+    console.log('[Dashboard] New opportunity created:', data);
+    // In a real app, this would add to the pipeline
     // For now, just close the modal
   };
 
@@ -84,7 +84,7 @@ export default function DashboardPage() {
               onClick={() => setIsModalOpen(true)}
               icon={<Plus className="w-4 h-4" />}
             >
-              Nouveau Dossier
+              Nouvelle Opportunité
             </Button>
           )
         }
@@ -124,10 +124,10 @@ export default function DashboardPage() {
         )}
       </div>
 
-      <NewProjectModal
+      <NewOpportunityModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleNewProject}
+        onSubmit={handleNewOpportunity}
       />
     </div>
   );
