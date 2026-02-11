@@ -8,6 +8,7 @@ import {
   getTasksForProject,
   Task,
   TaskStatus,
+  TaskPriority,
   statusConfig,
   priorityConfig,
 } from '@/data/tasks';
@@ -16,9 +17,11 @@ interface TaskSectionProps {
   projectId: string;
 }
 
-type GroupBy = 'collaborator' | 'domain';
+type GroupBy = 'collaborator' | 'domain' | 'priority';
 type StatusFilter = 'all' | TaskStatus;
 type DomainFilter = 'all' | DomainType;
+
+const priorityOrder: TaskPriority[] = ['urgent', 'high', 'normal', 'low'];
 
 const domains: DomainType[] = ['TAX', 'Social', 'Corporate', 'IP/IT'];
 
@@ -45,7 +48,7 @@ export default function TaskSection({ projectId }: TaskSectionProps) {
   const progressPct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
 
   const groupedTasks = useMemo(() => {
-    const groups: Record<string, { label: string; domain?: DomainType; tasks: Task[] }> = {};
+    const groups: Record<string, { label: string; domain?: DomainType; priority?: TaskPriority; tasks: Task[] }> = {};
 
     if (groupBy === 'collaborator') {
       filteredTasks.forEach(task => {
@@ -54,12 +57,20 @@ export default function TaskSection({ projectId }: TaskSectionProps) {
         }
         groups[task.assignedTo].tasks.push(task);
       });
-    } else {
+    } else if (groupBy === 'domain') {
       filteredTasks.forEach(task => {
         if (!groups[task.domain]) {
           groups[task.domain] = { label: task.domain, domain: task.domain, tasks: [] };
         }
         groups[task.domain].tasks.push(task);
+      });
+    } else {
+      // Group by priority — maintain priority order
+      priorityOrder.forEach(p => {
+        const matching = filteredTasks.filter(t => t.priority === p);
+        if (matching.length > 0) {
+          groups[p] = { label: priorityConfig[p].label, priority: p, tasks: matching };
+        }
       });
     }
 
@@ -119,6 +130,16 @@ export default function TaskSection({ projectId }: TaskSectionProps) {
               }`}
             >
               Par domaine
+            </button>
+            <button
+              onClick={() => setGroupBy('priority')}
+              className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                groupBy === 'priority'
+                  ? 'bg-white text-wedd-black shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Par priorité
             </button>
           </div>
 
@@ -201,9 +222,17 @@ export default function TaskSection({ projectId }: TaskSectionProps) {
                   <User className="w-4 h-4 text-gray-400" />
                   <span className="text-sm font-medium text-wedd-black">{group.label}</span>
                 </>
-              ) : (
+              ) : groupBy === 'domain' ? (
                 <>
                   {group.domain && <DomainBadge domain={group.domain} size="sm" />}
+                </>
+              ) : (
+                <>
+                  {group.priority && (
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${priorityConfig[group.priority].bgColor} ${priorityConfig[group.priority].color}`}>
+                      {priorityConfig[group.priority].label}
+                    </span>
+                  )}
                 </>
               )}
               <span className="text-xs text-gray-400 ml-1">

@@ -163,9 +163,10 @@ export default function Sidebar() {
     }
   }, [pathname]);
 
-  // Auto-collapse sidebar when navigating (on smaller screens)
+  // Auto-collapse sidebar on project/folder pages (production mode) or small screens
   useEffect(() => {
-    if (window.innerWidth < 1024 && !isCollapsed) {
+    const isProjectPage = pathname.startsWith('/project/');
+    if (isProjectPage || (window.innerWidth < 1024 && !isCollapsed)) {
       collapseSidebar();
     }
   }, [pathname, collapseSidebar, isCollapsed]);
