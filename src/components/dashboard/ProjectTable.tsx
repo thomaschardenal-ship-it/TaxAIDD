@@ -43,9 +43,9 @@ export default function ProjectTable({ projects }: ProjectTableProps) {
             const responsible = getUserById(project.responsibleId);
 
             return (
-              <tr key={project.id} className="hover:bg-taxaidd-gray-light/50">
+              <tr key={project.id} className="hover:bg-wedd-cream/50">
                 <td>
-                  <span className="font-medium text-taxaidd-black">{project.name}</span>
+                  <span className="font-medium text-wedd-black">{project.name}</span>
                 </td>
                 <td>
                   {client && (
@@ -95,7 +95,7 @@ export default function ProjectTable({ projects }: ProjectTableProps) {
                 <td>
                   <Link
                     href={`/project/${project.id}`}
-                    className="inline-flex items-center gap-1 text-taxaidd-purple hover:underline text-sm"
+                    className="inline-flex items-center gap-1 text-wedd-black hover:underline text-sm"
                   >
                     Ouvrir
                     <ExternalLink className="w-3.5 h-3.5" />

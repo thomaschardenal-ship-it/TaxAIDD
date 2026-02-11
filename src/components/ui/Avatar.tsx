@@ -53,7 +53,7 @@ export function AvatarGroup({ users, max = 4, size = 'sm' }: AvatarGroupProps) {
       ))}
       {remaining > 0 && (
         <div
-          className={`flex items-center justify-center rounded-full bg-taxaidd-gray text-taxaidd-black font-medium ring-2 ring-white ${sizeClasses[size]}`}
+          className={`flex items-center justify-center rounded-full bg-wedd-gray-400 text-wedd-black font-medium ring-2 ring-white ${sizeClasses[size]}`}
           title={`+${remaining} autres`}
         >
           +{remaining}

@@ -38,7 +38,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <CardContent className="p-5">
         {/* Header with status */}
         <div className="flex items-start justify-between mb-3">
-          <h3 className="font-semibold text-taxaidd-black text-lg leading-tight pr-2">
+          <h3 className="font-semibold text-wedd-black text-lg leading-tight pr-2">
             {project.name}
           </h3>
           <StatusBadge status={project.status} />
@@ -54,7 +54,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               {client.initials}
             </div>
             <div>
-              <p className="text-sm font-medium text-taxaidd-black">{client.name}</p>
+              <p className="text-sm font-medium text-wedd-black">{client.name}</p>
               <p className="text-xs text-gray-500">{client.industry}</p>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         <div className="mb-4">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-sm text-gray-600">Progression</span>
-            <span className="text-sm font-semibold text-taxaidd-black">{project.progress}%</span>
+            <span className="text-sm font-semibold text-wedd-black">{project.progress}%</span>
           </div>
           <ProgressBar value={project.progress} />
         </div>
@@ -107,7 +107,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           <Button
             variant="outline"
             size="sm"
-            className="w-full group-hover:border-taxaidd-yellow group-hover:bg-taxaidd-yellow/10"
+            className="w-full group-hover:border-wedd-mint group-hover:bg-wedd-mint/10"
             icon={<ArrowRight className="w-4 h-4" />}
           >
             Ouvrir

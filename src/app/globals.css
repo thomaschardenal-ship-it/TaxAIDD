@@ -20,13 +20,6 @@
   --wedd-gray-500: #6b6b66;
   --wedd-gray-600: #4a4a46;
 
-  /* Legacy aliases */
-  --taxaidd-yellow: var(--wedd-mint);
-  --taxaidd-yellow-dark: var(--wedd-mint-dark);
-  --taxaidd-black: var(--wedd-black);
-  --taxaidd-gray: var(--wedd-gray-400);
-  --taxaidd-gray-light: var(--wedd-cream);
-  --taxaidd-gray-lighter: var(--wedd-gray-100);
 }
 
 * {

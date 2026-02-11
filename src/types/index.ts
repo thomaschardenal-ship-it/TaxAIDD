@@ -1,4 +1,4 @@
-// Types pour l'application TaxAIDD
+// Types pour l'application WeDD
 
 export type UserRole = 'admin' | 'senior' | 'junior' | 'specialist';
 export type DomainType = 'TAX' | 'Social' | 'Corporate' | 'IP/IT';

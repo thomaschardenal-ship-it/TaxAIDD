@@ -24,8 +24,8 @@ export default function TreeView({ items, selectedId, filteredIds, onSelect, pro
   return (
     <div className="text-sm">
       {projectName && (
-        <div className="flex items-center gap-2 px-2 py-2 font-semibold text-taxaidd-black mb-1">
-          <Folder className="w-4 h-4 text-taxaidd-yellow" />
+        <div className="flex items-center gap-2 px-2 py-2 font-semibold text-wedd-black mb-1">
+          <Folder className="w-4 h-4 text-wedd-mint" />
           <span>{projectName}</span>
         </div>
       )}
@@ -77,8 +77,8 @@ function TreeItem({ item, level, selectedId, filteredIds, onSelect }: TreeItemPr
         className={`
           flex items-center gap-1.5 py-1.5 px-2 rounded-md cursor-pointer
           transition-all duration-150
-          ${isSelected ? 'bg-taxaidd-yellow/20 border-l-2 border-taxaidd-yellow' : 'hover:bg-taxaidd-gray-light'}
-          ${isDocument && !isGreyedOut ? 'hover:bg-taxaidd-yellow/10' : ''}
+          ${isSelected ? 'bg-wedd-mint/20 border-l-2 border-wedd-mint' : 'hover:bg-wedd-cream'}
+          ${isDocument && !isGreyedOut ? 'hover:bg-wedd-mint/10' : ''}
         `}
         style={{ paddingLeft: `${level * 16 + 8}px` }}
         onClick={handleClick}

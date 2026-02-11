@@ -6,7 +6,7 @@ import { ClientsProvider } from "@/context/ClientsContext";
 import SidebarWrapper from "@/components/layout/SidebarWrapper";
 
 export const metadata: Metadata = {
-  title: "TaxAIDD - Due Diligence Platform",
+  title: "WeDD - Due Diligence Platform",
   description: "Plateforme de gestion de dossiers de due diligence fiscale, sociale, corporate et IP/IT",
 };
 

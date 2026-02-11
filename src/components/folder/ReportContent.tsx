@@ -16,10 +16,10 @@ interface ReportContentProps {
 }
 
 const domainColors: Record<DomainType, { bg: string; border: string; text: string; light: string }> = {
-  'TAX': { bg: 'bg-purple-50', border: 'border-taxaidd-purple', text: 'text-taxaidd-purple', light: 'bg-purple-100' },
-  'Social': { bg: 'bg-emerald-50', border: 'border-taxaidd-mint', text: 'text-emerald-700', light: 'bg-emerald-100' },
-  'Corporate': { bg: 'bg-blue-50', border: 'border-taxaidd-blue', text: 'text-taxaidd-blue', light: 'bg-blue-100' },
-  'IP/IT': { bg: 'bg-pink-50', border: 'border-taxaidd-magenta', text: 'text-taxaidd-magenta', light: 'bg-pink-100' },
+  'TAX': { bg: 'bg-purple-50', border: 'border-wedd-black', text: 'text-wedd-black', light: 'bg-purple-100' },
+  'Social': { bg: 'bg-emerald-50', border: 'border-wedd-mint', text: 'text-emerald-700', light: 'bg-emerald-100' },
+  'Corporate': { bg: 'bg-blue-50', border: 'border-wedd-black', text: 'text-wedd-black', light: 'bg-blue-100' },
+  'IP/IT': { bg: 'bg-pink-50', border: 'border-wedd-mint', text: 'text-wedd-mint', light: 'bg-pink-100' },
 };
 
 const domainIcons: Record<DomainType, string> = {
@@ -97,7 +97,7 @@ export default function ReportContent({ elements, projectId, onCellSelect }: Rep
       {/* Header */}
       <div className="p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-taxaidd-black">Rapport de Due Diligence</h3>
+          <h3 className="font-semibold text-wedd-black">Rapport de Due Diligence</h3>
           <Button
             size="sm"
             onClick={handleGenerateWithAI}
@@ -117,7 +117,7 @@ export default function ReportContent({ elements, projectId, onCellSelect }: Rep
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-300 ${
-                validationProgress === 100 ? 'bg-green-500' : 'bg-taxaidd-purple'
+                validationProgress === 100 ? 'bg-green-500' : 'bg-wedd-black'
               }`}
               style={{ width: `${validationProgress}%` }}
             />
@@ -134,7 +134,7 @@ export default function ReportContent({ elements, projectId, onCellSelect }: Rep
         <select
           value={selectedDomain}
           onChange={(e) => setSelectedDomain(e.target.value as DomainType | 'all')}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-taxaidd-purple"
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-wedd-black"
         >
           <option value="all">Tous les domaines</option>
           <option value="TAX">TAX (Fiscalité)</option>
@@ -288,7 +288,7 @@ function ElementCard({
       className={`
         bg-white rounded-lg border-l-4 shadow-sm transition-all duration-300
         ${colors.border}
-        ${isSelected ? 'ring-2 ring-taxaidd-yellow glow-effect' : ''}
+        ${isSelected ? 'ring-2 ring-wedd-mint glow-effect' : ''}
         ${validationStatus === 'validated' ? 'opacity-80' : ''}
       `}
     >
@@ -304,7 +304,7 @@ function ElementCard({
             <ChevronDown className="w-4 h-4 text-gray-400" />
           )}
           <span>{getIcon()}</span>
-          <span className="font-medium text-taxaidd-black flex-1 text-left">{element.title}</span>
+          <span className="font-medium text-wedd-black flex-1 text-left">{element.title}</span>
           {element.sourceDocumentIds.length > 0 && (
             <span className="badge bg-gray-100 text-gray-600">
               {element.sourceDocumentIds.length} sources
@@ -391,7 +391,7 @@ function TableContent({ data, elementId, sourceDocIds, onCellSelect }: TableCont
             {data.headers.map((header, i) => (
               <th
                 key={i}
-                className="bg-taxaidd-gray-light px-3 py-2 text-left font-semibold text-taxaidd-black first:rounded-tl-lg last:rounded-tr-lg"
+                className="bg-wedd-cream px-3 py-2 text-left font-semibold text-wedd-black first:rounded-tl-lg last:rounded-tr-lg"
               >
                 {header}
               </th>
@@ -409,8 +409,8 @@ function TableContent({ data, elementId, sourceDocIds, onCellSelect }: TableCont
                     key={colIndex}
                     className={`
                       px-3 py-2 transition-colors
-                      ${row.isEditable ? 'cursor-pointer hover:bg-taxaidd-yellow/10' : ''}
-                      ${isSelected ? 'ring-2 ring-taxaidd-purple ring-inset bg-taxaidd-purple/5' : ''}
+                      ${row.isEditable ? 'cursor-pointer hover:bg-wedd-mint/10' : ''}
+                      ${isSelected ? 'ring-2 ring-wedd-black ring-inset bg-wedd-black/5' : ''}
                     `}
                     onClick={() => row.isEditable && handleCellClick(rowIndex, colIndex + 1, row)}
                   >
@@ -523,7 +523,7 @@ function SourcesFooter({ sourceDocIds, projectId, onSourceClick }: SourcesFooter
             <button
               key={docId}
               onClick={() => onSourceClick([docId])}
-              className="text-xs px-2 py-1 bg-taxaidd-gray-light rounded hover:bg-taxaidd-purple/10 hover:text-taxaidd-purple transition-colors"
+              className="text-xs px-2 py-1 bg-wedd-cream rounded hover:bg-wedd-black/10 hover:text-wedd-black transition-colors"
             >
               {doc?.name || docId}
             </button>

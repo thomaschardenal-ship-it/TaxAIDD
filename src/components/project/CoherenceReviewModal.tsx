@@ -141,7 +141,7 @@ export default function CoherenceReviewModal({ isOpen, onClose, projectName }: C
 
           <div
             className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
-              file ? 'border-taxaidd-mint bg-taxaidd-mint/5' : 'border-gray-300 hover:border-taxaidd-purple'
+              file ? 'border-wedd-mint bg-wedd-mint/5' : 'border-gray-300 hover:border-wedd-black'
             }`}
           >
             <input
@@ -154,11 +154,11 @@ export default function CoherenceReviewModal({ isOpen, onClose, projectName }: C
             <label htmlFor="coherence-file-upload" className="cursor-pointer">
               {file ? (
                 <div className="flex flex-col items-center gap-3">
-                  <div className="w-12 h-12 bg-taxaidd-mint/20 rounded-full flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-taxaidd-mint" />
+                  <div className="w-12 h-12 bg-wedd-mint/20 rounded-full flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-wedd-mint" />
                   </div>
                   <div>
-                    <p className="font-medium text-taxaidd-black">{file.name}</p>
+                    <p className="font-medium text-wedd-black">{file.name}</p>
                     <p className="text-sm text-gray-500">{(file.size / 1024).toFixed(1)} KB</p>
                   </div>
                 </div>
@@ -168,7 +168,7 @@ export default function CoherenceReviewModal({ isOpen, onClose, projectName }: C
                     <Upload className="w-6 h-6 text-gray-400" />
                   </div>
                   <div>
-                    <p className="font-medium text-taxaidd-black">Uploadez le rapport pré-final</p>
+                    <p className="font-medium text-wedd-black">Uploadez le rapport pré-final</p>
                     <p className="text-sm text-gray-500">PDF, Word ou PowerPoint</p>
                   </div>
                 </div>
@@ -204,7 +204,7 @@ export default function CoherenceReviewModal({ isOpen, onClose, projectName }: C
           <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <RefreshCw className="w-8 h-8 text-purple-600 animate-spin" />
           </div>
-          <h3 className="text-xl font-semibold text-taxaidd-black mb-2">Analyse en cours...</h3>
+          <h3 className="text-xl font-semibold text-wedd-black mb-2">Analyse en cours...</h3>
           <p className="text-gray-600">
             L&apos;IA parcourt votre document et vérifie la cohérence.
           </p>
@@ -270,7 +270,7 @@ export default function CoherenceReviewModal({ isOpen, onClose, projectName }: C
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-sm text-taxaidd-black">{issue.title}</span>
+                      <span className="font-medium text-sm text-wedd-black">{issue.title}</span>
                       <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
                         {getCategoryLabel(issue.category)}
                       </span>
@@ -278,8 +278,8 @@ export default function CoherenceReviewModal({ isOpen, onClose, projectName }: C
                     <p className="text-sm text-gray-600 mb-2">{issue.description}</p>
                     <p className="text-xs text-gray-500 mb-2">📍 {issue.location}</p>
                     {issue.suggestion && (
-                      <div className="p-2 bg-taxaidd-purple/5 rounded text-sm">
-                        <span className="text-taxaidd-purple font-medium">💡 Suggestion : </span>
+                      <div className="p-2 bg-wedd-black/5 rounded text-sm">
+                        <span className="text-wedd-black font-medium">💡 Suggestion : </span>
                         <span className="text-gray-700">{issue.suggestion}</span>
                       </div>
                     )}

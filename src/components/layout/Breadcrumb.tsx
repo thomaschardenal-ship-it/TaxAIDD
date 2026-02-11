@@ -18,7 +18,7 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
     <nav className="flex items-center gap-2 text-sm">
       <Link
         href="/"
-        className="text-gray-500 hover:text-taxaidd-purple transition-colors"
+        className="text-gray-500 hover:text-wedd-black transition-colors"
       >
         <Home className="w-4 h-4" />
       </Link>
@@ -29,12 +29,12 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
           {item.href ? (
             <Link
               href={item.href}
-              className="text-gray-500 hover:text-taxaidd-purple transition-colors"
+              className="text-gray-500 hover:text-wedd-black transition-colors"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="text-taxaidd-black font-medium">{item.label}</span>
+            <span className="text-wedd-black font-medium">{item.label}</span>
           )}
         </React.Fragment>
       ))}

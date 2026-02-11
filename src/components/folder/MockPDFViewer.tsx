@@ -47,7 +47,7 @@ export default function MockPDFViewer({ document, onHighlightClick }: MockPDFVie
 
   if (!document) {
     return (
-      <div className="h-full flex flex-col bg-taxaidd-gray-lighter">
+      <div className="h-full flex flex-col bg-wedd-gray-100">
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -63,10 +63,10 @@ export default function MockPDFViewer({ document, onHighlightClick }: MockPDFVie
   const currentHighlights = document.highlights?.filter(h => h.page === currentPage) || [];
 
   return (
-    <div className="h-full flex flex-col bg-taxaidd-gray-lighter">
+    <div className="h-full flex flex-col bg-wedd-gray-100">
       {/* Header */}
       <div className="bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
-        <h3 className="font-medium text-taxaidd-black truncate flex-1 mr-4">
+        <h3 className="font-medium text-wedd-black truncate flex-1 mr-4">
           {document.code && <span className="text-gray-400 mr-1">{document.code}</span>}
           {document.name}
         </h3>
@@ -194,7 +194,7 @@ export default function MockPDFViewer({ document, onHighlightClick }: MockPDFVie
                 {/* Tooltip on hover */}
                 {isHovered && (
                   <div
-                    className="absolute bottom-full left-0 mb-1 px-2 py-1 bg-taxaidd-black text-white text-xs rounded whitespace-nowrap z-10"
+                    className="absolute bottom-full left-0 mb-1 px-2 py-1 bg-wedd-black text-white text-xs rounded whitespace-nowrap z-10"
                     style={{ fontSize: '11px' }}
                   >
                     Utilisé dans : {highlight.linkedElementName}

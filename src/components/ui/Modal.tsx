@@ -70,11 +70,11 @@ export default function Modal({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-taxaidd-black">{title}</h2>
+          <h2 className="text-lg font-semibold text-wedd-black">{title}</h2>
           {showCloseButton && (
             <button
               onClick={onClose}
-              className="p-1 rounded-lg hover:bg-taxaidd-gray-light transition-colors"
+              className="p-1 rounded-lg hover:bg-wedd-cream transition-colors"
             >
               <X className="w-5 h-5 text-gray-500" />
             </button>

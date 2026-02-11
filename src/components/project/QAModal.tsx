@@ -93,7 +93,7 @@ export default function QAModal({ isOpen, onClose, items, projectName }: QAModal
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="client@example.com"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
             />
           </div>
 
@@ -101,7 +101,7 @@ export default function QAModal({ isOpen, onClose, items, projectName }: QAModal
             <label className="block text-sm font-medium text-gray-700 mb-1">Objet</label>
             <input
               type="text"
-              value={`[TaxAIDD] Questions & Réponses - ${projectName}`}
+              value={`[WeDD] Questions & Réponses - ${projectName}`}
               readOnly
               className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50"
             />
@@ -118,8 +118,8 @@ Suite à notre analyse préliminaire, nous aurions besoin de clarifications sur 
 Merci de nous faire parvenir vos réponses dans les meilleurs délais.
 
 Bien cordialement,
-L'équipe TaxAIDD Advisory`}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple"
+L'équipe WeDD Advisory`}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black"
             />
           </div>
 
@@ -165,7 +165,7 @@ L'équipe TaxAIDD Advisory`}
                   onClick={() => setStatusFilter(status)}
                   className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                     statusFilter === status
-                      ? 'bg-taxaidd-purple text-white'
+                      ? 'bg-wedd-black text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -177,10 +177,10 @@ L'équipe TaxAIDD Advisory`}
             <span className="text-sm text-gray-600">
               {selectedItems.size} / {items.length} sélectionnés
             </span>
-            <button onClick={selectAll} className="text-sm text-taxaidd-purple hover:underline">
+            <button onClick={selectAll} className="text-sm text-wedd-black hover:underline">
               Tout
             </button>
-            <button onClick={selectNone} className="text-sm text-taxaidd-purple hover:underline">
+            <button onClick={selectNone} className="text-sm text-wedd-black hover:underline">
               Aucun
             </button>
           </div>
@@ -188,7 +188,7 @@ L'équipe TaxAIDD Advisory`}
           {/* Items table */}
           <div className="max-h-[400px] overflow-y-auto">
             <table className="w-full">
-              <thead className="bg-taxaidd-gray-light sticky top-0">
+              <thead className="bg-wedd-cream sticky top-0">
                 <tr>
                   <th className="w-10 px-3 py-2"></th>
                   <th className="text-left px-3 py-2 text-sm font-semibold">Question</th>
@@ -206,7 +206,7 @@ L'équipe TaxAIDD Advisory`}
                     <tr
                       key={originalIndex}
                       className={`border-b border-gray-50 ${
-                        selectedItems.has(originalIndex) ? 'bg-taxaidd-yellow/5' : ''
+                        selectedItems.has(originalIndex) ? 'bg-wedd-mint/5' : ''
                       }`}
                     >
                       <td className="px-3 py-3">
@@ -214,7 +214,7 @@ L'équipe TaxAIDD Advisory`}
                           type="checkbox"
                           checked={selectedItems.has(originalIndex)}
                           onChange={() => toggleItem(originalIndex)}
-                          className="w-4 h-4 accent-taxaidd-yellow"
+                          className="w-4 h-4 accent-wedd-mint"
                         />
                       </td>
                       <td className="px-3 py-3 text-sm">{item.question}</td>

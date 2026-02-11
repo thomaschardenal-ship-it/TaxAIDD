@@ -190,15 +190,15 @@ export default function ImportModal({ isOpen, onClose, projectId = 'project-1', 
     return (
       <div
         key={index}
-        className="flex items-center gap-3 p-3 bg-taxaidd-gray-light rounded-lg"
+        className="flex items-center gap-3 p-3 bg-wedd-cream rounded-lg"
       >
         <FileText className="w-5 h-5 text-gray-400 flex-shrink-0" />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-taxaidd-black truncate">{file.name}</p>
+          <p className="text-sm font-medium text-wedd-black truncate">{file.name}</p>
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-500">{formatBytes(file.size)}</span>
             {uploadFile?.category && (
-              <span className="text-xs text-taxaidd-purple">→ {uploadFile.category}</span>
+              <span className="text-xs text-wedd-black">→ {uploadFile.category}</span>
             )}
             {uploadFile?.error && (
               <span className="text-xs text-red-500">{uploadFile.error}</span>
@@ -220,13 +220,13 @@ export default function ImportModal({ isOpen, onClose, projectId = 'project-1', 
             </button>
           )}
           {uploadFile?.status === 'uploading' && (
-            <Loader2 className="w-5 h-5 text-taxaidd-yellow animate-spin" />
+            <Loader2 className="w-5 h-5 text-wedd-mint animate-spin" />
           )}
           {uploadFile?.status === 'processing' && (
-            <Loader2 className="w-5 h-5 text-taxaidd-purple animate-spin" />
+            <Loader2 className="w-5 h-5 text-wedd-black animate-spin" />
           )}
           {uploadFile?.status === 'completed' && (
-            <Check className="w-5 h-5 text-taxaidd-mint" />
+            <Check className="w-5 h-5 text-wedd-mint" />
           )}
           {uploadFile?.status === 'failed' && (
             <AlertCircle className="w-5 h-5 text-red-500" />
@@ -242,13 +242,13 @@ export default function ImportModal({ isOpen, onClose, projectId = 'project-1', 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Importer des Documents" size="lg">
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-taxaidd-gray-light rounded-lg mb-6">
+      <div className="flex gap-1 p-1 bg-wedd-cream rounded-lg mb-6">
         <button
           onClick={() => setActiveTab('manual')}
           disabled={isUploading}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'manual'
-              ? 'bg-white text-taxaidd-black shadow-sm'
+              ? 'bg-white text-wedd-black shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
           } ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
@@ -260,7 +260,7 @@ export default function ImportModal({ isOpen, onClose, projectId = 'project-1', 
           disabled={isUploading}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'ai'
-              ? 'bg-white text-taxaidd-black shadow-sm'
+              ? 'bg-white text-wedd-black shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
           } ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
@@ -280,7 +280,7 @@ export default function ImportModal({ isOpen, onClose, projectId = 'project-1', 
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               disabled={isUploading}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-taxaidd-purple disabled:opacity-50"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-wedd-black disabled:opacity-50"
             >
               {CATEGORIES.map(cat => (
                 <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -292,7 +292,7 @@ export default function ImportModal({ isOpen, onClose, projectId = 'project-1', 
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className={`border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-taxaidd-yellow transition-colors ${
+            className={`border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-wedd-mint transition-colors ${
               isUploading ? 'opacity-50 pointer-events-none' : ''
             }`}
           >
@@ -321,11 +321,11 @@ export default function ImportModal({ isOpen, onClose, projectId = 'project-1', 
       {/* AI tab content */}
       {activeTab === 'ai' && (
         <div className="space-y-4">
-          <div className="bg-taxaidd-yellow/10 border border-taxaidd-yellow/30 rounded-lg p-4">
+          <div className="bg-wedd-mint/10 border border-wedd-mint/30 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-taxaidd-yellow-dark flex-shrink-0 mt-0.5" />
+              <Sparkles className="w-5 h-5 text-wedd-mint-dark flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-taxaidd-black">Classement automatique par IA</p>
+                <p className="text-sm font-medium text-wedd-black">Classement automatique par IA</p>
                 <p className="text-xs text-gray-600 mt-1">
                   L&apos;IA analysera vos documents et les classera automatiquement dans les bonnes categories.
                 </p>
@@ -337,18 +337,18 @@ export default function ImportModal({ isOpen, onClose, projectId = 'project-1', 
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className={`border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-taxaidd-purple transition-colors ${
+            className={`border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-wedd-black transition-colors ${
               isUploading ? 'opacity-50 pointer-events-none' : ''
             }`}
           >
-            <Sparkles className="w-12 h-12 mx-auto text-taxaidd-purple mb-3" />
+            <Sparkles className="w-12 h-12 mx-auto text-wedd-black mb-3" />
             <p className="text-sm text-gray-600 mb-2">
               Deposez plusieurs fichiers pour un classement automatique
             </p>
             <p className="text-xs text-gray-400 mb-4">
               Max {formatBytes(UPLOAD_CONFIG.maxSingleFileSize)} par fichier
             </p>
-            <label className="bg-taxaidd-purple text-white px-4 py-2 rounded-lg cursor-pointer text-sm inline-block hover:bg-purple-700 transition-colors">
+            <label className="bg-wedd-black text-white px-4 py-2 rounded-lg cursor-pointer text-sm inline-block hover:bg-purple-700 transition-colors">
               Selectionner des fichiers
               <input
                 type="file"

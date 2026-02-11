@@ -41,7 +41,7 @@ export default function Sidebar() {
             <span className="font-bold text-wedd-black text-sm font-display">W</span>
           </div>
           {!isCollapsed && (
-            <span className="font-bold text-lg text-white whitespace-nowrap font-display tracking-tight">TaxAIDD</span>
+            <span className="font-bold text-lg text-white whitespace-nowrap font-display tracking-tight">WeDD</span>
           )}
         </Link>
         <button

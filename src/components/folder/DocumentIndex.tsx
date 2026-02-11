@@ -32,7 +32,7 @@ export default function DocumentIndex({ documents, projectName, onImport }: Docu
       {/* Header */}
       <div className="p-4 border-b border-gray-100">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-taxaidd-black">Documents</h3>
+          <h3 className="font-semibold text-wedd-black">Documents</h3>
           <Button size="sm" variant="outline" icon={<Plus className="w-3.5 h-3.5" />} onClick={onImport}>
             Importer
           </Button>
