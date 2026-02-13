@@ -138,3 +138,26 @@ export interface QAItem {
   source: string;
   partialAnswer?: string;
 }
+
+// ─── Contrats de sous-traitance ──────────────────────────────────────────────
+
+export type ContractStatus = 'brouillon' | 'en-revision' | 'valide' | 'signe';
+
+export interface SubcontractingContract {
+  id: string;
+  opportunityId: string;
+  opportunityName: string;
+  specialistId: string;
+  specialistName: string;
+  domain: DomainType;
+  status: ContractStatus;
+  createdAt: string;
+  parties: {
+    wedd: { name: string; siren: string; address: string; representedBy: string };
+    specialist: { name: string; title: string; email: string; specialty: string };
+  };
+  scope: string[];
+  timeline: { startDate: string; endDate: string; estimatedDays: number };
+  budget: { dailyRate: number; totalDays: number; totalAmount: number };
+  confidentiality: { duration: string; penaltyClause: boolean };
+}

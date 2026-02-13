@@ -7,3 +7,4 @@ export * from './reportContent';
 export * from './notifications';
 export * from './resources';
 export * from './tasks';
+export * from './contracts';

@@ -3,6 +3,7 @@ import "./globals.css";
 import { ProjectProvider } from "@/context/ProjectContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 import { ClientsProvider } from "@/context/ClientsContext";
+import { ContractsProvider } from "@/context/ContractsContext";
 import SidebarWrapper from "@/components/layout/SidebarWrapper";
 
 export const metadata: Metadata = {
@@ -19,15 +20,17 @@ export default function RootLayout({
     <html lang="fr">
       <body className="font-sans antialiased bg-wedd-cream">
         <ClientsProvider>
-          <ProjectProvider>
-            <SidebarProvider>
+          <ContractsProvider>
+            <ProjectProvider>
+              <SidebarProvider>
               <div className="flex min-h-screen">
                 <SidebarWrapper>
                   {children}
                 </SidebarWrapper>
               </div>
-            </SidebarProvider>
-          </ProjectProvider>
+              </SidebarProvider>
+            </ProjectProvider>
+          </ContractsProvider>
         </ClientsProvider>
       </body>
     </html>
