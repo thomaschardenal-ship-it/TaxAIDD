@@ -265,20 +265,54 @@ export const reportElements: Record<string, ReportElement[]> = {
 
 export const irlItems: Record<string, IRLItem[]> = {
   'project-1': [
+    // ── TAX — Impôt sur les sociétés ──────────────────────────────────────
+    { category: 'Impôt sur les sociétés', document: 'Liasses fiscales individuelles au titre des 3 derniers exercices', status: 'pending' },
+    { category: 'Impôt sur les sociétés', document: 'Liasses fiscales groupe au titre des 3 derniers exercices', status: 'missing' },
+    { category: 'Impôt sur les sociétés', document: 'Formulaires 2571/2572 et 2573 (si applicable)', status: 'pending' },
+    { category: 'Impôt sur les sociétés', document: "Tout document relatif à la mise en place d'un groupe d'intégration fiscale, le cas échéant", status: 'missing' },
+    // ── TAX — Rapports des commissaires aux comptes ──────────────────────
+    { category: 'Rapports des commissaires aux comptes', document: 'Rapports des commissaires aux comptes au titre des 3 derniers exercices', status: 'pending' },
+    // ── TAX — Balances Générales ─────────────────────────────────────────
+    { category: 'Balances Générales', document: 'Balances générales au titre des 5 derniers exercices', status: 'partiel' as DocumentStatus },
+    // ── TAX — CIR & CII ─────────────────────────────────────────────────
+    { category: 'CIR & CII', document: "Déclarations de crédit d'impôts (CIR, CII) au titre des 3 derniers exercices", status: 'pending' },
+    { category: 'CIR & CII', document: 'Rescrits fiscaux obtenus en matière de CIR/CII', status: 'missing' },
+    { category: 'CIR & CII', document: 'Dossiers supports établis en matière de CIR/CII au titre des 3 dernières années', status: 'pending' },
+    // ── TAX — Contrats intragroupe ───────────────────────────────────────
+    { category: 'Contrats intragroupe', document: "Tout document relatif aux conventions conclues directement ou indirectement entre la société et les dirigeants ou le cas échéant entre la société et les autres sociétés du groupe — description et justification de la méthode de rémunération", status: 'pending' },
+    // ── TAX — Restructurations ───────────────────────────────────────────
+    { category: 'Restructurations', document: "Tout document relatif à des opérations de réorganisation / opérations exceptionnelles (acquisitions, cessions, apports, fusions, abandons de créances, etc) réalisées au titre des 5 dernières années", status: 'missing' },
+    // ── TAX — TVA ────────────────────────────────────────────────────────
+    { category: 'TVA', document: 'Déclarations de TVA au titre des 3 derniers exercices', status: 'pending' },
+    { category: 'TVA', document: 'Fichier Cadre CA / CA-3 au titre des 3 derniers exercices', status: 'partiel' as DocumentStatus },
+    { category: 'TVA', document: 'Fichier de calcul du coefficient de déduction de la TVA au titre des 3 derniers exercices', status: 'missing' },
+    { category: 'TVA', document: "Documentation d'une piste d'audit fiable", status: 'pending' },
+    { category: 'TVA', document: '3 exemples de factures selon les parties (France, UE, hors UE le cas échéant)', status: 'pending' },
+    // ── TAX — Taxe sur les salaires ──────────────────────────────────────
+    { category: 'Taxe sur les salaires', document: 'Déclarations annuelles de liquidation de la taxe sur les salaires au titre des 3 derniers exercices', status: 'pending' },
+    { category: 'Taxe sur les salaires', document: 'Fichier de calcul du coefficient de taxe sur les salaires (si applicable)', status: 'missing' },
+    // ── TAX — Formalités ─────────────────────────────────────────────────
+    { category: 'Formalités', document: 'Déclarations DAS2 au titre des 4 dernières années', status: 'pending' },
+    { category: 'Formalités', document: 'Formulaires IFU au titre des 4 dernières années', status: 'pending' },
+    { category: 'Formalités', document: 'Formulaires 2777 au titre des 4 dernières années', status: 'missing' },
+    { category: 'Formalités', document: "Certificat de conformité Fichier d'écritures comptables délivré par l'éditeur du logiciel comptable", status: 'pending' },
+    // ── TAX — Contrôles fiscaux ──────────────────────────────────────────
+    { category: 'Contrôles fiscaux', document: "Tout document relatif à un contrôle fiscal ou contentieux fiscal au cours des 5 dernières années", status: 'missing' },
+    // ── TAX — Toutes impositions ─────────────────────────────────────────
+    { category: 'Toutes impositions', document: 'Attestation de régularité fiscale (à télécharger sur impôt.gouv.fr)', status: 'pending' },
+    // ── Corporate ────────────────────────────────────────────────────────
     { category: 'Corporate', document: 'Organigramme Juridique', status: 'pending' },
     { category: 'Corporate', document: 'Registres mouvements titres', status: 'missing' },
     { category: 'Corporate', document: 'Management Packages', status: 'partiel' as DocumentStatus },
     { category: 'Corporate', document: 'PV Conseil N-2', status: 'missing' },
     { category: 'Corporate', document: 'PV AG 2025', status: 'pending' },
-    { category: 'TAX', document: 'Suivi déficits reportables', status: 'pending' },
-    { category: 'TAX', document: 'CA3 YTD', status: 'partiel' as DocumentStatus },
-    { category: 'TAX', document: 'TVS', status: 'missing' },
-    { category: 'TAX', document: 'Dossiers justificatifs CIR (3 ans)', status: 'pending' },
+    // ── Social ───────────────────────────────────────────────────────────
     { category: 'Social', document: 'Contrats Top Management', status: 'pending' },
     { category: 'Social', document: 'Travailleurs externes', status: 'partiel' as DocumentStatus },
     { category: 'Social', document: 'Contrôles URSSAF', status: 'missing' },
     { category: 'Social', document: 'PV CSE (3 ans)', status: 'pending' },
     { category: 'Social', document: 'Documents afférents litiges', status: 'missing' },
+    // ── IP/IT ────────────────────────────────────────────────────────────
     { category: 'IP/IT', document: 'Brevets & Dessins', status: 'na' as DocumentStatus },
     { category: 'IP/IT', document: 'Contrats cession Tiers', status: 'pending' },
     { category: 'IP/IT', document: 'Contrats DPA', status: 'pending' },

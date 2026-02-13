@@ -6,6 +6,7 @@ import { useClients } from '@/context/ClientsContext';
 import { Client, ClientContact } from '@/types';
 import Button from '@/components/ui/Button';
 import Modal, { ModalFooter } from '@/components/ui/Modal';
+import EmailImportModal from '@/components/clients/EmailImportModal';
 
 export default function ClientsPage() {
   const { clients, addClient, updateClient, deleteClient } = useClients();
@@ -22,6 +23,7 @@ export default function ClientsPage() {
     siren: '',
     contacts: [],
   });
+  const [showEmailImportModal, setShowEmailImportModal] = useState(false);
   const [newContact, setNewContact] = useState<Partial<ClientContact>>({
     name: '',
     email: '',
@@ -295,9 +297,14 @@ export default function ClientsPage() {
           <h1 className="text-2xl font-bold text-wedd-black">Clients</h1>
           <p className="text-gray-500 mt-1">Gerez vos clients et leurs contacts</p>
         </div>
-        <Button onClick={() => setShowAddModal(true)} icon={<Plus className="w-4 h-4" />}>
-          Nouveau client
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={() => setShowEmailImportModal(true)} icon={<Mail className="w-4 h-4" />}>
+            Import par email
+          </Button>
+          <Button onClick={() => setShowAddModal(true)} icon={<Plus className="w-4 h-4" />}>
+            Nouveau client
+          </Button>
+        </div>
       </div>
 
       {/* Search */}
@@ -448,6 +455,16 @@ export default function ClientsPage() {
       >
         <ClientModal isEditing={true} />
       </Modal>
+
+      {/* Email Import Modal */}
+      <EmailImportModal
+        isOpen={showEmailImportModal}
+        onClose={() => setShowEmailImportModal(false)}
+        onImport={(clientData) => {
+          addClient(clientData);
+          setShowEmailImportModal(false);
+        }}
+      />
     </div>
   );
 }

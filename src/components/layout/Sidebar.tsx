@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, TrendingUp, FolderOpen, ChevronLeft, ChevronRight,
-  ChevronDown, Building2, BookOpen, Users, Settings, Briefcase,
+  ChevronDown, Building2, BookOpen, Users, Settings, Briefcase, FileSignature,
 } from 'lucide-react';
 import { currentUser, projects, clients } from '@/data';
 import Avatar from '@/components/ui/Avatar';
@@ -143,6 +143,7 @@ const mainMenuItems = [
 const adminMenuItems = [
   { icon: Building2, label: 'Clients', href: '/clients' },
   { icon: BookOpen, label: 'Ressources', href: '/resources' },
+  { icon: FileSignature, label: 'Contrats', href: '/contracts' },
   { icon: Users, label: 'Utilisateurs', href: '/users', adminOnly: true },
   { icon: Settings, label: 'Paramètres', href: '/settings' },
 ];

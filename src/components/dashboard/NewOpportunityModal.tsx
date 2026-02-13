@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, Check, Search, Loader2, Building2, Plus, X, Globe, Users as UsersIcon, FileText, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { DomainType } from '@/types';
 import { users } from '@/data';
@@ -28,6 +28,8 @@ export interface OpportunityFormData {
   responsibleId: string;
   teamIds: string[];
   budget: Record<string, Record<string, number>>;
+  budgetInterne: Record<string, Record<string, number>>;
+  scopeItems: ScopeItem[];
   selectedSlides: string[];
 }
 
@@ -41,6 +43,7 @@ interface PappersCompany {
   ceo: string;
   employees: string;
   revenue: string;
+  website?: string;
   subsidiaries: PappersSubsidiary[];
 }
 
@@ -50,6 +53,14 @@ interface PappersSubsidiary {
   legalForm: string;
   ownership: number;
   city: string;
+}
+
+interface ScopeItem {
+  id: string;
+  text: string;
+  isChecked: boolean;
+  isCustom: boolean;
+  domain: DomainType;
 }
 
 // ─── Mock Pappers Data ───────────────────────────────────────────────────────
@@ -65,6 +76,7 @@ const mockPappersCompanies: PappersCompany[] = [
     ceo: 'Jean-Marc Dupont',
     employees: '73',
     revenue: '12,4 M€',
+    website: 'https://techvision.fr',
     subsidiaries: [
       { siren: '234 567 890', name: 'TechVision Cloud SARL', legalForm: 'SARL', ownership: 100, city: 'Paris' },
       { siren: '345 678 901', name: 'TechVision Services SAS', legalForm: 'SAS', ownership: 75, city: 'Lyon' },
@@ -81,6 +93,7 @@ const mockPappersCompanies: PappersCompany[] = [
     ceo: 'Pierre Legrand',
     employees: '245',
     revenue: '48,2 M€',
+    website: 'https://groupe-nexus.fr',
     subsidiaries: [
       { siren: '876 543 210', name: 'Nexus Manufacturing SAS', legalForm: 'SAS', ownership: 100, city: 'Lyon' },
       { siren: '765 432 109', name: 'Nexus Logistics SARL', legalForm: 'SARL', ownership: 100, city: 'Marseille' },
@@ -98,6 +111,7 @@ const mockPappersCompanies: PappersCompany[] = [
     ceo: 'Marie Chen',
     employees: '38',
     revenue: '6,8 M€',
+    website: 'https://dataflow.io',
     subsidiaries: [
       { siren: '222 333 444', name: 'DataFlow Cloud SARL', legalForm: 'SARL', ownership: 100, city: 'Paris' },
     ],
@@ -112,6 +126,7 @@ const mockPappersCompanies: PappersCompany[] = [
     ceo: 'Dr. François Muller',
     employees: '120',
     revenue: '25,6 M€',
+    website: 'https://biopharmlabs.com',
     subsidiaries: [
       { siren: '555 666 777', name: 'BioPharm R&D SAS', legalForm: 'SAS', ownership: 100, city: 'Strasbourg' },
       { siren: '666 777 888', name: 'BioPharm Distribution SARL', legalForm: 'SARL', ownership: 100, city: 'Paris' },
@@ -128,6 +143,7 @@ const mockPappersCompanies: PappersCompany[] = [
     ceo: 'Henri Vidal',
     employees: '310',
     revenue: '62,1 M€',
+    website: 'https://vidal-industries.fr',
     subsidiaries: [
       { siren: '999 000 111', name: 'Vidal Services SARL', legalForm: 'SARL', ownership: 100, city: 'Bordeaux' },
       { siren: '000 111 222', name: 'Vidal Immobilier SCI', legalForm: 'SCI', ownership: 100, city: 'Bordeaux' },
@@ -143,6 +159,7 @@ const mockPappersCompanies: PappersCompany[] = [
     ceo: 'Léa Dumont',
     employees: '55',
     revenue: '9,3 M€',
+    website: 'https://greentech-solutions.fr',
     subsidiaries: [
       { siren: '223 344 556', name: 'GreenTech Invest SAS', legalForm: 'SAS', ownership: 100, city: 'Nantes' },
     ],
@@ -198,6 +215,13 @@ const domainBaseBudget: Record<DomainType, number> = {
   'IP/IT': 9000,
 };
 
+const domainInternalBudget: Record<DomainType, number> = {
+  'TAX': 12000,
+  'Social': 10000,
+  'Corporate': 8000,
+  'IP/IT': 6000,
+};
+
 // ─── Slide Types ─────────────────────────────────────────────────────────────
 
 interface ProposalSlide {
@@ -231,6 +255,8 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
   const [jurisdictions, setJurisdictions] = useState<string[]>(['France']);
   const [jurisdictionSearch, setJurisdictionSearch] = useState('');
   const [showJurisdictionDropdown, setShowJurisdictionDropdown] = useState(false);
+  const [scopeItems, setScopeItems] = useState<ScopeItem[]>([]);
+  const [newCustomScope, setNewCustomScope] = useState<Record<string, string>>({});
 
   // Step 3 state
   const [responsibleId, setResponsibleId] = useState('');
@@ -238,6 +264,8 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
 
   // Step 4 state
   const [budget, setBudget] = useState<Record<string, Record<string, number>>>({});
+  const [budgetInterne, setBudgetInterne] = useState<Record<string, Record<string, number>>>({});
+  const [budgetView, setBudgetView] = useState<'client' | 'interne' | 'comparaison'>('client');
 
   // Step 5 state
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -323,6 +351,69 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
     setJurisdictions(prev => prev.filter(j => j !== country));
   };
 
+  // ── Scope management ──────────────────────────────────────────────────────
+
+  useEffect(() => {
+    if (domains.length > 0) {
+      setScopeItems(prev => {
+        const existingByDomain = new Map<string, ScopeItem[]>();
+        prev.forEach(item => {
+          const key = item.domain;
+          if (!existingByDomain.has(key)) existingByDomain.set(key, []);
+          existingByDomain.get(key)!.push(item);
+        });
+
+        const newItems: ScopeItem[] = [];
+        domains.forEach(domain => {
+          const existing = existingByDomain.get(domain);
+          if (existing && existing.length > 0) {
+            newItems.push(...existing);
+          } else {
+            const template = scopeTemplates.find(t => t.domain === domain);
+            if (template) {
+              template.sections.forEach((section, i) => {
+                newItems.push({
+                  id: `${domain}-${i}`,
+                  text: section,
+                  isChecked: true,
+                  isCustom: false,
+                  domain,
+                });
+              });
+            }
+          }
+        });
+        return newItems;
+      });
+    } else {
+      setScopeItems([]);
+    }
+  }, [domains]);
+
+  const toggleScopeItem = (id: string) => {
+    setScopeItems(prev => prev.map(item =>
+      item.id === id ? { ...item, isChecked: !item.isChecked } : item
+    ));
+  };
+
+  const addCustomScopeItem = (domain: DomainType) => {
+    const text = newCustomScope[domain]?.trim();
+    if (!text) return;
+    const newItem: ScopeItem = {
+      id: `custom-${domain}-${Date.now()}`,
+      text,
+      isChecked: true,
+      isCustom: true,
+      domain,
+    };
+    setScopeItems(prev => [...prev, newItem]);
+    setNewCustomScope(prev => ({ ...prev, [domain]: '' }));
+  };
+
+  const removeScopeItem = (id: string) => {
+    setScopeItems(prev => prev.filter(item => item.id !== id));
+  };
+
   // ── Team filtering by selected domains ─────────────────────────────────────
 
   const filteredUsers = useMemo(() => {
@@ -343,19 +434,34 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
 
   const initializeBudget = () => {
     const newBudget: Record<string, Record<string, number>> = {};
+    const newBudgetInterne: Record<string, Record<string, number>> = {};
     domains.forEach(domain => {
       newBudget[domain] = {};
+      newBudgetInterne[domain] = {};
       jurisdictions.forEach(jurisdiction => {
-        const base = domainBaseBudget[domain] || 10000;
-        // France gets full rate, other jurisdictions get 60%
-        newBudget[domain][jurisdiction] = jurisdiction === 'France' ? base : Math.round(base * 0.6);
+        const baseClient = domainBaseBudget[domain] || 10000;
+        const baseInterne = domainInternalBudget[domain] || 7000;
+        const factor = jurisdiction === 'France' ? 1 : 0.6;
+        newBudget[domain][jurisdiction] = Math.round(baseClient * factor);
+        newBudgetInterne[domain][jurisdiction] = Math.round(baseInterne * factor);
       });
     });
     setBudget(newBudget);
+    setBudgetInterne(newBudgetInterne);
   };
 
   const updateBudgetCell = (domain: string, jurisdiction: string, value: number) => {
     setBudget(prev => ({
+      ...prev,
+      [domain]: {
+        ...prev[domain],
+        [jurisdiction]: value,
+      },
+    }));
+  };
+
+  const updateBudgetInterneCell = (domain: string, jurisdiction: string, value: number) => {
+    setBudgetInterne(prev => ({
       ...prev,
       [domain]: {
         ...prev[domain],
@@ -369,8 +475,30 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
     return Object.values(budget[domain]).reduce((sum, v) => sum + v, 0);
   };
 
+  const getInterneDomainTotal = (domain: string): number => {
+    if (!budgetInterne[domain]) return 0;
+    return Object.values(budgetInterne[domain]).reduce((sum, v) => sum + v, 0);
+  };
+
   const getGrandTotal = (): number => {
     return domains.reduce((sum, d) => sum + getDomainTotal(d), 0);
+  };
+
+  const getInterneGrandTotal = (): number => {
+    return domains.reduce((sum, d) => sum + getInterneDomainTotal(d), 0);
+  };
+
+  const getMargin = (domain: string, jurisdiction: string): number => {
+    const client = budget[domain]?.[jurisdiction] || 0;
+    const interne = budgetInterne[domain]?.[jurisdiction] || 0;
+    return client - interne;
+  };
+
+  const getMarginPercent = (domain: string, jurisdiction: string): number => {
+    const client = budget[domain]?.[jurisdiction] || 0;
+    const interne = budgetInterne[domain]?.[jurisdiction] || 0;
+    if (client === 0) return 0;
+    return Math.round(((client - interne) / client) * 100);
   };
 
   // ── Proposal slides ───────────────────────────────────────────────────────
@@ -436,6 +564,8 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
       responsibleId,
       teamIds,
       budget,
+      budgetInterne,
+      scopeItems: scopeItems.filter(s => s.isChecked),
       selectedSlides: proposalSlides.map(s => s.id),
     });
     onClose();
@@ -461,6 +591,10 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
     setResponsibleId('');
     setTeamIds([]);
     setBudget({});
+    setBudgetInterne({});
+    setBudgetView('client');
+    setScopeItems([]);
+    setNewCustomScope({});
     setCurrentSlideIndex(0);
   };
 
@@ -500,6 +634,20 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
                 <span className="text-gray-500">Secteur</span>
                 <span className="font-medium">{targetSector || '—'}</span>
               </div>
+              {selectedTarget?.website && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">Site web</span>
+                  <a
+                    href={selectedTarget.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-wedd-mint hover:underline inline-flex items-center gap-1"
+                  >
+                    <Globe className="w-3 h-3" />
+                    {selectedTarget.website.replace('https://', '')}
+                  </a>
+                </div>
+              )}
               {selectedSubsidiaries.length > 0 && selectedTarget && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Entités dans le scope</span>
@@ -554,6 +702,8 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
       }
       case 'scope': {
         const template = scopeTemplates.find(t => t.domain === slide.domain);
+        const activeScopeItems = scopeItems.filter(s => s.domain === slide.domain && s.isChecked);
+        const totalSections = scopeItems.filter(s => s.domain === slide.domain).length;
         return (
           <div className="p-6 space-y-4">
             <div className="flex items-center gap-2 mb-4">
@@ -563,17 +713,24 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
               />
               <h3 className="text-lg font-bold text-wedd-black">{template?.title || `Scope — ${slide.domain}`}</h3>
             </div>
-            {template ? (
+            {activeScopeItems.length > 0 ? (
               <div className="space-y-2">
-                {template.sections.map((section, i) => (
-                  <div key={i} className="flex items-start gap-2 p-2 bg-gray-50 rounded">
+                {activeScopeItems.map((item, i) => (
+                  <div key={item.id} className="flex items-start gap-2 p-2 bg-gray-50 rounded">
                     <span className="text-xs font-mono text-gray-400 mt-0.5">{i + 1}.</span>
-                    <span className="text-sm">{section}</span>
+                    <span className="text-sm flex-1">{item.text}</span>
+                    {item.isCustom && (
+                      <span className="text-xs px-1.5 py-0.5 bg-wedd-mint/10 text-wedd-mint rounded">
+                        Personnalisé
+                      </span>
+                    )}
                   </div>
                 ))}
                 <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between text-sm">
                   <span className="text-gray-500">Durée estimée</span>
-                  <span className="font-medium">{template.estimatedDays} jours</span>
+                  <span className="font-medium">
+                    {template ? Math.round(template.estimatedDays * (activeScopeItems.length / Math.max(totalSections, 1))) : '—'} jours
+                  </span>
                 </div>
                 {jurisdictions.length > 1 && (
                   <div className="flex justify-between text-sm">
@@ -583,12 +740,14 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
                 )}
               </div>
             ) : (
-              <p className="text-gray-400 text-sm italic">Template non disponible</p>
+              <p className="text-gray-400 text-sm italic">Aucune section sélectionnée pour ce domaine</p>
             )}
           </div>
         );
       }
-      case 'budget':
+      case 'budget': {
+        const grandMargin = getGrandTotal() - getInterneGrandTotal();
+        const grandMarginPct = getGrandTotal() > 0 ? Math.round((grandMargin / getGrandTotal()) * 100) : 0;
         return (
           <div className="p-6 space-y-4">
             <h3 className="text-lg font-bold text-wedd-black mb-4">Budget Estimatif</h3>
@@ -629,8 +788,18 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
                 </tr>
               </tfoot>
             </table>
+            {/* Internal margin summary */}
+            <div className="mt-4 pt-3 border-t border-gray-100 bg-gray-50 rounded-lg p-3">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500">Marge globale estimée</span>
+                <span className={`font-medium ${grandMarginPct >= 25 ? 'text-emerald-600' : grandMarginPct >= 15 ? 'text-amber-600' : 'text-red-600'}`}>
+                  {grandMargin.toLocaleString('fr-FR')} € ({grandMarginPct}%)
+                </span>
+              </div>
+            </div>
           </div>
         );
+      }
       case 'references': {
         // Filter credentials by sector if target is known
         const relevantCreds = targetSector
@@ -915,6 +1084,20 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
                     <div><span className="text-gray-500">Dirigeant :</span> <span className="font-medium">{selectedTarget.ceo}</span></div>
                     <div><span className="text-gray-500">Effectif :</span> <span className="font-medium">{selectedTarget.employees}</span></div>
                     <div><span className="text-gray-500">CA :</span> <span className="font-medium">{selectedTarget.revenue}</span></div>
+                    {selectedTarget.website && (
+                      <div className="col-span-2">
+                        <span className="text-gray-500">Site web :</span>{' '}
+                        <a
+                          href={selectedTarget.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-wedd-mint hover:underline inline-flex items-center gap-1"
+                        >
+                          <Globe className="w-3 h-3" />
+                          {selectedTarget.website.replace('https://', '')}
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1026,6 +1209,79 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
             </div>
             <p className="text-xs text-gray-400 mt-2">France est incluse par défaut et ne peut pas être retirée.</p>
           </div>
+
+          {/* Scope validation */}
+          {domains.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Validation du périmètre d&apos;intervention
+              </label>
+              <div className="space-y-4">
+                {domains.map(domain => {
+                  const domainColor = domainOptions.find(d => d.value === domain)?.color;
+                  const label = domainOptions.find(d => d.value === domain)?.label || domain;
+                  const domainItems = scopeItems.filter(s => s.domain === domain);
+                  const checkedCount = domainItems.filter(s => s.isChecked).length;
+
+                  return (
+                    <div key={domain} className="border border-gray-200 rounded-lg overflow-hidden">
+                      <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 border-b border-gray-200">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: domainColor }} />
+                        <span className="font-medium text-sm">{label}</span>
+                        <span className="text-xs text-gray-400 ml-auto">{checkedCount}/{domainItems.length} sections</span>
+                      </div>
+                      <div className="p-3 space-y-1.5">
+                        {domainItems.map(item => (
+                          <label
+                            key={item.id}
+                            className={`flex items-start gap-2.5 p-2 rounded cursor-pointer transition-colors ${
+                              item.isChecked ? 'bg-wedd-mint/5' : 'bg-gray-50 opacity-60'
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={item.isChecked}
+                              onChange={() => toggleScopeItem(item.id)}
+                              className="w-4 h-4 accent-wedd-mint mt-0.5"
+                            />
+                            <span className={`text-sm flex-1 ${item.isChecked ? '' : 'line-through text-gray-400'}`}>
+                              {item.text}
+                            </span>
+                            {item.isCustom && (
+                              <button
+                                onClick={(e) => { e.preventDefault(); removeScopeItem(item.id); }}
+                                className="p-0.5 text-red-400 hover:text-red-600"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </label>
+                        ))}
+                        {/* Add custom item */}
+                        <div className="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100">
+                          <input
+                            type="text"
+                            value={newCustomScope[domain] || ''}
+                            onChange={(e) => setNewCustomScope(prev => ({ ...prev, [domain]: e.target.value }))}
+                            placeholder="Ajouter un élément personnalisé..."
+                            className="flex-1 px-3 py-1.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-wedd-mint"
+                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addCustomScopeItem(domain); } }}
+                          />
+                          <button
+                            onClick={() => addCustomScopeItem(domain)}
+                            disabled={!newCustomScope[domain]?.trim()}
+                            className="p-1.5 text-wedd-mint hover:bg-wedd-mint/10 rounded disabled:opacity-30"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -1101,69 +1357,178 @@ export default function NewOpportunityModal({ isOpen, onClose, onSubmit }: NewOp
       {/* ─── Step 4: Budget ───────────────────────────────────────────────── */}
       {currentStep === 4 && (
         <div className="space-y-4">
-          <p className="text-sm text-gray-500 mb-4">
-            Budget estimatif par domaine d&apos;intervention{jurisdictions.length > 1 ? ' et juridiction' : ''}. Les montants sont modifiables.
+          {/* Tab switcher */}
+          <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-lg w-fit">
+            {(['client', 'interne', 'comparaison'] as const).map(view => (
+              <button
+                key={view}
+                onClick={() => setBudgetView(view)}
+                className={`px-4 py-1.5 rounded text-sm font-medium transition-all ${
+                  budgetView === view
+                    ? 'bg-white text-wedd-black shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {view === 'client' ? 'Budget Client' : view === 'interne' ? 'Budget Interne' : 'Comparaison'}
+              </button>
+            ))}
+          </div>
+
+          <p className="text-sm text-gray-500">
+            {budgetView === 'client' && "Honoraires proposés au client. Les montants sont modifiables."}
+            {budgetView === 'interne' && "Coûts internes WeDD (salaires, sous-traitance). Les montants sont modifiables."}
+            {budgetView === 'comparaison' && "Marge entre honoraires client et coûts internes."}
           </p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 pr-4 text-gray-500 font-medium min-w-[140px]">Domaine</th>
-                  {jurisdictions.map(j => (
-                    <th key={j} className="text-right py-3 px-2 text-gray-500 font-medium min-w-[120px]">{j}</th>
-                  ))}
-                  <th className="text-right py-3 pl-4 text-gray-500 font-medium min-w-[100px]">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {domains.map(domain => {
-                  const domainColor = domainOptions.find(d => d.value === domain)?.color;
-                  const label = domainOptions.find(d => d.value === domain)?.label || domain;
-                  return (
-                    <tr key={domain} className="border-b border-gray-100">
-                      <td className="py-3 pr-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: domainColor }} />
-                          <span className="font-medium">{label}</span>
-                        </div>
-                      </td>
-                      {jurisdictions.map(j => (
-                        <td key={j} className="py-2 px-2">
-                          <div className="relative">
-                            <input
-                              type="number"
-                              value={budget[domain]?.[j] || 0}
-                              onChange={(e) => updateBudgetCell(domain, j, parseInt(e.target.value) || 0)}
-                              className="w-full text-right px-3 py-1.5 border border-gray-200 rounded focus:outline-none focus:border-wedd-black text-sm"
-                            />
-                          </div>
-                        </td>
-                      ))}
-                      <td className="py-3 pl-4 text-right font-medium">
-                        {getDomainTotal(domain).toLocaleString('fr-FR')} €
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-              <tfoot>
-                <tr className="border-t-2 border-gray-300">
-                  <td className="py-3 pr-4 font-bold">Total</td>
-                  {jurisdictions.map(j => {
-                    const colTotal = domains.reduce((sum, d) => sum + (budget[d]?.[j] || 0), 0);
+
+          {budgetView === 'comparaison' ? (
+            /* ── Comparison view ── */
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 pr-4 text-gray-500 font-medium min-w-[140px]">Domaine</th>
+                    <th className="text-left py-3 px-2 text-gray-500 font-medium text-xs w-16"></th>
+                    {jurisdictions.map(j => (
+                      <th key={j} className="text-right py-3 px-2 text-gray-500 font-medium min-w-[120px]">{j}</th>
+                    ))}
+                    <th className="text-right py-3 pl-4 text-gray-500 font-medium min-w-[100px]">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {domains.map(domain => {
+                    const domainColor = domainOptions.find(d => d.value === domain)?.color;
+                    const label = domainOptions.find(d => d.value === domain)?.label || domain;
                     return (
-                      <td key={j} className="py-3 px-2 text-right font-medium">
-                        {colTotal.toLocaleString('fr-FR')} €
-                      </td>
+                      <React.Fragment key={domain}>
+                        <tr className="border-b border-gray-50 bg-gray-50/50">
+                          <td rowSpan={3} className="py-2 pr-4 align-middle">
+                            <div className="flex items-center gap-2">
+                              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: domainColor }} />
+                              <span className="font-medium">{label}</span>
+                            </div>
+                          </td>
+                          <td className="text-xs text-gray-500 py-1 px-2">Client</td>
+                          {jurisdictions.map(j => (
+                            <td key={j} className="text-right py-1 px-2">{(budget[domain]?.[j] || 0).toLocaleString('fr-FR')} €</td>
+                          ))}
+                          <td className="text-right py-1 pl-4 font-medium">{getDomainTotal(domain).toLocaleString('fr-FR')} €</td>
+                        </tr>
+                        <tr className="border-b border-gray-50">
+                          <td className="text-xs text-gray-500 py-1 px-2">Interne</td>
+                          {jurisdictions.map(j => (
+                            <td key={j} className="text-right py-1 px-2 text-gray-600">{(budgetInterne[domain]?.[j] || 0).toLocaleString('fr-FR')} €</td>
+                          ))}
+                          <td className="text-right py-1 pl-4 font-medium text-gray-600">{getInterneDomainTotal(domain).toLocaleString('fr-FR')} €</td>
+                        </tr>
+                        <tr className="border-b border-gray-200">
+                          <td className="text-xs text-gray-500 py-1 px-2">Marge</td>
+                          {jurisdictions.map(j => {
+                            const pct = getMarginPercent(domain, j);
+                            return (
+                              <td key={j} className={`text-right py-1 px-2 font-medium ${pct >= 30 ? 'text-emerald-600' : pct >= 15 ? 'text-amber-600' : 'text-red-600'}`}>
+                                {getMargin(domain, j).toLocaleString('fr-FR')} € ({pct}%)
+                              </td>
+                            );
+                          })}
+                          {(() => {
+                            const totalMargin = getDomainTotal(domain) - getInterneDomainTotal(domain);
+                            const totalPct = getDomainTotal(domain) > 0 ? Math.round((totalMargin / getDomainTotal(domain)) * 100) : 0;
+                            return (
+                              <td className={`text-right py-1 pl-4 font-bold ${totalPct >= 30 ? 'text-emerald-600' : totalPct >= 15 ? 'text-amber-600' : 'text-red-600'}`}>
+                                {totalMargin.toLocaleString('fr-FR')} € ({totalPct}%)
+                              </td>
+                            );
+                          })()}
+                        </tr>
+                      </React.Fragment>
                     );
                   })}
-                  <td className="py-3 pl-4 text-right font-bold text-wedd-black">
-                    {getGrandTotal().toLocaleString('fr-FR')} €
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+                </tbody>
+                <tfoot>
+                  <tr className="border-t-2 border-gray-300">
+                    <td className="py-3 pr-4 font-bold">Total</td>
+                    <td className="px-2"></td>
+                    <td colSpan={jurisdictions.length} className="text-right py-3 px-2"></td>
+                    {(() => {
+                      const grandMargin = getGrandTotal() - getInterneGrandTotal();
+                      const grandPct = getGrandTotal() > 0 ? Math.round((grandMargin / getGrandTotal()) * 100) : 0;
+                      return (
+                        <td className={`py-3 pl-4 text-right font-bold ${grandPct >= 30 ? 'text-emerald-600' : grandPct >= 15 ? 'text-amber-600' : 'text-red-600'}`}>
+                          Marge : {grandMargin.toLocaleString('fr-FR')} € ({grandPct}%)
+                        </td>
+                      );
+                    })()}
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          ) : (
+            /* ── Editable budget table (client or interne) ── */
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 pr-4 text-gray-500 font-medium min-w-[140px]">Domaine</th>
+                    {jurisdictions.map(j => (
+                      <th key={j} className="text-right py-3 px-2 text-gray-500 font-medium min-w-[120px]">{j}</th>
+                    ))}
+                    <th className="text-right py-3 pl-4 text-gray-500 font-medium min-w-[100px]">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {domains.map(domain => {
+                    const domainColor = domainOptions.find(d => d.value === domain)?.color;
+                    const label = domainOptions.find(d => d.value === domain)?.label || domain;
+                    const currentBudget = budgetView === 'client' ? budget : budgetInterne;
+                    const currentUpdate = budgetView === 'client' ? updateBudgetCell : updateBudgetInterneCell;
+                    const currentTotal = budgetView === 'client' ? getDomainTotal(domain) : getInterneDomainTotal(domain);
+                    return (
+                      <tr key={domain} className="border-b border-gray-100">
+                        <td className="py-3 pr-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: domainColor }} />
+                            <span className="font-medium">{label}</span>
+                          </div>
+                        </td>
+                        {jurisdictions.map(j => (
+                          <td key={j} className="py-2 px-2">
+                            <div className="relative">
+                              <input
+                                type="number"
+                                value={currentBudget[domain]?.[j] || 0}
+                                onChange={(e) => currentUpdate(domain, j, parseInt(e.target.value) || 0)}
+                                className="w-full text-right px-3 py-1.5 border border-gray-200 rounded focus:outline-none focus:border-wedd-black text-sm"
+                              />
+                            </div>
+                          </td>
+                        ))}
+                        <td className="py-3 pl-4 text-right font-medium">
+                          {currentTotal.toLocaleString('fr-FR')} €
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t-2 border-gray-300">
+                    <td className="py-3 pr-4 font-bold">Total</td>
+                    {jurisdictions.map(j => {
+                      const currentBudget = budgetView === 'client' ? budget : budgetInterne;
+                      const colTotal = domains.reduce((sum, d) => sum + (currentBudget[d]?.[j] || 0), 0);
+                      return (
+                        <td key={j} className="py-3 px-2 text-right font-medium">
+                          {colTotal.toLocaleString('fr-FR')} €
+                        </td>
+                      );
+                    })}
+                    <td className="py-3 pl-4 text-right font-bold text-wedd-black">
+                      {(budgetView === 'client' ? getGrandTotal() : getInterneGrandTotal()).toLocaleString('fr-FR')} €
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
         </div>
       )}
 
